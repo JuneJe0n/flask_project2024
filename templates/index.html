@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='main.js') }}" defer></script>
+</head>
+
+<header class="sticky top-0 z-50 h-60px bg-white li-sm:h-50px">
+    <div class="mx-auto h-full w-full max-w-screen-xl flex items-center px-4">
+        <a href="/?source=header">
+            <!-- <span class="sr-only">EWH&MADE</span> 스크린 리더 용도라는 듯?-->
+            <img src="static/images/logo.png" class="h-[35px] w-auto lt-sm:h[30px]">
+        </a>
+        <div class="grow"></div>
+        <div class="flex flex-row-reverse items-center sm:flex-row">
+            <form>
+                <div class="relative hidden sm:mr-2 sm-block">
+                    <div class="absolute inset-y-0 left-3 flex items-center">
+                        <i class="i-ri-search-line text-sm text-gray-500"></i>
+                    </div>
+                    <input id="research_input" class="w-[250px] border border-gray300 rounded-full py-1.5 pl-8 text-sm transition focus:border-black" type="text" placeholder="검색어를 입력하세요" value>
+                </div>
+                <a href="/search?source=header" class="h-12 w-12 flex cursor-pointer both-center rounded-full transition sm:hidden">
+                    <i class="i-ri-search-line h-5 w-5 text-gray-500"></i>
+                    <!-- <span class="sr-only">상품 검색</span> -->
+                </a>
+            </form>
+            <button id="login_button" class="h-12 w-12 flex cursor-pointer both-center rounded-full transition sm:hover:bg-gray-100">
+                <i class="i-ri-shuffle-line h-5 w-5 text-gray-500"></i>
+            </button>
+        </div>
+        <div class="direct-message-icon relative" data-headlessui-state>
+            <div class="flex both-center">
+                <button class="relative h-12 w-12 flex both-center rounded-full transition sm:hover:bg-gray-100" type="button" aria-expanded="false" data-headlessui-state id="headlessui-popover-button-:r0:">
+                </button>
+            </div>
+        </div>
+        <div class="relative ml-3 flex-none" data-headlessui-state>
+            <div class="h-full flex both-center">
+                <button id="headlessui-menu-button-:r5:" type="button" aria-haspopup="menu" aria-expanded="false" data-headlessui-state>
+                    <img src="static/images/user_icon.png" class="flex-none border rounded-full bg-white object-cover" draggable="false" style="width: 32px; height: 32px;">
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar__logo">
+        <a href="">EwhaMarket</a>
+    </div>
+
+    <ul class="navbar__menu" style="list-style-type: none;">
+        <li><a href="/list">List</a></li>
+        <li><a href="/review">Review</a></li>
+        <li><a href="/reg_items">Register Items</a></li>
+        <li><a href="/reg_reviews">Register Reviews</a></li>
+    </ul>
+
+        <a href="#" class="navbar__toogleBtn">
+            <i class="fas fa-bars"></i>
+        </a>
+    </nav>
+
+    <section>
+        {% block section %}
+
+        {% endblock section %}
+    </section>
+    
+    </body>
+    </html>
