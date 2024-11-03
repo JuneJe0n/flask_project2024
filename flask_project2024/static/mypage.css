@@ -1,0 +1,144 @@
+:root {
+  --font-family-inter: 'Inter', sans-serif;
+}
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-inter);
+  color: #000;
+}
+
+.my-page-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.welcome-message {
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 5px;
+}
+
+.email-info {
+  font-size: 16px;
+  color: #bdbfc3;
+  margin-bottom: 20px;
+}
+
+.menu {
+  display: flex;
+  gap: 30px;
+  padding: 20px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+
+.menu-item {
+  text-align: center;
+  align-items: center;
+}
+
+.menu i {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.menu-text {
+  font-size: 16px;
+  color: #000;
+}
+
+.menu-subtext, .menu-count {
+  font-size: 14px;
+  font-weight: bold;
+  color: #00462a;
+}
+
+.recent-products-section {
+  margin-bottom: 30px;
+}
+
+.recent-products-title {
+  font-size: 18px;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.recent-products {
+  display: flex;
+  gap: 10px;
+}
+
+.product-placeholder {
+  width: 80px;
+  height: 80px;
+  background-color: #e1e1e1;
+  border-radius: 10px;
+}
+
+.see-more-link {
+  font-size: 14px;
+  color: #00462a;
+  text-decoration: none;
+  float: right;
+  margin-top: 10px;
+}
+
+.customer-center {
+  display: flex;
+  gap: 30px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e8e8;
+}
+
+.customer-center-title, .notice-link, .product-qna-link, .faq-link {
+  font-size: 16px;
+  color: #000;
+  text-decoration: none;
+}
+
+.user-profile {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.avatar-placeholder {
+  width: 38px;
+  height: 38px;
+  background-color: #00462a;
+  border-radius: 50%;
+}
+
+.logout {
+  font-size: 14px;
+  color: #00462a;
+  text-decoration: none;
+  margin-left: 10px;
+  border-radius: 5px;
+  padding:5px 15px;
+}
+
+#logout {background-color: #006400;color: white;}
+#logout:hover {background-color: #004d00;}

@@ -1,0 +1,98 @@
+* {margin:0; padding:0; box-sizing: border-box;}
+
+header {
+    height: 80px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0 50px;
+    background-color: lightpink;
+}
+
+header h1 {font-size: 24px;}
+header h1 a {color: #333; text-decoration: none;}
+
+.userBox{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-box{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 300px;
+    background: #F0F0F0;
+    border-radius: 40px;
+    padding: 5px 10px;
+    border: 1px solid #F0F0F0;
+}
+
+.search-txt{
+    border:none;
+    padding-left: 5%;
+    background:none;
+    outline:none;
+    float: left;
+    color: #797979;
+    font-size: 16px;
+    flex: 1;
+}
+
+.search-btn{
+    color: #797979;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+header .userRegister {display: flex; gap: 10px;}
+.userRegister button {
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#signin {background-color: #006400;color: white;}
+#signin:hover {background-color: #004d00;}
+.userRegister button:hover {background-color: #f0f0f0;}
+
+
+
+
+
+
+.lnb li{display: inline-block;}
+.lnb {height:65px; background-color: lightblue; padding: 10px 50px;}
+
+.lnb ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    gap: 20px;
+}
+
+.lnb ul li {
+    font-size: 16px;
+}
+
+.lnb ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    display: block;
+}
+
+.lnb ul li .active a,
+.lnb ul li a:hover {
+    border-bottom: 3px solid #006400;
+    color: #006400;
+    font-weight: bold;
+}
+
+body{font-family: Arial, Helvetica, sans-serif;}

@@ -1,0 +1,61 @@
+{% extends "index.html" %}
+{% block section %}
+<form method="post" enctype="multipart/form-data" action="/submit_item_post">
+
+<div class="form-container">
+    <div class="reg_img_upload">
+        <label for="img">이미지 업로드: </label>
+        <input type="file" name="file" /><br><br>
+    </div>
+
+    <div class="reg_info_input">
+        <div><br><br>
+            <label for="name">상품명: </label>
+            <input type="text" name="name" id="name" required><br><br>
+        </div>
+
+        <div>
+            <label for="option">상품 옵션: </label>
+            <input type="text" name="option" id="option" required><br><br>
+        </div>
+
+        <div>
+            <label for="quantity">수량: </label>
+            <input type="number" name="quantity" id="quantity" required><br><br>
+        </div>
+
+        <div>
+            <label for="category">상품 유형: </label><br>
+            <select id="category" name="category">
+                <option value="Hair" selected>헤어</option>
+                <option value="Glasses">안경</option>
+                <option value="Necklace">목걸이</option>
+                <option value="Bracelet">팔찌</option>
+                <option value="Ring">반지</option>
+                <option value="Watch">시계</option>
+            </select><br><br>
+        </div>
+
+        <div>
+            <label for="price">상품 가격: </label>
+            <input type="number" name="price" id="price" required><br><br>
+        </div>
+
+        <div>
+            <label for="discount">할인율: </label>
+            <input type="number" name="discount" id="discount" required><br><br>
+        </div>
+
+        <div>
+            <label for="description">상세 설명: </label>
+            <input type="text" name="description" id="description" required><br><br>
+        </div>
+    </div>
+</div>
+
+<div>
+    <input type="submit" value="Submit!"><br><br>
+</div>
+
+</form>
+{% endblock section %}
