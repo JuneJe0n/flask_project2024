@@ -1,0 +1,119 @@
+{% extends "index.html" %}
+
+{% block section %}
+<head>
+    <title>Item_Detail</title>
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+        .detail {
+            float: left;
+            padding: 10px;
+            background-color: white;
+        }
+
+        .detail.image {
+            width: 50%;
+        }
+
+        .detail.info {
+            width: 50%;
+            padding: 20px;
+        }
+        
+        footer {
+              color: black;
+              height: 50px;
+              clear: both;
+              text-align: center;
+        }
+
+        .footer_nav {
+            display: flex;
+            justify-content: space-between; /* 네비게이션 사이의 간격을 균등하게 분배 */
+            align-items: center;
+            width: 100%; /* 화면 가로 크기에 맞춤 */
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .footer_nav ul {
+            display: flex;
+            padding: 0;
+            width: 100%;
+            margin: 0;
+        }
+
+        .footer_nav li {
+            list-style: none;
+            flex: 1;
+        }
+
+        .footer_nav a {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none; /* 밑줄 제거 */
+            border-top: 2px solid gray;
+            color: gray; /* 링크 색상 */
+            transition: color 0.3s; /* 색상 전환 효과 */
+            padding: 10px 0;
+        }
+
+        .footer_nav a:hover {
+            border-top: 2px solid green;
+            color: green;
+        }
+
+        .footer_nav a.active {
+            border-top: 2px solid green;
+            color: green;          
+        }
+
+        hr {
+            border: none; /* Remove default border */
+            height: 2px; /* Set the height of the line */
+            background-color: green; /* Change color */
+            width: 100%; /* Set the width of the line */
+            margin: 0; /* Center the line and add vertical spacing */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="detail image">
+        <img src="{{ item.img_path }}" alt="center_img">
+    </div>
+
+    <form action=".php" class="detail info">
+        <p style="color:gray"><img src="static/images/user_icon.png" alt="user_icon" width="20" height="20">
+            {{ item.seller }}</p>
+        <p><b>{{ item.name }}</b></p><br>
+        <p color:gray;">원가</p><br>
+        <p><span style="color:red">할인율</span>{{ item.price }}</p><br>
+        <select id="option">
+            <option value="green-color">옵션선택</option>
+        </select>
+        <p input type>옵션 반영</p>
+        <hr>
+        <p>총 금액 <b>{{ item.price }}</b></p>
+
+        <div>
+            <input type="button" value="장바구니">
+            <input type="submit" value="구매하기">
+        </div>
+    </form>
+    
+    <footer>
+        <div class="footer_nav">
+            <ul>
+                <li><a href="#">상품 설명</a></li>
+                <li><a href="#">리뷰</a></li>
+                <li><a href="#">상품 문의</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+{% endblock section %}
