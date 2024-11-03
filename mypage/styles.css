@@ -1,0 +1,151 @@
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f8f8f8;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures body fills the full viewport height */
+}
+
+.header,
+.greeting-section,
+.actions-section,
+.recent-products,
+.customer-service {
+    flex-shrink: 0;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.header span {
+    font-size: 18px;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+}
+
+.user-menu a {
+    margin-right: 15px;
+    color: #333;
+    text-decoration: none;
+}
+
+.profile-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.greeting-section {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.greeting-section h2 {
+    font-size: 24px;
+    color: #00462A;
+    margin-bottom: 5px;
+}
+
+.greeting-section p {
+    color: #888;
+}
+
+/* Actions Section */
+.actions-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #fff;
+    margin: 20px 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.action-card {
+    text-align: center;
+}
+
+.action-card img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+/* Specific styling for the truck icon */
+.truck-icon {
+    width: 45px; /* Slightly wider */
+    height: 40px; /* Same height as other icons */
+}
+
+.action-card p {
+    color: #333;
+}
+
+.action-card span {
+    display: block;
+    font-size: 16px;
+    color: #00462A;
+    font-weight: bold;
+}
+
+/* Recent Products */
+.recent-products {
+    padding: 20px;
+}
+
+.recent-products h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-list {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.product {
+    width: 100px;
+    height: 100px;
+    background-color: #ddd;
+    border-radius: 5px;
+}
+
+.more-link {
+    margin-left: auto;
+    text-decoration: none;
+    color: #888;
+    font-size: 14px;
+}
+
+/* Footer Customer Service */
+.customer-service {
+    padding: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
