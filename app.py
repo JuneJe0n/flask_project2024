@@ -36,6 +36,7 @@ def reg_item_submit_post():
 
     # Collect form data and add it to the items list
     data = {
+        'id': len(items),  # Unique ID for each item
         'seller': request.form.get('seller'),
         'name': request.form.get('name'),
         'category': request.form.get('category'),
@@ -51,7 +52,16 @@ def reg_item_submit_post():
     items.append(data)  # Append the new item to the items list
 
     # Redirect to the list view after submission
-    return render_template("submit_item_result.html", data=data, img_path=image_path)
+    return redirect(url_for("view_list"))
+
+@application.route("/item/<int:item_id>")
+def view_item_detail(item_id):
+    # Fetch the item by its ID
+    item = next((item for item in items if item['id'] == item_id), None)
+    if item is None:
+        return "Item not found", 404
+    return render_template("itemdetail.html", item=item)
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)
+
