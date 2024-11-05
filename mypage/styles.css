@@ -26,12 +26,12 @@ body {
 
 .actions-section {
     width: 90%; /* 화면의 약 90% 너비로 설정 */
-    height: 250px;
+    height: 200px;
     padding: 30px;
     background-color: #fff;
     border-radius: 30px;
     border: 1px solid #ddd;
-    margin: -70px auto 20px auto; /* Center horizontally */
+    margin: -10px auto 20px auto; /* Center horizontally */
     box-sizing: border-box;
     display: flex;
     justify-content: space-around; /* 아이콘들이 좌우로 일렬로 나열되도록 설정 */
@@ -118,7 +118,6 @@ body {
 /* Recent Products */
 .recent-products {
     padding: 30px;
-    
 }
 
 .recent-products h3 {
