@@ -6,7 +6,7 @@ header {
     align-items:center;
     justify-content:space-between;
     padding: 0 50px;
-    background-color: lightpink;
+    background-color: white;
 }
 
 header h1 {font-size: 24px;}
@@ -68,29 +68,46 @@ header .userRegister {display: flex; gap: 10px;}
 
 
 .lnb li{display: inline-block;}
-.lnb {height:65px; background-color: lightblue; padding: 10px 50px;}
+.lnb {
+    display: flex;
+    justify-content: space-between; /* 네비게이션 사이의 간격을 균등하게 분배 */
+    align-items: center;
+    width: 100%; /* 화면 가로 크기에 맞춤 */
+    margin: 0 auto;
+    padding: 0;
+    height:65px;
+    background-color: white;
+    padding: 10px 50px;}
 
 .lnb ul {
     display: flex;
+    padding: 0;
+    width: 100%;
+    margin: 0;
     justify-content: center;
     list-style-type: none;
-    gap: 20px;
 }
 
 .lnb ul li {
     font-size: 16px;
+    list-style: none;
+    flex: 1;
 }
 
 .lnb ul li a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px 15px;
     display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none; /* 밑줄 제거 */
+    border-bottom: 2px solid lightgray;
+    color: gray; /* 링크 색상 */
+    transition: color 0.3s; /* 색상 전환 효과 */
+    padding: 10px 0;
 }
 
 .lnb ul li .active a,
 .lnb ul li a:hover {
-    border-bottom: 3px solid #006400;
+    border-bottom: 2px solid #006400;
     color: #006400;
     font-weight: bold;
 }
