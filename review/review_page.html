@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        header h1 {
+            color: #2d4b29;
+        }
+        header input[type="search"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+        }
+        .menu-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .menu-icons img {
+            width: 24px;
+            height: 24px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .tabs div {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #888;
+        }
+        .tabs .active {
+            color: #2d4b29;
+            font-weight: bold;
+            position: relative;
+        }
+        .tabs .active::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #2d4b29;
+            width: 100%;
+        }
+        .review-summary {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+            color: #2d4b29;
+        }
+        .review-summary .stars {
+            display: inline-block;
+            margin-left: 10px;
+            color: #a5d6a7;
+        }
+        .review-images {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .review-images div {
+            width: 200px;
+            height: 200px;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .review-images .add-photo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background-color: #f2f2f2;
+            color: #999;
+        }
+        .review-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .review-options select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            width: 80px; /* 최신순 버튼과 동일한 너비 */
+            height: 38px; /* 최신순 버튼과 동일한 높이 */
+            cursor: pointer;
+        }
+        .sort-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .sort-buttons button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .sort-buttons .active {
+            border-color: #2d4b29;
+            background-color: #2d4b29;
+            color: #fff;
+        }
+        .review-item {
+            border-top: 1px solid #ddd;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .review-item .left {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .review-item .content {
+            line-height: 1.4;
+        }
+        .review-item .content .username {
+            font-weight: bold;
+            color: #2d4b29;
+        }
+        .review-item .content .stars {
+            color: #a5d6a7;
+            margin-left: 5px;
+        }
+        .review-item .right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #999;
+        }
+        .review-item .right .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .review-item .right .details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .review-item .right .details .date {
+            color: #333;
+        }
+        .review-item .right .details .like {
+            color: #a5d6a7;
+            margin-top: 5px;
+        }
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .pagination span,
+        .pagination a {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+        }
+        .pagination .active {
+            background-color: #2d4b29;
+            color: #fff;
+            font-weight: bold;
+        }
+        .write-review {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #2d4b29;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EWH&MADE</h1>
+            <input type="search" placeholder="검색어를 입력하세요">
+            <div class="menu-icons">
+                <img src="cart-icon.png" alt="Cart">
+                <img src="heart-icon.png" alt="Favorite">
+                <img src="user-icon.png" alt="User">
+                <span>이화님</span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <div>상품 설명</div>
+            <div class="active">리뷰</div>
+            <div>상품 문의</div>
+        </div>
+
+        <div class="review-summary">
+            리뷰 (50)
+            <span class="stars">🍀🍀🍀🍀🍀</span>
+        </div>
+
+        <div class="review-images">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div class="add-photo">+</div>
+        </div>
+
+        <div class="review-options">
+            <select>
+                <option>옵션</option>
+            </select>
+            <div class="sort-buttons">
+                <button class="active" onclick="sortBy('latest')">최신순</button>
+                <button onclick="sortBy('best')">베스트순</button>
+            </div>
+        </div>
+
+        <div class="review-item">
+            <div class="left">
+                <div class="content">
+                    <div class="username">abcd**** <span class="stars">🍀🍀🍀🍀🍀</span></div>
+                    <div>너무 마음에 들어요!</div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="avatar"></div>
+                <div class="details">
+                    <div class="date">2024. 10. 10</div>
+                    <div class="like">❤️ 2</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="review-item">
+            <div class="left">
+                <div class="content">
+                    <div class="username">abcd**** <span class="stars">🍀🍀🍀🍀🍀</span></div>
+                    <div>너무 마음에 들어요!</div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="avatar"></div>
+                <div class="details">
+                    <div class="date">2024. 10. 10</div>
+                    <div class="like">❤️ 2</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination-container">
+            <div class="pagination">
+                <span>← Previous</span>
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <span>Next →</span>
+            </div>
+        </div>
+
+        <button class="write-review">리뷰 작성하기</button>
+    </div>
+
+    <script>
+        function sortBy(order) {
+            const buttons = document.querySelectorAll('.sort-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            if (order === 'latest') {
+                buttons[0].classList.add('active');
+            } else if (order === 'best') {
+                buttons[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
