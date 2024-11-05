@@ -11,35 +11,45 @@ body {
     color: #333;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensures body fills the full viewport height */
+    min-height: 100vh;
+    justify-content: space-between;
 }
 
 .header,
 .greeting-section,
-.actions-section,
 .recent-products,
 .customer-service {
-    flex-shrink: 0;
+    width: 100%; /* Make sections take full width */
+    padding: 20px; /* Add padding to separate elements from edges */
+    box-sizing: border-box;
 }
 
-.main-content {
-    flex: 1;
+.actions-section {
+    width: 90%; /* 화면의 약 90% 너비로 설정 */
+    height: 250px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    margin: -70px auto 20px auto; /* Center horizontally */
+    box-sizing: border-box;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around; /* 아이콘들이 좌우로 일렬로 나열되도록 설정 */
+    align-items: center;
 }
 
+/* Header Section */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 20px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
 }
 
 .header span {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .user-menu {
@@ -59,46 +69,39 @@ body {
     border-radius: 50%;
 }
 
+/* Greeting Section */
 .greeting-section {
     text-align: center;
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
 .greeting-section h2 {
-    font-size: 24px;
+    font-size: 26px;
     color: #00462A;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .greeting-section p {
     color: #888;
+    font-size: 18px;
 }
 
-/* Actions Section */
-.actions-section {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-    background-color: #fff;
-    margin: 20px 20px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-}
-
+/* Action Card Styling */
 .action-card {
     text-align: center;
+    padding: 10px;
+    flex: 1; /* 아이콘들이 균등하게 공간을 차지하도록 설정 */
 }
 
 .action-card img {
-    width: 40px;
-    height: 40px;
+    width: 50px; /* 아이콘 크기를 조정 */
+    height: 50px;
     margin-bottom: 5px;
 }
 
-/* Specific styling for the truck icon */
 .truck-icon {
-    width: 45px; /* Slightly wider */
-    height: 40px; /* Same height as other icons */
+    width: 60px; 
+    height: 40px; 
 }
 
 .action-card p {
@@ -114,38 +117,38 @@ body {
 
 /* Recent Products */
 .recent-products {
-    padding: 20px;
+    padding: 30px;
+    
 }
 
 .recent-products h3 {
-    font-size: 18px;
+    font-size: 20px;
     color: #333;
     margin-bottom: 10px;
 }
 
 .product-list {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    justify-content: space-between;
+    gap: 20px;
 }
 
 .product {
-    width: 100px;
-    height: 100px;
+    flex: 1; /* Make product items responsive */
+    height: 250px;
     background-color: #ddd;
     border-radius: 5px;
 }
 
 .more-link {
-    margin-left: auto;
     text-decoration: none;
     color: #888;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 /* Footer Customer Service */
 .customer-service {
-    padding: 20px;
+    padding: 30px;
     border-top: 1px solid #ddd;
     text-align: center;
 }
