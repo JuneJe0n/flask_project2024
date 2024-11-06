@@ -14,6 +14,10 @@ def Hello():
 def view_list():
     # Pass the stored items list to the template
     return render_template("list.html", items=items)
+    
+@application.route("/itemdetail")
+def view_itemdetail():
+    return render_template("itemdetail.html")
 
 @application.route("/review")
 def view_review():
