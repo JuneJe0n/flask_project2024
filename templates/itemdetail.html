@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block section %}
+{% block content %}
 <head>
     <title>Item_Detail</title>
     <style>
@@ -16,6 +16,8 @@
 
         .detail.image {
             width: 50%;
+            padding: 10px;
+            text-align: center;
         }
 
         .detail.info {
@@ -84,14 +86,15 @@
 
 <body>
     <div class="detail image">
-        <img src="/static/images/" alt="center_img" width="70%" height="40%">
-        <div style="display: flex; gap: 10px">
-            <img src="/static/image/" alt="all_img1" width="14%" height="8%">
-            <img src="/static/image/" alt="all_img2" width="14%" height="8%">
-            <img src="/static/image/" alt="all_img3" width="14%" height="8%">
-            <img src="/static/image/" alt="all_img4" width="14%" height="8%">
-            <img src="/static/image/" alt="all_img5" width="14%" height="8%">
-            <img src="/static/image/" alt="all_img6" width="14%" height="8%">
+        <img src="/static/images/empty_img.png" alt="center_img" width="85%" height="50%">
+        <div style="margin-top: 25px; display: flex-center;">
+            <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+            <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+            <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+            <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+            <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+            <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+            <img src="/static/images/empty_img.png" alt="center_img" width="10%">
         </div>
     </div>
 
@@ -120,11 +123,11 @@
     <footer>
         <div class="footer_nav">
             <ul>
-                <li><a href="#">상품 설명</a></li>
+                <li><a href="#" class="active">상품 설명</a></li>
                 <li><a href="#">리뷰</a></li>
                 <li><a href="#">상품 문의</a></li>
             </ul>
         </div>
     </footer>
 </body>
-{% endblock section %}
+{% endblock %}
