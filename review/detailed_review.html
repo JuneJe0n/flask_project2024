@@ -4,76 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Review Page</title>
-    <style>
+    <style>  
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1341px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
         }
-        header {
+        .footer_nav {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        header h1 {
-            color: #2d4b29;
-        }
-        header input[type="search"] {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 300px;
-        }
-        .menu-icons {
-            display: flex;
-            gap: 10px;
             align-items: center;
-        }
-        .menu-icons img {
-            width: 24px;
-            height: 24px;
-        }
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .tabs div {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            color: #888;
-        }
-        .tabs .active {
-            color: #2d4b29;
-            font-weight: bold;
+            width: 100vw; /* 화면 가로 크기에 맞춤 (여백 제거) */
+            margin: 0; 
+            padding: 0;
             position: relative;
+            left: 50%;
+            transform: translateX(-50%); /* 가운데 정렬 */
         }
-        .tabs .active::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: #2d4b29;
+
+        .footer_nav ul {
+            display: flex;
+            padding: 0;
             width: 100%;
+            margin: 0;
         }
+
+        .footer_nav li {
+            list-style: none;
+            flex: 1;
+        }
+
+        .footer_nav a {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none; /* 밑줄 제거 */
+            color: #ddd; /* 링크 색상 변경 */
+            transition: color 0.3s;
+            padding: 15px 0; /* 글자와 선 사이 간격 */
+            border-top: 1px solid #ddd; /* 글씨 위에 회색 선 추가 */
+            border-bottom: 1px solid #ddd; /* 글씨 아래에 회색 선 추가 */
+        }
+
+        .footer_nav a:hover {
+            border-bottom: 2px solid #2d4b29; /* hover 시의 선 색상 변경 */
+            color: #2d4b29; /* hover 시의 글씨 색상 변경 */
+        }
+
+        .footer_nav a.active {
+            border-bottom: 2px solid #2d4b29; /* 선택된 상태의 선 색상 변경 */
+            color: #2d4b29; /* 선택된 상태의 글씨 색상 변경 */        
+        }
+
         .review-summary {
+            font-weight: bold;
             text-align: center;
             margin: 20px 0;
             font-size: 24px;
-            color: #2d4b29;
+            color: #000000;
+        }
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: #ddd;
+            margin-top: 10px;
+            margin-bottom: 20px;
         }
         .review-images {
             display: flex;
@@ -93,65 +94,61 @@
             margin-top: 20px;
             border-top: 1px solid #ddd;
             padding-top: 20px;
+            align-items: flex-start; /* 수직 중앙 정렬 */
         }
         .review-content .text {
             max-width: 70%;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.6;
         }
         .review-content .text .username {
-            font-weight: bold;
-            color: #2d4b29;
+            color: #000000;
+            margin-bottom: 10px;
         }
         .review-content .text .stars {
-            color: #a5d6a7;
+            color: #000000;
             margin-left: 5px;
         }
         .review-content .date-like {
             text-align: right;
-            color: #999;
+            color: #000000;
             font-size: 14px;
+            margin-top: 10px;
         }
         .review-content .date-like .like {
-            color: #a5d6a7;
-            margin-top: 5px;
+            color: #000000;
+            margin-top: 0px;
         }
         .back-to-list {
             text-align: right;
             margin-top: 30px;
         }
         .back-to-list button {
-            padding: 10px 20px;
-            background-color: #f2f2f2;
-            color: #2d4b29;
+            padding: 5px 20px;
+            background-color: #ffffff;
+            color: #000000;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
+            height: 31px;
+            width: 127px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>EWH&MADE</h1>
-            <input type="search" placeholder="검색어를 입력하세요">
-            <div class="menu-icons">
-                <img src="cart-icon.png" alt="Cart">
-                <img src="heart-icon.png" alt="Favorite">
-                <img src="user-icon.png" alt="User">
-                <span>이화님</span>
-            </div>
-        </header>
-
-        <div class="tabs">
-            <div>상품 설명</div>
-            <div class="active">리뷰</div>
-            <div>상품 문의</div>
+        <div class="footer_nav">
+            <ul>
+                <li><a href="#">상품 설명</a></li>
+                <li><a href="#" class="active">리뷰</a></li> <!-- 리뷰 항목에 active 클래스 적용 -->
+                <li><a href="#">상품 문의</a></li>
+            </ul>
         </div>
 
         <div class="review-summary">
             상세 리뷰
         </div>
+        <hr class="divider"> <!-- 회색 선 추가 -->
 
         <div class="review-images">
             <div></div>
@@ -160,12 +157,21 @@
 
         <div class="review-content">
             <div class="text">
-                <div class="username">abcd**** <span class="stars">🍀🍀🍀🍀🍀</span></div>
+                <div class="username">
+                    abcd**** 
+                    <span class="stars">
+                        <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                        <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                        <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                        <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                        <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                    </span>
+                </div>
                 <p>너무 마음에 들어요!<br>또 구매하겠습니다~</p>
             </div>
             <div class="date-like">
                 <div>2024. 10. 10</div>
-                <div class="like">❤️ 2</div>
+                <div class="like">❤ 2</div>
             </div>
         </div>
 
