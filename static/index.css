@@ -1,4 +1,4 @@
-* {margin:0; padding:0; box-sizing: border-box;}
+    * {margin:0; padding:0; box-sizing: border-box;}
 
 header {
     height: 80px;
@@ -11,6 +11,12 @@ header {
 
 header h1 {font-size: 24px;}
 header h1 a {color: #333; text-decoration: none;}
+
+#logo{
+    margin:20px 0 0 0;
+    size:10px;
+    float:left;
+}   
 
 .userBox{
     display: flex;
