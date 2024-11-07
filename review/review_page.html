@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -11,74 +11,74 @@
             padding: 0;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1341px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
         }
-        header {
+        .footer_nav {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        header h1 {
-            color: #2d4b29;
-        }
-        header input[type="search"] {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 300px;
-        }
-        .menu-icons {
-            display: flex;
-            gap: 10px;
             align-items: center;
-        }
-        .menu-icons img {
-            width: 24px;
-            height: 24px;
-        }
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .tabs div {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            color: #888;
-        }
-        .tabs .active {
-            color: #2d4b29;
-            font-weight: bold;
+            width: 100vw; /* 화면 가로 크기에 맞춤 (여백 제거) */
+            margin: 0; 
+            padding: 0;
             position: relative;
+            left: 50%;
+            transform: translateX(-50%); /* 가운데 정렬 */
         }
-        .tabs .active::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: #2d4b29;
+
+        .footer_nav ul {
+            display: flex;
+            padding: 0;
             width: 100%;
+            margin: 0;
+        }
+
+        .footer_nav li {
+            list-style: none;
+            flex: 1;
+        }
+
+        .footer_nav a {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none; /* 밑줄 제거 */
+            color: #ddd; /* 링크 색상 변경 */
+            transition: color 0.3s;
+            padding: 15px 0; /* 글자와 선 사이 간격 */
+            border-top: 1px solid #ddd; /* 글씨 위에 회색 선 추가 */
+            border-bottom: 1px solid #ddd; /* 글씨 아래에 회색 선 추가 */
+        }
+
+        .footer_nav a:hover {
+            border-bottom: 2px solid #2d4b29; /* hover 시의 선 색상 변경 */
+            color: #2d4b29; /* hover 시의 글씨 색상 변경 */
+        }
+
+        .footer_nav a.active {
+            border-bottom: 2px solid #2d4b29; /* 선택된 상태의 선 색상 변경 */
+            color: #2d4b29; /* 선택된 상태의 글씨 색상 변경 */        
         }
         .review-summary {
             text-align: center;
             margin: 20px 0;
             font-size: 24px;
-            color: #2d4b29;
+            color: #000000;
+            font-weight: bold;
         }
         .review-summary .stars {
             display: inline-block;
             margin-left: 10px;
             color: #a5d6a7;
+        }
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: #ddd;
+            margin-top: 10px;
+            margin-bottom: 20px;
         }
         .review-images {
             display: flex;
@@ -107,12 +107,12 @@
             margin: 20px 0;
         }
         .review-options select {
-            padding: 8px 12px;
+            padding: 0px 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             background-color: #fff;
             width: 80px; /* 최신순 버튼과 동일한 너비 */
-            height: 38px; /* 최신순 버튼과 동일한 높이 */
+            height: 32px; /* 최신순 버튼과 동일한 높이 */
             cursor: pointer;
         }
         .sort-buttons {
@@ -120,11 +120,13 @@
             gap: 5px;
         }
         .sort-buttons button {
-            padding: 8px 12px;
+            padding: 0px 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             background-color: #fff;
             cursor: pointer;
+            height: 32px;
+            font-size: 14px;
         }
         .sort-buttons .active {
             border-color: #2d4b29;
@@ -137,6 +139,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
         .review-item .left {
             display: flex;
@@ -145,13 +149,15 @@
         }
         .review-item .content {
             line-height: 1.4;
+            font-size: 14px;
         }
         .review-item .content .username {
-            font-weight: bold;
-            color: #2d4b29;
+            color: #000000;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
         .review-item .content .stars {
-            color: #a5d6a7;
+            color: #000000;
             margin-left: 5px;
         }
         .review-item .right {
@@ -174,73 +180,55 @@
         }
         .review-item .right .details .date {
             color: #333;
+            font-size: 14px;
         }
         .review-item .right .details .like {
-            color: #a5d6a7;
+            color: #000000;
             margin-top: 5px;
+            font-size: 14px;
         }
-        .pagination-container {
+        .review-button-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .pagination {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .pagination span,
-        .pagination a {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #333;
-        }
-        .pagination .active {
-            background-color: #2d4b29;
-            color: #fff;
-            font-weight: bold;
+            justify-content: flex-end; /* 오른쪽 정렬 */
+            margin-top: 40px; /* 위 요소와의 간격 추가 */
+            padding-top: 30px; /* 버튼 위에 여백 추가 */
         }
         .write-review {
             position: absolute;
             bottom: 20px;
             right: 20px;
-            padding: 10px 20px;
+            padding: 0px 20px;
             background-color: #2d4b29;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: bold;
+            font-size: 14px;
+            height: 32px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>EWH&MADE</h1>
-            <input type="search" placeholder="검색어를 입력하세요">
-            <div class="menu-icons">
-                <img src="cart-icon.png" alt="Cart">
-                <img src="heart-icon.png" alt="Favorite">
-                <img src="user-icon.png" alt="User">
-                <span>이화님</span>
-            </div>
-        </header>
-
-        <div class="tabs">
-            <div>상품 설명</div>
-            <div class="active">리뷰</div>
-            <div>상품 문의</div>
+        <div class="footer_nav">
+            <ul>
+                <li><a href="#">상품 설명</a></li>
+                <li><a href="#" class="active">리뷰</a></li> <!-- 리뷰 항목에 active 클래스 적용 -->
+                <li><a href="#">상품 문의</a></li>
+            </ul>
         </div>
 
         <div class="review-summary">
             리뷰 (50)
-            <span class="stars">🍀🍀🍀🍀🍀</span>
+            <span class="stars">
+                <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+            </span>
         </div>
+        <hr class="divider">
 
         <div class="review-images">
             <div></div>
@@ -262,7 +250,15 @@
         <div class="review-item">
             <div class="left">
                 <div class="content">
-                    <div class="username">abcd**** <span class="stars">🍀🍀🍀🍀🍀</span></div>
+                    <div class="username">abcd**** 
+                        <span class="stars">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                        </span>
+                    </div>
                     <div>너무 마음에 들어요!</div>
                 </div>
             </div>
@@ -270,7 +266,7 @@
                 <div class="avatar"></div>
                 <div class="details">
                     <div class="date">2024. 10. 10</div>
-                    <div class="like">❤️ 2</div>
+                    <div class="like">❤ 2</div>
                 </div>
             </div>
         </div>
@@ -278,7 +274,15 @@
         <div class="review-item">
             <div class="left">
                 <div class="content">
-                    <div class="username">abcd**** <span class="stars">🍀🍀🍀🍀🍀</span></div>
+                    <div class="username">abcd**** 
+                        <span class="stars">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="C:\Users\chchc\Documents\review\greenclover.png" alt="greenclover" width="20" height="20">
+                        </span>
+                    </div>
                     <div>너무 마음에 들어요!</div>
                 </div>
             </div>
@@ -286,22 +290,13 @@
                 <div class="avatar"></div>
                 <div class="details">
                     <div class="date">2024. 10. 10</div>
-                    <div class="like">❤️ 2</div>
+                    <div class="like">❤ 2</div>
                 </div>
             </div>
         </div>
-
-        <div class="pagination-container">
-            <div class="pagination">
-                <span>← Previous</span>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <span>Next →</span>
-            </div>
+        <div class="review-button-container">
+            <button class="write-review">리뷰 작성하기</button>
         </div>
-
-        <button class="write-review">리뷰 작성하기</button>
     </div>
 
     <script>
