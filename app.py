@@ -36,14 +36,12 @@ def reg_reviews():
 
 @application.route("/submit_item_post", methods=['POST'])
 def submit_item_post():
-    print('#################')
-    # Save the uploaded image file
+    print('##############################')
     image_file = request.files["file"]
     image_file.save("static/image/{}".format(image_file.filename))
     data = request.form
     DB.insert_item(data['name'], data, image_file.filename)
-
-    print (data['name'])
+    
     return render_template("submit_item_result.html", data=data, img_path="static/images/{}".format(image_file.filename))
 
 if __name__ == "__main__":
