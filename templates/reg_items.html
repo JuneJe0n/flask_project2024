@@ -1,127 +1,125 @@
 {% extends "index.html" %}
 
-<head>
-    <link rel="stylesheet" href="..\static\style.css">
-    <script src="..\static\main.js" defer></script>
-    <!--css, js 적용이 안 되어 화면 레이아웃이 이상하다면 crs 경로를 본인 컴퓨터 내 경로에 맞게끔 수정해주시면 됩니다-->
-</head>
+{% block nav %}
+<hr>
+{% endblock %}
 
-<div id="title">
-    <form>상품 등록하기</form>
-</div>
+{% block content %}
+    <br>
+    <div id="title">
+        <div>상품 등록하기</div>
+    </div>
 
-<form action="/submit_item_post" method="post" enctype="multipart/form-data">
-    
-    <div style="width: 1512px; padding: 0px; overflow: hidden; justify-self: center;">
-        <!--사진 등록 란.-->
-        <div class="upload-grid" style="float: left; flex: 1;">
-            <div class="upload-box" style="border: 5px solid #00462A;" id="box1" onclick="openFileDialog(event, 1)">
-                <img id="preview1" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus1" style="width: 210px; font-size: 32pt; text-align: center; color: dimgrey; cursor: pointer;">
-                    +<br><span style="font-size: 10pt;">상품 프로필 이미지를<br>등록해주세요</span>
-                </label>
-                <input id="fileInput1" type="file" name="file" style="display: none;" onchange="changeIMG(1)" />
-            </div>
-            <div class="upload-box" id="box2" onclick="openFileDialog(event, 2)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview2" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus2" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput2" type="file" name="file" style="display: none;" onchange="changeIMG(2)" />
-            </div>
-            <div class="upload-box" id="box3" onclick="openFileDialog(event, 3)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview3" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus3" style="display: none;width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput3" type="file" name="file" style="display: none;" onchange="changeIMG(3)" />
-            </div>
-            <div class="upload-box" id="box4" onclick="openFileDialog(event, 4)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview4" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus4" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput4" type="file" name="file" style="display: none;" onchange="changeIMG(4)" />
-            </div>
-            <div class="upload-box" id="box5" onclick="openFileDialog(event, 5)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview5" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus5" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput5" type="file" name="file" style="display: none;" onchange="changeIMG(5)" />
-            </div>
-            <div class="upload-box" id="box6" onclick="openFileDialog(event, 6)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview6" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus6" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput6" type="file" name="file" style="display: none;" onchange="changeIMG(6)" />
-            </div>
-            <div class="upload-box" id="box7" onclick="openFileDialog(event, 7)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview7" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus7" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput7" type="file" name="file" style="display: none;" onchange="changeIMG(7)" />
-            </div>
-            <div class="upload-box" id="box8" onclick="openFileDialog(event, 8)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview8" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus8" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput8" type="file" name="file" style="display: none;" onchange="changeIMG(8)" />
-            </div>
-            <div class="upload-box" id="box9" onclick="openFileDialog(event, 9)" style="opacity: 0.5; pointer-events: none;">
-                <img id="preview9" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
-                <label id="plus9" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
-                <input id="fileInput9" type="file" name="file" style="display: none;" onchange="changeIMG(9)" />
-            </div>
-        </div>
-
-        <div class="item-reg" style="float: right; flex: 1;">
-            <!--이미지를 제외한 정보 등록 란-->
-            <form class="reg-item-1"></form>
-
-            <form class="reg-item-1">
-                <label for="name">상품명<span style="color: red;">*</span></label>
-                <input type="text" name="name" id="name" style="width: 100%; height: 52px; align-self: stretch;" placeholder="상품명을 입력하세요" required>
-            </form>
-            <br>
-            <form class="reg-item-1">
-                <label for="option" style="width: 100%">상품 옵션<span style="color: red;">*</span><br></label>
-                <div id="option-container" style="width: 80%; float: left;">
-                    <input type="text" name="option[]" id="option" style="width: 100%; height: 52px; align-self: stretch; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" placeholder="예) S/화이트" required>
+    <form method="post" enctype="multipart/form-data" action="/submit_item_post">
+        <div style="width: 1512px; padding: 0px; overflow: hidden; justify-self: center;">
+            <!--사진 등록 란.-->
+            <div class="upload-grid" style="float: left; flex: 1;">
+                <div class="upload-box" style="border: 5px solid #00462A;" id="box1" onclick="openFileDialog(event, 1)">
+                    <img id="preview1" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus1" style="width: 210px; font-size: 10pt; text-align: center; color: dimgrey; cursor: pointer;">
+                        <span style="font-size: 32pt;">+</span><br>상품 프로필 이미지를<br>등록해주세요</span>
+                    </label>
+                    <input id="fileInput1" type="file" name="file" style="display: none;" onchange="changeIMG(1)" />
                 </div>
-                <div style="width: 20%; float: right;">
-                    <button type="button" style="width: 100%; height: 52px; background-color: #00462A; color: white; align-self: stretch; border-top-right-radius: 8px; border-bottom-right-radius: 8px;" onclick="addOption()">옵션 추가 <br><span id="optnum" style="font-size: smaller;">(현재 옵션 수: 0)</span></button>
+                <div class="upload-box" id="box2" onclick="openFileDialog(event, 2)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview2" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus2" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput2" type="file" name="file" style="display: none;" onchange="changeIMG(2)" />
                 </div>
-            </form>
-            <br>
-            <form class="reg-item-1">
-                <div style="width: 48%; float: left;">
-                    <label for="amount"> 수량(개)<span style="color: red;">*</span></label>
-                    <input type="text" name="amount" style="width: 100%; height: 52px; align-self: stretch;" id="amount" placeholder="예) 12" required>
+                <div class="upload-box" id="box3" onclick="openFileDialog(event, 3)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview3" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus3" style="display: none;width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput3" type="file" name="file" style="display: none;" onchange="changeIMG(3)" />
+                </div>
+                <div class="upload-box" id="box4" onclick="openFileDialog(event, 4)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview4" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus4" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput4" type="file" name="file" style="display: none;" onchange="changeIMG(4)" />
+                </div>
+                <div class="upload-box" id="box5" onclick="openFileDialog(event, 5)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview5" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus5" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput5" type="file" name="file" style="display: none;" onchange="changeIMG(5)" />
+                </div>
+                <div class="upload-box" id="box6" onclick="openFileDialog(event, 6)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview6" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus6" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput6" type="file" name="file" style="display: none;" onchange="changeIMG(6)" />
+                </div>
+                <div class="upload-box" id="box7" onclick="openFileDialog(event, 7)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview7" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus7" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput7" type="file" name="file" style="display: none;" onchange="changeIMG(7)" />
+                </div>
+                <div class="upload-box" id="box8" onclick="openFileDialog(event, 8)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview8" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus8" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput8" type="file" name="file" style="display: none;" onchange="changeIMG(8)" />
+                </div>
+                <div class="upload-box" id="box9" onclick="openFileDialog(event, 9)" style="opacity: 0.5; pointer-events: none;">
+                    <img id="preview9" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                    <label id="plus9" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                    <input id="fileInput9" type="file" name="file" style="display: none;" onchange="changeIMG(9)" />
+                </div>
+            </div>
+
+            <div class="item-reg" style="float: right; flex: 1;">
+                <!--이미지를 제외한 정보 등록 란-->
+                <div class="reg-item-1">
+                    <label for="name">상품명<span style="color: red;">*</span></label>
+                    <input type="text" name="name" id="name" style="width: 100%; height: 52px; align-self: stretch;" placeholder="상품명을 입력하세요" required>
+                </div>
+                <br>
+                <div class="reg-item-1">
+                    <label for="option" style="width: 100%">상품 옵션<span style="color: red;">*</span><br></label>
+                    <div id="option-container" style="width: 80%; float: left;">
+                        <input type="text" name="option[]" id="option" style="width: 100%; height: 52px; align-self: stretch; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" placeholder="예) S/화이트" required>
+                    </div>
+                    <div style="width: 20%; float: right;">
+                        <button type="button" style="width: 100%; height: 52px; background-color: #00462A; color: white; align-self: stretch; border-top-right-radius: 8px; border-bottom-right-radius: 8px;" onclick="addOption()">옵션 추가 <br><span id="optnum" style="font-size: smaller;">(현재 옵션 수: 0)</span></button>
+                    </div>
+                </div>
+                <br>
+                <div class="reg-item-1">
+                    <div style="width: 48%; float: left;">
+                        <label for="amount"> 수량(개)<span style="color: red;">*</span></label>
+                        <input type="text" name="amount" style="width: 100%; height: 52px; align-self: stretch;" id="amount" placeholder="예) 12" required>
+                    </div>
+                    
+                    <div style="width: 48%; float: right;">
+                        <label for="category">상품 유형<span style="color: red;">*</span></label>
+                        <select id="category" name="category" style="width: 100%; height: 52px; align-self: stretch; border-radius: 8px;">
+                        <option value="Home" selected> 홈/리빙 </option>
+                        <option value="Clothes"> 패션/옷 </option>
+                        <option value="Accessory"> 액세서리 </option>
+                        <option value="Food"> 식품 </option>
+                        <option value="Cosmetic"> 뷰티/화장품 </option>
+                        <option value="ETC"> ETC </option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class="reg-item-1">
+                    <div style="width: 48%; float: left;">
+                        <label for="price">상품 가격(￦)<span style="color: red;">*</span></label>
+                        <input type="text" name="price" style="width: 100%; height: 52px; align-self: stretch;" id="price" placeholder="예) 3000" required>
+                    </div>
+                    <div style="width: 48%; float: right;">
+                        <label for="discount"> 할인(%)</label>
+                        <input type="text" name="discount" style="width: 100%; height: 52px; align-self: stretch;" id="discount" placeholder="예) 20" required>
+                    </div>
+                </div>
+                <br>
+                <div class="reg-item-2">
+                    <label for="info">상세설명<span style="color: red;">*</span></label>
+                    <textarea name="info" id="info" style="width: 100%; height: 239px; resize: none; overflow-y: auto; align-self: stretch; border-radius: 8px;" placeholder="상품에 대한 설명을 작성하세요" required></textarea>
                 </div>
                 
-                <div style="width: 48%; float: right;">
-                    <label for="category">상품 유형<span style="color: red;">*</span></label>
-                    <select id="category" name="category" style="width: 100%; height: 52px; align-self: stretch; border-radius: 8px;">
-                    <option value="Home" selected> 홈/리빙 </option>
-                    <option value="Clothes"> 패션/옷 </option>
-                    <option value="Accessory"> 액세서리 </option>
-                    <option value="Food"> 식품 </option>
-                    <option value="Cosmetic"> 뷰티/화장품 </option>
-                    <option value="ETC"> ETC </option>
-                    </select>
-                </div>
-            </form>
-            <br>
-            <form class="reg-item-1">
-                <div style="width: 48%; float: left;">
-                    <label for="price">상품 가격(￦)<span style="color: red;">*</span></label>
-                    <input type="text" name="price" style="width: 100%; height: 52px; align-self: stretch;" id="price" placeholder="예) 3000"required>
-                </div>
-                <div style="width: 48%; float: right;">
-                    <label for="discount"> 할인(%)</label>
-                    <input type="text" name="discount" style="width: 100%; height: 52px; align-self: stretch;" id="discount" placeholder="예) 20"required>
-                </div>
-            </form>
-            <br>
-            <div class="reg-item-2">
-                <label for="info">상세설명<span style="color: red;">*</span></label>
-                <textarea name="info" id="info" style="width: 100%; height: 239px; resize: none; overflow-y: auto; align-self: stretch; border-radius: 8px;" placeholder="상품에 대한 설명을 작성하세요" required></textarea>
             </div>
-            
         </div>
-    </div>
-</form>
+        <div id="final-button" style="justify-self: center;">
+            <input class="submit-botton" type="submit" value="상품 등록" style="width: 1361px; height: 53px; background-color: #00462A; color: white; border-radius: 8px;" onclick="addItem()">
+        </div>
+    </form>
 
-<form id="final-button" style="justify-self: center;">
-    <input class="submit-botton" type="submit" value="상품 등록" style="width: 1361px; height: 53px; background-color: #00462A; color: white; border-radius: 8px;" onclick="addItem()">
-</form>
+{% endblock %}

@@ -70,11 +70,11 @@ function changecolor(cloverIndex) {
         const n = cloverIndex;
         for (var i = 1; i <= n; i++) {
             const clovercolor = document.getElementById(`clover${i}`);
-            clovercolor.src = "C:/Users/5313l/flask_project2024/static/images/greenclover.png";
+            clovercolor.src = "../static/images/greenclover.png";
         }
         for (var i = n+1; i <= 5 ; i++) {
             const clovercolor = document.getElementById(`clover${i}`);
-            clovercolor.src = "C:/Users/5313l/flask_project2024/static/images/clover.png";
+            clovercolor.src = "../static/images/clover.png";
         }
     }
 }
