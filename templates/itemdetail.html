@@ -1,101 +1,10 @@
 {% extends "index.html" %}
 
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='itemdetail.css') }}">
+{% endblock %}
+
 {% block section %}
-<head>
-    <title>Item_Detail</title>
-    <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-        .detail {
-            display: flex;
-            width: 100%;
-            height: auto;
-            overflow: hidden;
-            padding: 20px;
-            background-color: white;
-        }
-
-        .detail-image {
-            flex: 1;
-            min-width: 600px;
-            overflow: hidden;
-            padding: 20px 0;
-            margin: 0 20px;
-            margin-left: 0;
-            text-align: center;
-        }
-
-        .detail-info {
-            flex: 1;
-            min-width: 600px;
-            overflow: hidden;
-            padding: 20px 0;
-            margin: 0 20px;
-            margin-right: 50px;
-        }
-        
-        footer {
-              color: black;
-              height: 50px;
-              clear: both;
-              text-align: center;
-        }
-
-        .footer_nav {
-            display: flex;
-            justify-content: space-between; /* 네비게이션 사이의 간격을 균등하게 분배 */
-            align-items: center;
-            width: 100%; /* 화면 가로 크기에 맞춤 */
-            margin: 0;
-            padding: 0;
-        }
-
-        .footer_nav ul {
-            display: flex;
-            padding: 0;
-            width: 100%;
-            margin: 0;
-        }
-
-        .footer_nav li {
-            list-style: none;
-            flex: 1;
-        }
-
-        .footer_nav a {
-            display: block;
-            width: 100%;
-            text-align: center;
-            text-decoration: none; /* 밑줄 제거 */
-            border-top: 2px solid gray;
-            color: gray; /* 링크 색상 */
-            transition: color 0.3s; /* 색상 전환 효과 */
-            padding: 10px 0;
-        }
-
-        .footer_nav a:hover {
-            border-top: 2px solid #006400;
-            color: #006400;
-        }
-
-        .footer_nav a.active {
-            border-top: 2px solid #006400;
-            color: #006400;          
-        }
-
-        hr {
-            border: none; /* Remove default border */
-            height: 2px; /* Set the height of the line */
-            background-color: #006400; /* Change color */
-            width: 100%; /* Set the width of the line */
-            margin: 0; /* Center the line and add vertical spacing */
-        }
-    </style>
-</head>
 
 <body>
     <div class="detail">
