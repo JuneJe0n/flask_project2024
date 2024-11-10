@@ -1,16 +1,10 @@
 {% extends "index.html" %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="../static/list.css">
-{% endblock %}
-
 {% block content %}
-
-<body>
-  <div class="row">
+  <div class="row" style="justify-self: center;">
     <div class="column">
       <div class="column-nav">
-          <ul style="list-style-type: none;">
+          <ul style="list-style-type: none; justify-self: start;">
             <li><b><span style="font-size: 40px; color: black;">액세서리</span></b></li><br>
             <li><a href="#" class="active">#헤어</a></li>
             <li><a href="#">#안경</a></li>
@@ -152,8 +146,7 @@
   </div>
 
   <footer>
-    <br>
-      <div class="pagination">
+      <div class="pagination" style="justify-self: center;">
           <a href="#" class="prev" style="color: gray">← Previous</a>
           <a href="#" class="page active">1</a>
           <a href="#" class="page">2</a>
@@ -163,5 +156,4 @@
           <a href="#" class="next" style="color: #006400">Next →</a>
       </div>
   </footer>
-</body>
-{% endblock %}
+{% endblock content %}

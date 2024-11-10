@@ -14,11 +14,17 @@
 .column-nav {
     flex: 3;
     min-width: 200px;
+    width: 269px;
     height: 100vh;
     text-align: center;
     white-space: nowrap;
-    padding: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 39px;
+    padding-bottom: 48px;
+    gap: 18px;
     background-color: white;
+    justify-items: center;
 }
 
 .column-items {
@@ -35,8 +41,8 @@
     background-color: #e9ecef;
     border-color: #e9ecef;
     border-radius:8px;
-    width: 170px; /* 고정된 너비 */
-    height: 40px; /* 고정된 높이 */
+    width: 209px; /* 고정된 너비 */
+    height: 43px; /* 고정된 높이 */
     margin: 10px 0;
     padding: 10px;
     color: darkgray;
@@ -46,14 +52,14 @@
 }
 
 .column-nav a:hover {
-    background-color: #006400;      
-    border-color: #006400;       
+    background-color: #00462A;      
+    border-color: #00462A;       
     color: white;      
 }
 
 .column-nav a.active {
-    background-color: #006400;
-    border-color: #006400;
+    background-color: #00462A;
+    border-color: #00462A;
     color: white;
 }
 
@@ -82,12 +88,12 @@ footer {
 }
 
 .pagination a:hover {
-    background-color: #006400;
+    background-color: #00462A;
     color: white; /* 마우스 오버 시 배경 색상 */
 }
 
 .pagination .active {
-    background-color: #006400; /* 현재 페이지 스타일 */
+    background-color: #00462A; /* 현재 페이지 스타일 */
     color: white; /* 현재 페이지 글자 색상 */
-    border: 1px solid #006400; /* 현재 페이지 테두리 색상 */
+    border: 1px solid #00462A; /* 현재 페이지 테두리 색상 */
 }
