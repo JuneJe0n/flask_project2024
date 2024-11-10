@@ -1,15 +1,52 @@
 let optnum = 0;
 
-function addOption() {
-    const optionInputs = document.querySelectorAll('input[name="option[]"]');
-    optionInputs.forEach(input => {
-        if (input.value.trim() !== "") {
-            optnum += 1;
-            document.getElementById("optnum").innerHTML = "(현재 옵션 수: "+optnum+")";    
-            input.value = "";
-        }
-    });
+function addOption(OptionText) {
+    if (OptionText.trim() == "") {
+        return;  // 빈 값은 무시하고 함수 종료
+    }
+
+    const option = document.getElementById("options");
+
+    const optionBox = document.createElement("div");
+    optionBox.className = "option-box";
+    optionBox.textContent = OptionText;
+
+    const deleteBtn = document.createElement("span");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.textContent = "×";
+    deleteBtn.onclick = function() {
+        option.removeChild(optionBox);
+        optnum -= 1;
+        document.getElementById(`hidden-option${optnum}`).remove();
+    };
+
+    const hiddenInput = document.createElement("input");
+    hiddenInput.type = "hidden";
+    hiddenInput.name = "option[]";  // 서버에서 리스트로 받을 수 있도록 설정
+    hiddenInput.value = OptionText;
+    hiddenInput.id = `hidden-option${optnum}`;
+
+    // 옵션 div에 삭제 버튼 추가하고 폼에 숨겨진 input 추가
+    optionBox.appendChild(deleteBtn);
+    option.appendChild(optionBox);
+    document.getElementById("option-container").appendChild(hiddenInput);
+
+    optnum += 1;
 }
+
+document.getElementById("option-receive").addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && this.value.trim() !== "") {
+        event.preventDefault();
+        addOption(this.value.trim());
+        this.value = "";
+    }
+
+    if (!optnum) {
+        const a = document.getElementById("option-notice");
+        a.style.display = 'none';
+    }
+});
+
 
 function addItem() {
     const newname = document.getElementById("name").value;

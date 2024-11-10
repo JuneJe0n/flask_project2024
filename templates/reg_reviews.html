@@ -10,7 +10,7 @@
         <form>리뷰 작성하기</form>
     </div>
 
-    <form action="/submit_item_post" method="post" enctype="multipart/form-data">
+    <form action="/submit_review_post" method="post" enctype="multipart/form-data">
         <div style="width: 1341px; padding: 0px; overflow: hidden; justify-self: center;">
             <div style="margin-left: 0px; font-size: 15px;">
                 <label for="name">상품<br><br></label>
@@ -38,7 +38,6 @@
             <div class="reg-review" style="float: right; width: 659px; padding-right: 10px; padding-left: 0px;">
                 <div style="justify-self: center;">상품이 만족스러우셨나요?<br><br></div>
                 <div class="stars" style="justify-self: center;">
-                    <!--클로버 이미지가 이상하다면 본인 컴퓨터 경로에 맞게 src 수정해주시면 됩니다. main.js 폴더의 경로도 수정해주셔야 정상작동 됩니다-->
                     <div class="star">
                         <img id="clover1" src="../static/images/clover.png" style="width: 40px;" onmouseover="changecolor(1)" onclick="fixcolor(1)">
                     </div>
@@ -61,17 +60,17 @@
                     <div class="upload-box-2" id="box1" onclick="openFileDialog(event, 1)">
                         <img id="preview1" style="display: none; width: 196px; height: 100%; margin-top: px;" />
                         <label id="plus1" style="width: 196px; font-size: 32pt; text-align: center; color: dimgrey; cursor: pointer;">+</label>
-                        <input id="fileInput1" type="file" name="file" style="display: none;" onchange="changeIMG(1)" />
+                        <input id="fileInput1" type="file" name="file1" style="display: none;" onchange="changeIMG(1)" />
                     </div>
                     <div class="upload-box-2" id="box2" onclick="openFileDialog(event, 2)">
                         <img id="preview2" style="display: none; width: 196px; height: 100%; margin-top: px;" />
                         <label id="plus2" style="width: 196px; font-size: 32pt; text-align: center; color: dimgrey; cursor: pointer;">+</label>
-                        <input id="fileInput2" type="file" name="file" style="display: none;" onchange="changeIMG(2)" />
+                        <input id="fileInput2" type="file" name="file2" style="display: none;" onchange="changeIMG(2)" />
                     </div>
                     <div class="upload-box-2" id="box3" onclick="openFileDialog(event, 3)">
                         <img id="preview3" style="display: none; width: 196px; height: 100%; margin-top: px;" />
                         <label id="plus3" style="width: 196px; font-size: 32pt; text-align: center; color: dimgrey; cursor: pointer;">+</label>
-                        <input id="fileInput3" type="file" name="file" style="display: none;" onchange="changeIMG(3)" />
+                        <input id="fileInput3" type="file" name="file3" style="display: none;" onchange="changeIMG(3)" />
                     </div>
                 </div>
                 <br>
