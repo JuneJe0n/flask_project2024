@@ -49,19 +49,26 @@
         // JavaScript to toggle password visibility
         function togglePassword() {
             const passwordInput = document.getElementById('password');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-            } else {
-                passwordInput.type = 'password';
-            }
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
         }
 
-        // JavaScript to simulate ID check functionality
+        // JavaScript to check ID availability
         function checkID() {
             const usernameInput = document.getElementById('username').value;
             if (usernameInput) {
-                alert(`Checking if ID "${usernameInput}" is available...`);
-                // Implement actual ID check logic here (e.g., API call)
+                fetch(`/check_id?id=${usernameInput}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.available) {
+                            alert("ID is available!");
+                        } else {
+                            alert("ID already exists. Please choose another one.");
+                        }
+                    })
+                    .catch(error => {
+                        alert("Error checking ID.");
+                        console.error("Error:", error);
+                    });
             } else {
                 alert("Please enter an ID to check.");
             }
