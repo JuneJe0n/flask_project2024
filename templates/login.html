@@ -11,7 +11,17 @@
         <div class="login-box">
             <!-- Logo Image -->
             <img src="../static/images/logo.png" alt="EWH&MADE Logo" class="logo-image">
-            <form>
+
+            <!-- 플래시 메시지 표시 -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <script>
+                        alert("{{ messages[0] }}");
+                    </script>
+                {% endif %}
+            {% endwith %}
+
+            <form action="/login_confirm" method="post">
                 <div class="input-group">
                     <input type="text" id="username" name="username" placeholder="ID or Email" required>
                 </div>
@@ -27,7 +37,7 @@
                 <span>New to our community</span>
                 <hr>
             </div>
-            <button class="signup-btn">Create an account</button>
+            <a href="/signup"><button class="signup-btn">Create an account</button></a>
         </div>
     </div>
 
