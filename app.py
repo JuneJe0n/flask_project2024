@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from database import DBhandler
 import hashlib
 import os
@@ -29,6 +29,7 @@ def register_user():
     pw=request.form['pw']
     pw_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
     if DB.insert_user(data,pw_hash):
+        flash("Registration successful! Please log in.")
         return render_template("login.html")
     else:
         flash("user id already exist!")
