@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from database import DBhandler
 import hashlib
 import os
@@ -34,6 +34,14 @@ def register_user():
     else:
         flash("user id already exist!")
         return render_template("signup.html")
+
+@application.route("/check_id")
+def check_id():
+    id_to_check = request.args.get("id")
+    if DB.user_duplicate_check(id_to_check):
+        return jsonify({"available": True})
+    else:
+        return jsonify({"available": False})
 
 @application.route("/list")
 def view_list():
