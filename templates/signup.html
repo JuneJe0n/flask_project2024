@@ -11,6 +11,16 @@
         <div class="login-box">
             <!-- Title -->
             <h1 class="title">Sign In</h1>
+            
+            <!-- 플래시 메시지 표시 -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <script>
+                        alert("{{ messages[0] }}");
+                    </script>
+                {% endif %}
+            {% endwith %}
+
             <form action="/signup_post" method="POST">
                 <div class="input-group">
                     <input type="text" id="nickname" name="nickname" placeholder="Nickname" required>
