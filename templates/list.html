@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="../static/list.css">
+  <link rel="stylesheet" href="/static/list.css">
 {% endblock %}
 
 {% block content %}
@@ -26,14 +26,14 @@
                       {% for key, value in row1 %}
                           <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
                               <div id="itemsection">
-                                  <img src="../static/images/empty_img.png" alt="item_img" width="240px" height="192px" style="display: block;">
+                                  <img src="{{value.images[0]}}" alt="item_img" width="240px" height="192px" style="display: block;">
                                   <p style="margin: 10px 0;">
-                                      <img src="../static/images/user_icon.png" alt="user_icon" width="20" height="20">
+                                      <img src="/static/images/user_icon.png" alt="user_icon" width="20" height="20">
                                       <span style="color:gray;">{{value.nickname}}</span>
                                   </p>
                                   <p style="font-size: 18px"><b>{{key}}</b></p>
                                   <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}%</b></span> {{value.price}}원</p>
-                                  <p><img src="../static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
+                                  <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
                               </div>
                           </td>
                       {% endfor %}
@@ -43,7 +43,7 @@
                       {% for key, value in row2 %}
                           <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
                               <div id="itemsection">
-                                  <img src="../static/images/empty_img.png" alt="item_img" width="240" height="192" style="display: block;">
+                                  <img src="{{value.images[0]}}" alt="item_img" width="240" height="192" style="display: block;">
                                   <p style="margin: 10px 0;">
                                       <img src="../static/images/user_icon.png" alt="user_icon" width="20" height="20">
                                       <span style="color:gray;">{{value.user}}</span>
