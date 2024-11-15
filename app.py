@@ -52,9 +52,9 @@ def view_list():
 def view_itemdetail():
     return render_template("itemdetail.html")
 
-@application.route("/review")
-def view_review():
-    return render_template("review.html")
+@application.route("/review_page")
+def view_review_page():
+    return render_template("review_page.html")
 
 @application.route("/reg_items")
 def reg_items():
