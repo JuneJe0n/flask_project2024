@@ -11,6 +11,11 @@
         <div class="login-box">
             <!-- Logo Image -->
             <img src="../static/images/logo.png" alt="EWH&MADE Logo" class="logo-image">
+            {% with mesg = get_flashed_messages() %}
+            {% if mesg !=[] %}
+            <script>alert("{{ mesg[0] }}")</script>
+            {% endif %}
+            {% endwith %}
             <form>
                 <div class="input-group">
                     <input type="text" id="username" name="username" placeholder="ID or Email" required>

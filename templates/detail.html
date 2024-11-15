@@ -1,7 +1,8 @@
 {% extends "index.html" %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="../static/itemdetail.css">
+<link rel="stylesheet" href="/static/detail.css">
+
 {% endblock %}
 
 {% block content %}
@@ -9,25 +10,25 @@
 <body>
     <div class="detail">
         <div class="detail-image">
-            <img src="../static/images/empty_img.png" alt="center_img" width="550px" height="450px">
+            <img src="/static/images/empty_img.png" alt="center_img" width="550px" height="450px">
             <div style="margin-top: 15px; display: flex-center;">
-                <img src="../static/images/empty_img.png" alt="center_img" width="10%">
-                <img src="../static/images/empty_img.png" alt="center_img" width="10%">
-                <img src="../static/images/empty_img.png" alt="center_img" width="10%">
-                <img src="../static/images/empty_img.png" alt="center_img" width="10%">
-                <img src="../static/images/empty_img.png" alt="center_img" width="10%">
-                <img src="../static/images/empty_img.png" alt="center_img" width="10%">
-                <img src="../static/images/empty_img.png" alt="center_img" width="10%">
+                <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+                <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+                <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+                <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+                <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+                <img src="/static/images/empty_img.png" alt="center_img" width="10%">
+                <img src="/static/images/empty_img.png" alt="center_img" width="10%">
             </div>
         </div>
 
         <form action=".php" class="detail-info">
-            <p style="color:gray;"><img src="../static/images/user_icon.png" alt="user_icon" width="30" height="30">
+            <p style="color:gray;"><img src="/static/images/user_icon.png" alt="user_icon" width="30" height="30">
                 배꽃헤어</p>
-            <p style="font-size:30px; margin: 20px 0;"><b>핸드메이드 행운 스크런치</b></p>
-        <p style="color:gray; display: flex; justify-content: flex-end; margin: 0;"><del>10,000원</del></p>
+            <p style="font-size:30px; margin: 20px 0;"><b>{{key}}</b></p>
+        <p style="color:gray; display: flex; justify-content: flex-end; margin: 0;"><del>{{data.price}}원</del></p>
             <p style="font-size: 30px; display: flex; justify-content: flex-end; margin: 10px 0;"><b>
-            <span style="color:red; font-size: 40px; margin-right: 10px;">20%</span>8,000원</b></p>
+            <span style="color:red; font-size: 40px; margin-right: 10px;">{{data.discount}}%</span>8,000원</b></p>
             <select id="option" style="width: 100%;">
                 <option value="option">옵션 선택</option>
             </select>
