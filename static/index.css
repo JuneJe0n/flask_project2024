@@ -1,4 +1,6 @@
-    * {margin:0; padding:0; box-sizing: border-box;}
+/* 이하 index */
+
+* {margin:0; padding:0; box-sizing: border-box;}
 
 header {
     height: 80px;
@@ -64,8 +66,8 @@ header .userRegister {display: flex; gap: 10px;}
     font-size: 14px;
 }
 
-#signin {background-color: #006400;color: white;}
-#signin:hover {background-color: #004d00;}
+#signup {background-color: #006400;color: white;}
+#signup:hover {background-color: #004d00;}
 .userRegister button:hover {background-color: #f0f0f0;}
 
 
