@@ -19,6 +19,20 @@ def Hello():
 def login():
     return render_template("login.html")
 
+@application.route("/login_confirm", methods=['POST'])
+def login_user():
+    id_ = request.form['id']
+    pw = request.form['pw']
+    pw_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
+    if DB.find_user(id_, pw_hash):
+        session['id'] = id_
+        flash("Welcome, " + id_ + "!")
+        return redirect(url_for('view_list'))  # 로그인 후 리스트 페이지로 이동
+    else:
+        flash("Wrong ID or Password!")
+        return redirect(url_for('login'))  # 로그인 실패 시 다시 로그인 페이지로 이동
+
+
 @application.route("/signup")
 def signup():
     return render_template("signup.html")
