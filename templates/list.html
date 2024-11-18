@@ -32,7 +32,7 @@
                                       <span style="color:gray;">{{value.nickname}}</span>
                                   </p>
                                   <p style="font-size: 18px"><b>{{key}}</b></p>
-                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}%</b></span> {{value.price}}원</p>
+                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
                                   <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
                               </div>
                           </td>
@@ -49,7 +49,7 @@
                                       <span style="color:gray;">{{value.user}}</span>
                                   </p>
                                   <p style="font-size: 18px"><b>{{key}}</b></p>
-                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}%</b></span> {{value.price}}원</p>
+                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
                                   <p><img src="../static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
                               </div>
                           </td>
@@ -72,5 +72,9 @@
       <a href="#" class="next" style="color: #006400;">Next →</a>
     </div>
 </footer>  
+
+{% block extra_js %}
+<script src="/static/list.js"></script>
+{% endblock %}
 
 {% endblock content %}
