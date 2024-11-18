@@ -1,0 +1,62 @@
+{% extends "index.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/detail.css">
+
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <div class="detail">
+        <div class="detail-image">
+            <img src="/{{data.images[0]}}" alt="center_img" width="550px" height="450px">
+            <div style="margin-top: 15px; display: flex-center;">
+                {% for i in range(1, 9) %}
+                {% if data.images[i] %}
+                <img src="/{{data.images[i]}}" alt="other_img" width="66px" height="54px">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <form action=".php" class="detail-info">
+            <p style="color:gray;"><img src="/static/images/user_icon.png" alt="user_icon" width="30" height="30">
+                {{data.user}}</p>
+            <p style="font-size:30px; margin: 20px 0;"><b>{{name}}</b></p>
+        <p style="color:gray; display: flex; justify-content: flex-end; margin: 0;"><del>{{data.price}}원</del></p>
+            <p style="font-size: 30px; display: flex; justify-content: flex-end; margin: 10px 0;"><b>
+            <span style="color:red; font-size: 40px; margin-right: 10px;">{{data.discount}}%</span>8,000원</b></p>
+            <select id="option" style="width: 100%;">
+                <option value="option">옵션 선택</option>
+                {% for i in range(0, data.options|length) %}
+                    {% if data.options[i] %}
+                        <option value="/{{ data.options[i] }}">{{ data.options[i] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            
+            <p style="display: flex; justify-content: space-between; margin: 20px 0;">S/화이트
+            <input type="number" min="0" max="100" value="0"></p>
+            <hr>
+            <p style="display: flex; justify-content: flex-end; align-items: flex-end; margin: 20px 0;">총 금액
+            <span style="font-size:30px;  margin-left: 10px;"><b>24,000원</b></span></p>
+
+            <div style="float: right; margin: 20px 0;">
+                <input type="button" value="장바구니" style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
+                <input type="submit" value="구매하기" style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <div class="footer_nav">
+            <ul>
+                <li><a href="#" class="active">상품 설명</a></li>
+                <li><a href="#">리뷰</a></li>
+                <li><a href="#">상품 문의</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+{% endblock %}

@@ -1,0 +1,153 @@
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f8f8f8;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+}
+
+.header,
+.greeting-section,
+.recent-products,
+.customer-service {
+    width: 100%; /* Make sections take full width */
+    padding: 20px; /* Add padding to separate elements from edges */
+    box-sizing: border-box;
+}
+
+.actions-section {
+    width: 90%; /* 화면의 약 90% 너비로 설정 */
+    height: 200px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    margin: -5px auto 20px auto; /* Center horizontally */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around; /* 아이콘들이 좌우로 일렬로 나열되도록 설정 */
+    align-items: center;
+}
+
+/* Header Section */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.header span {
+    font-size: 20px;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+}
+
+.user-menu a {
+    margin-right: 15px;
+    color: #333;
+    text-decoration: none;
+}
+
+.profile-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+/* Greeting Section */
+.greeting-section {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.greeting-section h2 {
+    font-size: 26px;
+    color: #00462A;
+    margin-bottom: 10px;
+}
+
+.greeting-section p {
+    color: #888;
+    font-size: 18px;
+}
+
+/* Action Card Styling */
+.action-card {
+    text-align: center;
+    padding: 10px;
+    flex: 1; /* 아이콘들이 균등하게 공간을 차지하도록 설정 */
+}
+
+.action-card img {
+    width: 50px; /* 아이콘 크기를 조정 */
+    height: 50px;
+    margin-bottom: 5px;
+}
+
+.truck-icon {
+    width: 60px; 
+    height: 40px; 
+}
+
+.action-card p {
+    color: #333;
+}
+
+.action-card span {
+    display: block;
+    font-size: 16px;
+    color: #00462A;
+    font-weight: bold;
+}
+
+/* Recent Products */
+.recent-products {
+    padding: 30px;
+}
+
+.recent-products h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.product {
+    flex: 1; /* Make product items responsive */
+    height: 250px;
+    background-color: #ddd;
+    border-radius: 5px;
+}
+
+.more-link {
+    text-decoration: none;
+    color: #888;
+    font-size: 16px;
+}
+
+/* Footer Customer Service */
+.customer-service {
+    padding: 30px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
