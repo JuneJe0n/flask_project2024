@@ -11,23 +11,17 @@
         <div class="login-box">
             <!-- Logo Image -->
             <img src="../static/images/logo.png" alt="EWH&MADE Logo" class="logo-image">
-
-            <!-- 플래시 메시지 표시 -->
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <script>
-                        alert("{{ messages[0] }}");
-                    </script>
-                {% endif %}
+            {% with mesg = get_flashed_messages() %}
+            {% if mesg != [] %}
+            <script>alert("{{ mesg[0] }}")</script>
+            {% endif %}
             {% endwith %}
-
-            <form action="/login_confirm" method="post">
+            <form action="/login_confirm" method="POST">
                 <div class="input-group">
-                    <input type="text" id="username" name="username" placeholder="ID or Email" required>
+                    <input type="text" id="id" name="id" placeholder="ID" required>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" name="password" placeholder="Your Password" required>
-                    <!-- Eye Icon for Password Toggle -->
+                    <input type="password" id="pw" name="pw" placeholder="Your Password" required>
                     <img src="eye.png" alt="Toggle Visibility" class="password-toggle" onclick="togglePassword()">
                 </div>
                 <button type="submit" class="login-btn">Log in</button>
@@ -37,14 +31,16 @@
                 <span>New to our community</span>
                 <hr>
             </div>
-            <a href="/signup"><button class="signup-btn">Create an account</button></a>
+            <a href="/signup">
+                <button class="signup-btn">Create an account</button>
+            </a>
         </div>
     </div>
 
     <script>
         // JavaScript to toggle password visibility
         function togglePassword() {
-            const passwordInput = document.getElementById('password');
+            const passwordInput = document.getElementById('pw');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
             } else {

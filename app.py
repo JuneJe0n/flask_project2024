@@ -15,9 +15,32 @@ items = []
 def Hello():
     return render_template("index.html")
 
+@application.route("/mypage")
+def mypage():
+    return render_template("mypage.html")
+
 @application.route("/login")
 def login():
     return render_template("login.html")
+
+@application.route("/logout")
+def logout_user():
+    session.clear()
+    return redirect(url_for('Hello'))
+
+@application.route("/login_confirm", methods=['POST'])
+def login_user():
+    id_ = request.form['id']
+    pw = request.form['pw']
+    pw_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
+    if DB.find_user(id_, pw_hash):
+        session['id'] = id_
+        flash("Welcome, " + id_ + "!")
+        return redirect(url_for('view_list'))  # 로그인 후 리스트 페이지로 이동
+    else:
+        flash("Wrong ID or Password!")
+        return redirect(url_for('login'))  # 로그인 실패 시 다시 로그인 페이지로 이동
+
 
 @application.route("/signup")
 def signup():
@@ -45,12 +68,68 @@ def check_id():
 
 @application.route("/list")
 def view_list():
-    # Pass the stored items list to the template
-    return render_template("list.html", items=items)
+    page = request.args.get("page", 0, type=int)
+    per_page = 8  # item count to display per page
+    per_row = 4  # item count to display per row
+    row_count = int(per_page / per_row)
+    start_idx = per_page * page
+    end_idx = per_page * (page + 1)
 
-@application.route("/itemdetail")
+    data = DB.get_items()  # read the table
+    item_counts = len(data)
+    data = dict(list(data.items())[start_idx:end_idx])
+    tot_count = len(data)
+
+    for i in range(row_count):  # last row
+        if (i == row_count - 1) and (tot_count % per_row != 0):
+            locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:])
+        else:
+            locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:(i + 1) * per_row])
+
+    finalprices = {}
+    # 데이터 순회
+    for key, item in data.items():  # item은 (key, value) 쌍
+        price = float(item.get('price', 0))  # 'price'는 item 딕셔너리에서 가져옴
+        discount = float(item.get('discount', 0))  # 'discount'는 item 딕셔너리에서 가져옴
+        finalprice = int(price * (100 - discount) * 0.01)
+        finalprices[key] = finalprice  # finalprices 딕셔너리에 최종 가격 저장
+
+    # 이후 finalprices를 템플릿에 넘길 수 있습니다.
+    return render_template(
+        "list.html",
+        datas=data.items(),
+        row1=locals()['data_0'].items(),
+        row2=locals()['data_1'].items(),
+        limit=per_page,
+        page=page,
+        page_count=int((item_counts / per_page) + 1),
+        total=item_counts,
+        finalprices=finalprices  # 템플릿으로 finalprices 전달
+    )
+
+
+
+@application.route('/dynamicrul/<varible_name>/')
+def DynamicUrl(varible_name):
+    return str(varible_name)
+
+@application.route("/detail")
 def view_itemdetail():
-    return render_template("itemdetail.html")
+    return render_template("detail.html")
+
+@application.route("/view_detail/<name>/")
+def view_item_detail(name):
+    print("###name:",name)
+    data = DB.get_item_byname(str(name))
+    print("####data:",data)
+
+    price = float(data['price'] or 0)
+    discount = float(data['discount'] or 0)
+
+    finalprice = int(price * (100 - discount) * 0.01)
+
+    return render_template("detail.html", name=name, data=data, finalprice=finalprice)
+
 
 @application.route("/review_page")
 def view_review_page():
@@ -80,7 +159,31 @@ def submit_item_post():
     
     DB.insert_item(data['name'], data, img_list, opt_list)
 
-    return render_template("list.html", items=items)
+
+    page = request.args.get("page", 0, type=int)
+    per_page=8 # item count to display per page
+    per_row=4 # item count to display per row
+    row_count=int(per_page/per_row)
+    start_idx=per_page*page
+    end_idx=per_page*(page+1)
+    data = DB.get_items() #read the table
+    item_counts=len(data)
+    data=dict(list(data.items())[start_idx:end_idx])
+    tot_count = len(data)
+    for i in range(row_count):#last row
+        if (i == row_count-1) and (tot_count%per_row != 0):
+            locals()['data_{}'.format(i)] = dict(list(data.items())[i*per_row:])
+        else: 
+            locals()['data_{}'.format(i)] = dict(list(data.items())[i*per_row:(i+1)*per_row])
+
+    return render_template( 
+        "list.html",
+        datas=data.items(), 
+        row1=locals()['data_0'].items(), 
+        row2=locals()['data_1'].items(), 
+        limit=per_page,
+        page=page, page_count=int((item_counts/per_page)+1),
+        total=item_counts)
 
 @application.route("/submit_review_post", methods=['POST'])
 def submit_review_post():
