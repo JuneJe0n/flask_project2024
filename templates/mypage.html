@@ -11,15 +11,18 @@
     <header class="header">
         <span>마이페이지</span>
         <div class="user-menu">
-            <a href="#">로그아웃</a>
+            <a href="/logout">로그아웃</a>
             <img src="profile-icon.png" alt="Profile Icon" class="profile-icon">
         </div>
     </header>
 
     <!-- Greeting Section -->
     <section class="greeting-section">
-        <h2>이*화님 안녕하세요!</h2>
-        <p>ewha****@gmail.com</p>
+        {% if session['id'] %}
+        <h2>{{session['id']}}님 안녕하세요!</h2>
+        <!--firebase에 email 저장 field 만들면 아래에 자동으로 반영됩니다.-->
+        <p>{{session['email']}}</p>
+        {% endif %}
     </section>
 
     <!-- Actions Section -->
