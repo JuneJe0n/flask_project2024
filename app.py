@@ -87,12 +87,13 @@ def view_list():
             locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:(i + 1) * per_row])
 
     finalprices = {}
-    # 데이터 순회
-    for key, item in data.items():  # item은 (key, value) 쌍
-        price = float(item.get('price', 0))  # 'price'는 item 딕셔너리에서 가져옴
-        discount = float(item.get('discount', 0))  # 'discount'는 item 딕셔너리에서 가져옴
-        finalprice = int(price * (100 - discount) * 0.01)
-        finalprices[key] = finalprice  # finalprices 딕셔너리에 최종 가격 저장
+    if data:
+        for key, item in data.items():
+            price = float(item.get('price', 0))
+            discount = float(item.get('discount', 0))
+            finalprice = int(price * (100 - discount) * 0.01)
+            finalprices[key] = finalprice
+
 
     # 이후 finalprices를 템플릿에 넘길 수 있습니다.
     return render_template(
@@ -176,6 +177,14 @@ def submit_item_post():
         else: 
             locals()['data_{}'.format(i)] = dict(list(data.items())[i*per_row:(i+1)*per_row])
 
+    finalprices = {}
+    if data:
+        for key, item in data.items():
+            price = float(item.get('price', 0))
+            discount = float(item.get('discount', 0))
+            finalprice = int(price * (100 - discount) * 0.01)
+            finalprices[key] = finalprice
+
     return render_template( 
         "list.html",
         datas=data.items(), 
@@ -183,7 +192,8 @@ def submit_item_post():
         row2=locals()['data_1'].items(), 
         limit=per_page,
         page=page, page_count=int((item_counts/per_page)+1),
-        total=item_counts)
+        total=item_counts,
+        finalprices=finalprices)
 
 @application.route("/submit_review_post", methods=['POST'])
 def submit_review_post():
