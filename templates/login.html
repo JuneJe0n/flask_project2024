@@ -10,7 +10,7 @@
     <div class="login-container">
         <div class="login-box">
             <!-- Logo Image -->
-            <img src="../static/images/logo.png" alt="EWH&MADE Logo" class="logo-image">
+            <img src="/static/images/logo.png" alt="EWH&MADE Logo" class="logo-image">
             {% with mesg = get_flashed_messages() %}
             {% if mesg != [] %}
             <script>alert("{{ mesg[0] }}")</script>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="input-group">
                     <input type="password" id="pw" name="pw" placeholder="Your Password" required>
-                    <img src="eye.png" alt="Toggle Visibility" class="password-toggle" onclick="togglePassword()">
+                    <img src="/static/images/eye.png" alt="Toggle Visibility" class="password-toggle" onclick="togglePassword()">
                 </div>
                 <button type="submit" class="login-btn">Log in</button>
             </form>

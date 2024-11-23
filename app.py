@@ -32,6 +32,7 @@ def logout_user():
 def login_user():
     id_ = request.form['id']
     pw = request.form['pw']
+
     pw_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
     if DB.find_user(id_, pw_hash):
         session['id'] = id_
@@ -123,13 +124,14 @@ def view_item_detail(name):
     print("###name:",name)
     data = DB.get_item_byname(str(name))
     print("####data:",data)
+    info = request.form.get('info')
 
     price = float(data['price'] or 0)
     discount = float(data['discount'] or 0)
 
     finalprice = int(price * (100 - discount) * 0.01)
 
-    return render_template("detail.html", name=name, data=data, finalprice=finalprice)
+    return render_template("detail.html", name=name, data=data, info=info, finalprice=finalprice)
 
 
 @application.route("/review_page")
@@ -149,6 +151,7 @@ def submit_item_post():
     data = request.form
     img_list = []
     opt_list = [opt for opt in request.form.getlist('option[]') if opt.strip()]
+    info = request.form.get('info')
 
     # 이미지 파일 저장 및 경로 리스트에 추가
     for i in range(1, 10):  # 최대 9개의 이미지를 처리
@@ -193,7 +196,8 @@ def submit_item_post():
         limit=per_page,
         page=page, page_count=int((item_counts/per_page)+1),
         total=item_counts,
-        finalprices=finalprices)
+        finalprices=finalprices,
+        info=info)
 
 @application.route("/submit_review_post", methods=['POST'])
 def submit_review_post():

@@ -3,70 +3,22 @@
     text-decoration: none;
 }
 
-.column {
+.items {
     display: flex;
+    justify-content: center;
     width: 100%;
-    height: 90vh;
-    overflow: hidden;
-    background-color: white;
-}
-
-.column-nav {
-    flex: 3;
-    min-width: 200px;
-    width: 269px;
-    height: 100vh;
-    text-align: center;
-    white-space: nowrap;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 39px;
-    padding-bottom: 48px;
-    gap: 18px;
-    background-color: white;
-    justify-items: center;
-}
-
-.column-items {
-    flex: 17;
     min-width: 800px;
-    height: 100vh;
+    height: 100%;
+    overflow: hidden;
     text-align: center;
     padding: 20px;
     background-color: white;
 }
 
-  .column-nav a {
-    display: inline-block;
-    background-color: #e9ecef;
-    border-color: #e9ecef;
-    border-radius:8px;
-    width: 209px; /* 고정된 너비 */
-    height: 43px; /* 고정된 높이 */
-    margin: 10px 0;
-    padding: 10px;
-    color: darkgray;
-    font-size: 18px;
-    text-align: left;
-    text-decoration: none;
-}
-
-.column-nav a:hover {
-    background-color: #00462A;      
-    border-color: #00462A;       
-    color: white;      
-}
-
-.column-nav a.active {
-    background-color: #00462A;
-    border-color: #00462A;
-    color: white;
-}
-
 #itemsection {
     text-align: left;
     color: black;
-    margin: 15px;
+    margin: 20px;
     font-size: 13px;
 }
 
@@ -75,7 +27,7 @@ footer {
     height: 50px;
     clear: both;
     text-align: center;
-    margin: 20px 0;
+    margin: 40px 0;
 }
 
 .pagination a {
