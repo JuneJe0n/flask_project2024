@@ -11,7 +11,8 @@
     <header class="header">
         <span>마이페이지</span>
         <div class="user-menu">
-            <a href="/logout">로그아웃</a>
+            <button name="reg_items" id="reg_items" onclick="location.href='/reg_items'">상품 등록</button>
+            <button name="logout" id="logout" onclick="location.href='/logout'">로그아웃</button>
             <img src="/static/images/profile-icon.png" alt="Profile Icon" class="profile-icon">
         </div>
     </header>
@@ -19,7 +20,7 @@
     <!-- Greeting Section -->
     <section class="greeting-section">
         {% if session['id'] %}
-        <h2>{{session['id']}}님 안녕하세요!</h2>
+        <h2>{{session['nickname']}}님 안녕하세요!</h2>
         <!--firebase에 email 저장 field 만들면 아래에 자동으로 반영됩니다.-->
         <p>{{session['email']}}</p>
         {% endif %}

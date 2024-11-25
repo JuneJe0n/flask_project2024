@@ -32,16 +32,20 @@ def logout_user():
 def login_user():
     id_ = request.form['id']
     pw = request.form['pw']
-
     pw_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
-    if DB.find_user(id_, pw_hash):
-        session['id'] = id_
-        flash("Welcome, " + id_ + "!")
-        return redirect(url_for('view_list'))  # 로그인 후 리스트 페이지로 이동
-    else:
-        flash("Wrong ID or Password!")
-        return redirect(url_for('login'))  # 로그인 실패 시 다시 로그인 페이지로 이동
 
+    user = DB.find_user(id_, pw_hash)  # 사용자 데이터 가져오기
+
+    if user:  # 사용자가 존재하면 로그인 성공
+        session['id'] = user['id']
+        session['nickname'] = user['nickname']
+        session['email'] = user['email']
+        flash(f"Welcome, {user['nickname']}!")
+        return redirect(url_for('view_list'))
+    else:  # 사용자 없으면 로그인 실패
+        flash("Wrong ID or Password!")
+        return redirect(url_for('login'))
+    
 
 @application.route("/signup")
 def signup():
@@ -214,6 +218,43 @@ def submit_review_post():
     DB.insert_review(data, img_list)
     
     return render_template("list.html", items=items)
+
+
+@application.route("/search", methods=['GET'])
+def search():
+    # 검색어 가져오기
+    keyword = request.args.get('search_kw', type=str, default='').strip()  # 'search_kw'는 검색창 input의 name
+    if not keyword:  # 검색어가 비어 있으면 검색 결과 페이지로 이동
+        flash("Please enter a search term.")
+        return redirect(url_for('view_list'))  # 'home' 페이지로 리디렉션 (view_list 대신)
+
+    try:
+        # Firebase에서 아이템 가져오기 (DB.child("item").get() 대신 직접 가져오기)
+        items = DB.get_items()  # DB에서 아이템을 가져오는 메서드 수정 필요 (DBhandler 객체에 맞게)
+        filtered_items = []
+
+        # 아이템들 중에서 검색어와 일치하는 아이템 필터링
+        for item_name, item_data in items.items():  # items는 딕셔너리 형태로 반환됨
+            name = item_data.get("name", "").lower()  # 아이템 이름 (소문자로 처리하여 비교)
+            info = item_data.get("info", "").lower()  # 아이템 설명 (소문자로 처리하여 비교)
+
+            # 검색어가 이름이나 설명에 포함되면 필터링
+            if keyword.lower() in name or keyword.lower() in info:
+                filtered_items.append(item_data)
+
+        # 검색 결과가 있을 때
+        if filtered_items:
+            return render_template('search_results.html', items=filtered_items, keyword=keyword)
+        else:
+            flash("No items found.")
+            return render_template('search_results.html', items=[], keyword=keyword)  # 검색 결과가 없으면 빈 리스트 전달
+    except Exception as e:
+        # 오류 처리: Firebase에서 데이터를 가져오는 중 예외가 발생한 경우
+        flash(f"Error occurred while fetching items: {str(e)}")
+        return render_template('search_results.html', items=[], keyword=keyword)  # 오류 발생 시 빈 리스트 전달
+
+
+
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)
