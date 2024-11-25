@@ -1,9 +1,12 @@
-function addReview() {
+function addReview(event) {
+    event.preventDefault();
+
     const opt = document.getElementById('options').value;
     const rev = document.getElementById('info').value;
 
     if (opt && rev.length >= 20 && fixcolorvalue == -1) {
         alert('리뷰가 등록되었습니다!');
+        document.getElementById('regreview').submit();
     } else if (opt && fixcolorvalue == -1) {
         alert('리뷰를 20자 이상 입력해주세요!');
     } else {

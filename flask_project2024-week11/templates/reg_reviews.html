@@ -10,7 +10,7 @@
         <label>리뷰 작성하기</label>
     </div>
 
-    <form action="/reg_review" method="post" enctype="multipart/form-data">
+    <form id="regreview" action="/reg_review" method="post" enctype="multipart/form-data">
         <div style="width: 1341px; padding: 0px; overflow: hidden; justify-self: center;">
             <div style="margin-left: 0px; font-size: 15px;">
                 <label for="name">상품<br><br></label>
@@ -84,7 +84,7 @@
                 <br>
                 <input type="hidden" id="clovers" name="clovers" style="justify-self: center;" value="0"></input>
                 <div id="final-button" style="justify-self: center;">
-                    <input class="submit-botton" type="submit" value="리뷰 등록" style="width: 660px; height: 52px; background-color: #00462A; color: white; border-radius: 8px;" onclick="addReview()">
+                    <input class="submit-botton" type="submit" value="리뷰 등록" style="width: 660px; height: 52px; background-color: #00462A; color: white; border-radius: 8px;" onclick="addReview(event)">
                 </div>
             </div>
         </div>

@@ -146,20 +146,17 @@ def reg_review_init(name):
 @application.route("/reg_review", methods=['POST'])
 def reg_review():
     data = request.form
-    if len(data['info']) >= 20:
-        img_list = []
+    img_list = []
 
-        for i in range(1, 3):
-            image_file = request.files.get(f'file{i}')
-            if image_file:
-                image_path = f"static/images/{image_file.filename}"
-                image_file.save(image_path)
-                img_list.append(image_path)
-        
-        DB.insert_review(data, img_list)
-        return render_template("review_page.html")
-    else:
-        return render_template("review_page.html")
+    for i in range(1, 3):
+        image_file = request.files.get(f'file{i}')
+        if image_file:
+            image_path = f"static/images/{image_file.filename}"
+            image_file.save(image_path)
+            img_list.append(image_path)
+    
+    DB.insert_review(data, img_list)
+    return render_template("review_page.html")
 
 @application.route("/submit_item_post", methods=['POST'])
 def submit_item_post():
