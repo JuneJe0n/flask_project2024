@@ -7,10 +7,10 @@
 {% block content %}
     <br>
     <div id="title" style="justify-self: center;">
-        <form>리뷰 작성하기</form>
+        <label>리뷰 작성하기</label>
     </div>
 
-    <form class="mb-3" name="myform" id="myform" action="/reg_review" method="post" enctype="multipart/form-data">
+    <form action="/reg_review" method="post" enctype="multipart/form-data">
         <div style="width: 1341px; padding: 0px; overflow: hidden; justify-self: center;">
             <div style="margin-left: 0px; font-size: 15px;">
                 <label for="name">상품<br><br></label>
@@ -28,11 +28,11 @@
             <hr>
             <div class="reg-review" style="float: left; padding-left: 0px; display: flex; flex-direction: column;">
                 <div class="reg-item-1" style="gap: 8px; display: flex; flex-direction: column;">
-                    <label value="" disabled selected>구매 옵션<span style="color: red;">*</span></label>
-                    <select id="option" style="width: 612px; height: 52px; align-self: stretch; margin: 0; border-radius: 8px;">
+                    <label for="options">구매 옵션<span style="color: red;">*</span></label>
+                    <select id="options" name="options" style="width: 612px; height: 52px; align-self: stretch; margin: 0; border-radius: 8px;">
                         {% for i in range(0, data.options | length) %}
                             {% if data.options[i] %}
-                                <option name="option" id="option" value="{{data.options[i]}}">{{ data.options[i] }}</option>
+                                <option value="{{data.options[i]}}">{{ data.options[i] }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -47,19 +47,19 @@
                 <div style="justify-self: center;">상품이 만족스러우셨나요?<br><br></div>
                 <div class="stars" style="justify-self: center;">
                     <div class="star">
-                        <img id="clover1" src="../static/images/clover.png" style="width: 40px;" onmouseover="changecolor(1)" onclick="fixcolor(1)">
+                        <img id="clover1" src="/static/images/clover.png" style="width: 40px;" onmouseover="changecolor(1)" onclick="fixcolor(1)">
                     </div>
                     <div class="star">
-                        <img id="clover2" src="../static/images/clover.png" style="width: 40px;" onmouseover="changecolor(2)" onclick="fixcolor(2)">
+                        <img id="clover2" src="/static/images/clover.png" style="width: 40px;" onmouseover="changecolor(2)" onclick="fixcolor(2)">
                     </div>
                     <div class="star">
-                        <img id="clover3" src="../static/images/clover.png" style="width: 40px;" onmouseover="changecolor(3)" onclick="fixcolor(3)">
+                        <img id="clover3" src="/static/images/clover.png" style="width: 40px;" onmouseover="changecolor(3)" onclick="fixcolor(3)">
                     </div>
                     <div class="star">
-                        <img id="clover4" src="../static/images/clover.png" style="width: 40px;" onmouseover="changecolor(4)" onclick="fixcolor(4)">
+                        <img id="clover4" src="/static/images/clover.png" style="width: 40px;" onmouseover="changecolor(4)" onclick="fixcolor(4)">
                     </div>
                     <div class="star">
-                        <img id="clover5" src="../static/images/clover.png" style="width: 40px;" onmouseover="changecolor(5)" onclick="fixcolor(5)">
+                        <img id="clover5" src="/static/images/clover.png" style="width: 40px;" onmouseover="changecolor(5)" onclick="fixcolor(5)">
                     </div>
                 </div>
                 <br>
@@ -82,6 +82,7 @@
                     </div>
                 </div>
                 <br>
+                <input type="hidden" id="clovers" name="clovers" style="justify-self: center;" value="0"></input>
                 <div id="final-button" style="justify-self: center;">
                     <input class="submit-botton" type="submit" value="리뷰 등록" style="width: 660px; height: 52px; background-color: #00462A; color: white; border-radius: 8px;" onclick="addReview()">
                 </div>
@@ -89,4 +90,8 @@
         </div>
     </form>
 
+{% endblock %}
+
+{% block extra_js %}
+    <script src="/static/reg_review.js"></script>
 {% endblock %}

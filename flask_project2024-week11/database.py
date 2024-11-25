@@ -27,8 +27,9 @@ class DBhandler:
         reivew_info = {
             "preview": data['info'][:10],
             "info": data['info'],
-            "option": data['option'],
-            "img_path": img_list
+            "option": data['options'], #name으로 받음
+            "star": data['clovers'],
+            "img_path": img_list,
         }
         self.db.child("review").child(data['info'][:10]).set(reivew_info)
         return True
