@@ -3,9 +3,8 @@ function Delete(itemId, button) {
     var row = button.closest('td');
     row.remove();
 
-    // Send AJAX request to the server to remove the item from the cart
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/remove_item', true);  // Adjust URL as necessary
+    xhr.open('POST', '/remove_item', true); 
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
         if (xhr.status === 200) {

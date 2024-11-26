@@ -1,1 +1,9 @@
-"{{name}} <img src="{{image}}" alt="{{image}}">
+<h1>구매하기</h1>
+<p>상품명: {{ name }}</p>
+<p><img src="{{ image }}" alt="상품 이미지"></p>
+<ul>
+    {% for option in options %}
+        <li>옵션: {{ option[0] }}, 수량: {{ option[1] }}</li>
+    {% endfor %}
+</ul>
+<p>총 가격: {{ total_price }}</p>

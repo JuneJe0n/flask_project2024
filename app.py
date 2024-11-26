@@ -143,9 +143,25 @@ def view_review_page():
 def reg_items():
     return render_template("reg_items.html")
 
+@application.route("/reg_review_init/<name>/")
+def reg_review_init(name):
+    data = DB.get_item_byname(str(name))
+    return render_template("reg_reviews.html", name=name, data=data)
+
 @application.route("/reg_reviews")
 def reg_reviews():
-    return render_template("reg_reviews.html")
+    data = request.form
+    img_list = []
+
+    for i in range(1, 3):
+        image_file = request.files.get(f'file{i}')
+        if image_file:
+            image_path = f"static/images/{image_file.filename}"
+            image_file.save(image_path)
+            img_list.append(image_path)
+    
+    DB.insert_review(data, img_list)
+    return render_template("review_page.html")
 
 @application.route("/submit_item_post", methods=['POST'])
 def submit_item_post():
@@ -216,41 +232,10 @@ def submit_review_post():
     
     return render_template("list.html", items=items)
 
-@application.route('/myreview')
-def view_myreview():
-    return render_template('myreview.html')
-
-@application.route("/likelist")
-def view_likelist():
-    # 세션에서 찜 목록을 가져옵니다
-    like_items = session.get('like', [])
-    
-    return render_template("likelist.html", like_items=like_items)
-
-
-
 # 장바구니에 항목 추가
 @application.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    data = request.form
-    
-    DB.insert_cart(data['name'], data)
-
-    data = DB.get_carts() #read the table
-
-    finalprices = {}
-    if data:
-        for key, cart in data.items():
-            price = float(cart.get('price', 0))
-            discount = float(cart.get('discount', 0))
-            finalprice = int(price * (100 - discount) * 0.01)
-            finalprices[key] = finalprice
-
-    return render_template( 
-        "shoppingcart.html",
-        datas=data.items(), 
-        items=items,
-        finalprices=finalprices)
+    return render_template('shoppingcart.html')
 
 
 # 장바구니 페이지
@@ -259,22 +244,24 @@ def view_cart():
     return render_template('shoppingcart.html')
 
 #커스터마이징 요청서
-@application.route('/customazing')
+@application.route('/customizing')
 def customazing():
     name = request.args.get('name')
     image = request.args.get('image')
-    total_price = request.args.get('totalPrice')
+    price = request.args.get('price')
     
-    return render_template('customazing.html', name=name, image=image, total_price=total_price)
+    return render_template('customizing.html', name=name, image=image, price=price)
 
 @application.route('/buying')
 def buying():
     name = request.args.get('name')
     image = request.args.get('image')
     total_price = request.args.get('totalPrice')
+    options_json = request.args.get('selectedOption')  # JSON 형식으로 전달받음
 
-    return render_template('buying.html', name=name, image=image, total_price=total_price)
+    options = json.loads(options_json)
 
+    return render_template('buying.html', name=name, image=image, total_price=total_price, options=options)
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)

@@ -22,14 +22,6 @@ class DBhandler:
         }
         self.db.child("item").child(name).set(item_info)
         return True
-    
-    def insert_cart(self, name, data):
-        cart_info = {
-            "price": data['price'],
-            "image": data['images[0]']
-        }
-        self.db.child("cart").child(name).set(cart_info)
-        return True
 
     def insert_review(self, data, img_list):
         reivew_info = {
@@ -69,10 +61,6 @@ class DBhandler:
     def get_items(self):
         items = self.db.child("item").get().val()
         return items    
-    
-    def get_carts(self):
-        items = self.db.child("cart").get().val()
-        return items   
 
     def get_item_byname(self, name):
         items = self.db.child("item").get()

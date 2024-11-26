@@ -53,6 +53,7 @@
             <form action="/add_to_cart" method="POST">
                 <input type="hidden" name="name" value="{{ name }}">
                 <input type="hidden" name="image" value="{{ data.images[0] }}">
+                <input type="hidden" name="price" value="{{ finalprice }}">
                 <input type="hidden" name="totalPrice" id="totalPrice">
                 <input type="hidden" name="selectedOption" id="selectedOptionInput">
                 
