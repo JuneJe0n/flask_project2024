@@ -22,27 +22,29 @@
         <hr class="divider"> <!-- 회색 선 추가 -->
 
         <div class="review-images">
-            <div></div>
-            <div></div>
+            {% if review.img_path %}
+                {% for img in review.img_path %}
+                    <img src="/{{ img }}" alt="리뷰 이미지" width="200" height="200">
+                {% endfor %}
+            {% else %}
+                <p>이미지가 없습니다.</p>
+            {% endif %}
         </div>
 
         <div class="review-content">
             <div class="text">
                 <div class="username">
-                    abcd**** 
+                    {{ review.username }}
                     <span class="stars">
-                        <img src="..\static\images\greenclover.png" alt="greenclover" width="20" height="20">
-                        <img src="..\static\images\greenclover.png" alt="greenclover" width="20" height="20">
-                        <img src="..\static\images\greenclover.png" alt="greenclover" width="20" height="20">
-                        <img src="..\static\images\greenclover.png" alt="greenclover" width="20" height="20">
-                        <img src="..\static\images\greenclover.png" alt="greenclover" width="20" height="20">
+                        {% for i in range(review.star) %}
+                        <img src="../static/images/greenclover.png" alt="greenclover" width="20" height="20">
+                        {% endfor %}
                     </span>
                 </div>
-                <p>너무 마음에 들어요!<br>또 구매하겠습니다~</p>
+                <p>{{ review.info }}</p>
             </div>
             <div class="date-like">
-                <div>2024. 10. 10</div>
-                <div class="like">❤ 2</div>
+                <div>{{ review.date }}</div>
             </div>
         </div>
 
