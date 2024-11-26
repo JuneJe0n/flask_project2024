@@ -1,23 +1,16 @@
 const select = document.getElementById('option');
 const displayElement = document.getElementById('selectedOptions');
-
 const finalPriceElement = document.getElementById('finalPrice');
 let finalPrice = parseFloat(finalPriceElement.textContent);
-
 finalPriceElement.textContent = finalPrice.toLocaleString() + "원";
-
 
 window.onload = function() {
     const priceElement = document.getElementById('price');
     let price = priceElement.textContent.trim();
-
     price = price.replace(/[^0-9]/g, '');
     const formattedPrice = Number(price).toLocaleString();
-
     priceElement.textContent = formattedPrice + "원";
 };
-
-
 
 function calculateTotalPrice() {
     let totalPrice = 0;
@@ -34,12 +27,9 @@ function calculateTotalPrice() {
 function updateSelectedOptions() {
     const selectedValue = select.value;
     const selectedText = select.options[select.selectedIndex].text;
-
-    // 이미 선택된 옵션인지 확인 (중복 방지)
     const existingOptions = document.querySelectorAll('.newoptionDiv .optionText');
     let isDuplicate = false;
-
-    // 선택한 옵션이 이미 추가된 옵션 목록에 있는지 확인
+    
     existingOptions.forEach(option => {
         if (option.textContent === selectedText) {
             isDuplicate = true;
@@ -47,42 +37,35 @@ function updateSelectedOptions() {
     });
 
     if (selectedValue && !isDuplicate) {
-        // 새 데이터를 추가
         const newOptionDiv = document.createElement('div');
         newOptionDiv.classList.add('newoptionDiv');
-
-        const template = document.getElementById('optionTemplate')
+        const template = document.getElementById('optionTemplate');
         const clone = template.content.cloneNode(true);
-
         clone.querySelector('.optionText').textContent = selectedText;
         displayElement.appendChild(clone);
     }
 
-    // 가격 업데이트 함수 호출
     updateTotalPrice();
 }
+
+const hiddenInput = document.getElementById('hiddenOptionInput');
+hiddenInput.value = selectedText;
 
 function updateTotalPrice() {
     const totalPrice = calculateTotalPrice();
     const totalPriceElement = document.getElementById('totalPrice');
-
-    // 천 단위로 구분하여 표시
     const formattedTotalPrice = totalPrice.toLocaleString();
-
     totalPriceElement.textContent = `${formattedTotalPrice}원`;
 }
 
-// 수량 입력이 변경될 때마다 가격을 업데이트
 document.addEventListener('input', function(event) {
     if (event.target.classList.contains('quantity-input')) {
         updateTotalPrice();
     }
 });
 
-// select 요소의 변경 이벤트에 함수 연결
 select.addEventListener('change', updateSelectedOptions);
 
-//하단 이미지 클릭 시 center_img 변경
 function changeCenterImage(thumbnail) {
     const centerImage = document.getElementById('center_img');
     centerImage.src = thumbnail.src;
@@ -95,11 +78,9 @@ function changeCenterImage(thumbnail) {
 }
 
 window.onload = () => {
-        thumbnails[0].classList.add('active-thumbnail');
+    thumbnails[0].classList.add('active-thumbnail');
 };
 
-
-//footer에 iframe 생성
 function loadIframe(url, element = null) {
     const iframe = document.getElementById('footer_iframe');
     iframe.src = url;
@@ -108,7 +89,7 @@ function loadIframe(url, element = null) {
     iframe.onload = () => {
         const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
         iframe.style.height = iframeDocument.body.scrollHeight + "px";
-    }; //iframe 높이 설정
+    };
 
     if (element) {
         const buttons = document.querySelectorAll('.footer_nav a');
@@ -121,3 +102,70 @@ window.onload = () => {
     const defaultButton = document.querySelector('.footer_nav a[href="/review_page"]');
     loadIframe('/detail_info', defaultButton);
 };
+
+function submitData(action) {
+    const displayElement = document.getElementById('selectedOptions');
+    const selectedOptions = Array.from(
+        displayElement.querySelectorAll('.newoptionDiv')
+    ).map(optionDiv => ({
+        option: optionDiv.querySelector('.optionText').textContent,
+        quantity: optionDiv.querySelector('.quantity-input').value
+    }));
+
+    document.getElementById('selectedOptionInput').value = JSON.stringify(selectedOptions);
+
+    const productData = {
+        name: document.getElementById('productName').textContent,
+        price: document.getElementById('productPrice').textContent,
+        image: document.getElementById('productImage').src
+    };
+    document.getElementById('productDataInput').value = JSON.stringify(productData);
+
+    const otherData = {
+        userId: document.getElementById('userId').value
+    };
+    document.getElementById('otherDataInput').value = JSON.stringify(otherData);
+
+    const form = document.getElementById('dataForm');
+
+    if (action === 'cart') {
+        form.action = "{{ url_for('add_to_cart') }}";
+    } else if (action === 'order') {
+        form.action = "{{ url_for('order_page') }}";
+    } else if (action === 'wishlist') {
+        form.action = "{{ url_for('view_likelist') }}";
+    }
+
+    form.submit();
+}
+
+function addToCart() {
+    const newname = document.getElementById("name").value;
+    const newamount = document.getElementById("image").value;
+    const newprice = document.getElementById("price").value;
+    const newinfo = document.getElementById("options").value;
+
+    if (newname && optnum >= 1 && newamount && newprice && newinfo && newcategory) {
+        alert(newname+" 가 장바구니에 담겼습니다!");
+    } else {
+        alert("필수 입력 요소를 선택해주세요!");
+    }
+}
+
+function reqCustomization() {
+    const name = document.querySelector('input[name="name"]').value;
+    const image = document.querySelector('input[name="image"]').value;
+    const totalPrice = document.querySelector('#totalPrice').value;
+    const selectedOption = document.querySelector('#selectedOptionInput').value;
+
+    window.location.href = `/customazing?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&totalPrice=${totalPrice}&selectedOption=${encodeURIComponent(selectedOption)}`;
+}
+
+function buyingItem() {
+    const name = document.querySelector('input[name="name"]').value;
+    const image = document.querySelector('input[name="image"]').value;
+    const totalPrice = document.querySelector('#totalPrice').value;
+    const selectedOption = document.querySelector('#selectedOptionInput').value;
+
+    window.location.href = `/buying?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&totalPrice=${totalPrice}&selectedOption=${encodeURIComponent(selectedOption)}`;
+}

@@ -50,10 +50,27 @@
             <p style="display: flex; justify-content: flex-end; align-items: flex-end; margin: 20px 0;">총 금액
             <span id="totalPrice" style="font-size:30px;  margin-left: 10px;"><b>0원</b></span></p>
 
-            <div style="float: right; margin: 20px 0;">
-                <input type="button" value="장바구니" style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
-                <input type="submit" value="구매하기" style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
-            </div>
+            <form action="/add_to_cart" method="POST">
+                <input type="hidden" name="name" value="{{ name }}">
+                <input type="hidden" name="image" value="{{ data.images[0] }}">
+                <input type="hidden" name="totalPrice" id="totalPrice">
+                <input type="hidden" name="selectedOption" id="selectedOptionInput">
+                
+                <div style="float: right; margin: 20px 0;">
+                    <div style="margin-bottom: 10px;">
+                        <input type="submit" value="장바구니" 
+                            style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px; margin-right: 10px;"
+                            onclick="addToCart();">
+                        <input type="button" value="구매하기" 
+                            style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;"
+                            onclick="buyingItem()">
+                    </div>
+                    <input type="button" value="커스터마이징 요청하기" 
+                        style="margin-left:10px; background-color:aliceblue; border: none; border-radius: 4px; width: 200px; height: 30px; font-size: 15px;"
+                        onclick="reqCustomization()">
+                </div>
+            </form>
+            
         </label>
     </div>
 
@@ -62,7 +79,6 @@
             <ul>
                 <li><a onclick="loadIframe('/detail_info', this)" class="active">상품 설명</a></li>
                 <li><a onclick="loadIframe('/review_page', this)">리뷰</a></li>
-                <li><a onclick="loadIframe('/custom_request', this)">커스터마이징 요청서</a></li>
                 <li><a onclick="loadIframe('/seller_email', this)">판매자 메일</a></li>
             </ul>
         </div>

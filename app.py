@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from database import DBhandler
 import hashlib
 import os
+import json
 
 application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
@@ -124,14 +125,14 @@ def view_item_detail(name):
     print("###name:",name)
     data = DB.get_item_byname(str(name))
     print("####data:",data)
-    info = request.form.get('info')
 
     price = float(data['price'] or 0)
     discount = float(data['discount'] or 0)
 
     finalprice = int(price * (100 - discount) * 0.01)
 
-    return render_template("detail.html", name=name, data=data, info=info, finalprice=finalprice)
+    return render_template("detail.html", name=name, data=data, finalprice=finalprice)
+
 
 
 @application.route("/review_page")
@@ -214,6 +215,66 @@ def submit_review_post():
     DB.insert_review(data, img_list)
     
     return render_template("list.html", items=items)
+
+@application.route('/myreview')
+def view_myreview():
+    return render_template('myreview.html')
+
+@application.route("/likelist")
+def view_likelist():
+    # 세션에서 찜 목록을 가져옵니다
+    like_items = session.get('like', [])
+    
+    return render_template("likelist.html", like_items=like_items)
+
+
+
+# 장바구니에 항목 추가
+@application.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    data = request.form
+    
+    DB.insert_cart(data['name'], data)
+
+    data = DB.get_carts() #read the table
+
+    finalprices = {}
+    if data:
+        for key, cart in data.items():
+            price = float(cart.get('price', 0))
+            discount = float(cart.get('discount', 0))
+            finalprice = int(price * (100 - discount) * 0.01)
+            finalprices[key] = finalprice
+
+    return render_template( 
+        "shoppingcart.html",
+        datas=data.items(), 
+        items=items,
+        finalprices=finalprices)
+
+
+# 장바구니 페이지
+@application.route('/shoppingcart')
+def view_cart():
+    return render_template('shoppingcart.html')
+
+#커스터마이징 요청서
+@application.route('/customazing')
+def customazing():
+    name = request.args.get('name')
+    image = request.args.get('image')
+    total_price = request.args.get('totalPrice')
+    
+    return render_template('customazing.html', name=name, image=image, total_price=total_price)
+
+@application.route('/buying')
+def buying():
+    name = request.args.get('name')
+    image = request.args.get('image')
+    total_price = request.args.get('totalPrice')
+
+    return render_template('buying.html', name=name, image=image, total_price=total_price)
+
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)
