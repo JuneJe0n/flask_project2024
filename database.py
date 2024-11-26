@@ -30,6 +30,7 @@ class DBhandler:
             "option": data['options'], #name으로 받음
             "star": data['clovers'],
             "img_path": img_list,
+            "likes": 0
         }
         self.db.child("review").child(data['info'][:10]).set(reivew_info)
         return True
@@ -140,3 +141,44 @@ class DBhandler:
         except Exception as e:
             print(f"Error in search_items: {e}")
             return []
+    
+    def get_reviews(self):
+        try:
+            # Firebase에서 리뷰 데이터 가져오기
+            reviews = self.db.child("review").get()
+            if not reviews.each():  # 리뷰 데이터가 없으면 빈 리스트 반환
+                return []
+
+            # 리뷰 데이터를 리스트로 변환
+            result = []
+            for review in reviews.each():
+                review_data = review.val() 
+                review_data["star"] = int(review_data.get("star", 0)) 
+                review_data["name"] = review.key()  # 리뷰 이름(key)을 추가 (필요에 따라)
+                review_data["username"] = review_data.get("username", "unknown_user") 
+                review_data["date"] = review_data.get("date", "unknown_date")
+                result.append(review_data)
+
+            return result  # 리뷰 리스트 반환
+        except Exception as e:
+            print(f"Error fetching reviews: {str(e)}")
+            return []    
+        
+    def get_review_by_id(self, review_id):
+        try:
+            # Firebase에서 리뷰 ID에 맞는 리뷰 가져오기
+            review = self.db.child("review").child(str(review_id)).get()
+            if review.val():
+                review_data = review.val()
+                # star 값 변환
+                try:
+                    review_data["star"] = int(review_data.get("star", 0))
+                except ValueError:
+                    review_data["star"] = 0
+                return review_data
+            else:
+                return None
+        except Exception as e:
+            print(f"Error fetching review by id: {str(e)}")
+            return None
+    
