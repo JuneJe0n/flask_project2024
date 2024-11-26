@@ -63,6 +63,21 @@ body {
     text-decoration: none;
 }
 
+header .user-menu{display:flex;gap: 10px;}
+.user-menu button{
+    padding:5px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size:14px;
+}
+
+#reg_items{background-color: #006400; color: white;}
+#reg_items:hover{background-color: #004d00;}
+.user-menu button:hover{background-color: #f0f0f0;}
+
+
 .profile-icon {
     width: 30px;
     height: 30px;

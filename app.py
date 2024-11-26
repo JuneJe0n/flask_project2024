@@ -33,13 +33,19 @@ def login_user():
     id_ = request.form['id']
     pw = request.form['pw']
     pw_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
-    if DB.find_user(id_, pw_hash):
-        session['id'] = id_
-        flash("Welcome, " + id_ + "!")
-        return redirect(url_for('view_list'))  # 로그인 후 리스트 페이지로 이동
-    else:
+
+    user = DB.find_user(id_, pw_hash)  # 사용자 데이터 가져오기
+
+    if user:  # 사용자가 존재하면 로그인 성공
+        session['id'] = user['id']
+        session['nickname'] = user['nickname']
+        session['email'] = user['email']
+        flash(f"Welcome, {user['nickname']}!")
+        return redirect(url_for('view_list'))
+    else:  # 사용자 없으면 로그인 실패
         flash("Wrong ID or Password!")
-        return redirect(url_for('login'))  # 로그인 실패 시 다시 로그인 페이지로 이동
+        return redirect(url_for('login'))
+
 
 
 @application.route("/signup")
@@ -132,17 +138,56 @@ def view_item_detail(name):
     return render_template("detail.html", name=name, data=data, finalprice=finalprice)
 
 
-@application.route("/review_page")
+@application.route("/review_page", methods=['GET'])
 def view_review_page():
-    return render_template("review_page.html")
+    # Fetch reviews from the database
+    page = request.args.get("page", 1, type=int)  # 현재 페이지 번호, 기본값은 1
+    per_page = 5  # 페이지당 표시할 리뷰 수
+
+    reviews = DB.get_reviews()  
+    total_reviews = len(reviews)
+    
+    # 리뷰 리스트를 현재 페이지에 맞게 슬라이싱
+    start_idx = (page - 1) * per_page
+    end_idx = start_idx + per_page
+    paginated_reviews = reviews[start_idx:end_idx]
+    
+    # 총 페이지 수 계산
+    total_pages = (total_reviews + per_page - 1) // per_page
+
+    return render_template(
+        "review_page.html",
+        reviews=paginated_reviews,
+        current_page=page,
+        total_pages=total_pages,
+        has_prev=page > 1,
+        has_next=page < total_pages
+    )
+
 
 @application.route("/reg_items")
 def reg_items():
     return render_template("reg_items.html")
 
-@application.route("/reg_reviews")
-def reg_reviews():
-    return render_template("reg_reviews.html")
+@application.route("/reg_review_init/<name>/")
+def reg_review_init(name):
+    data = DB.get_item_byname(str(name))
+    return render_template("reg_reviews.html", name=name, data=data)
+
+@application.route("/reg_review", methods=['POST'])
+def reg_review():
+    data = request.form
+    img_list = []
+
+    for i in range(1, 3):
+        image_file = request.files.get(f'file{i}')
+        if image_file:
+            image_path = f"static/images/{image_file.filename}"
+            image_file.save(image_path)
+            img_list.append(image_path)
+    
+    DB.insert_review(data, img_list)
+    return render_template("review_page.html")
 
 @application.route("/submit_item_post", methods=['POST'])
 def submit_item_post():
@@ -195,21 +240,68 @@ def submit_item_post():
         total=item_counts,
         finalprices=finalprices)
 
-@application.route("/submit_review_post", methods=['POST'])
-def submit_review_post():
-    data = request.form
-    img_list = []
+@application.route("/search", methods=['GET'])
+def search():
+    # 검색어 가져오기
+    keyword = request.args.get('search_kw', type=str, default='').strip()  # 'search_kw'는 검색창 input의 name
+    if not keyword:  # 검색어가 비어 있으면 검색 결과 페이지로 이동
+        flash("Please enter a search term.")
+        return redirect(url_for('view_list'))  # 'home' 페이지로 리디렉션 (view_list 대신)
 
-    for i in range(1, 3):
-        image_file = request.files.get(f'file{i}')
-        if image_file:
-            image_path = f"static/images/{image_file.filename}"
-            image_file.save(image_path)
-            img_list.append(image_path)
+    try:
+        # Firebase에서 아이템 가져오기 (DB.child("item").get() 대신 직접 가져오기)
+        items = DB.get_items()  # DB에서 아이템을 가져오는 메서드 수정 필요 (DBhandler 객체에 맞게)
+        filtered_items = []
+
+        # 아이템들 중에서 검색어와 일치하는 아이템 필터링
+        for item_name, item_data in items.items():  # items는 딕셔너리 형태로 반환됨
+            name = item_data.get("name", "").lower()  # 아이템 이름 (소문자로 처리하여 비교)
+            info = item_data.get("info", "").lower()  # 아이템 설명 (소문자로 처리하여 비교)
+
+            # 검색어가 이름이나 설명에 포함되면 필터링
+            if keyword.lower() in name or keyword.lower() in info:
+                filtered_items.append(item_data)
+
+        # 검색 결과가 있을 때
+        if filtered_items:
+            return render_template('search_results.html', items=filtered_items, keyword=keyword)
+        else:
+            flash("No items found.")
+            return render_template('search_results.html', items=[], keyword=keyword)  # 검색 결과가 없으면 빈 리스트 전달
+    except Exception as e:
+        # 오류 처리: Firebase에서 데이터를 가져오는 중 예외가 발생한 경우
+        flash(f"Error occurred while fetching items: {str(e)}")
+        return render_template('search_results.html', items=[], keyword=keyword)  # 오류 발생 시 빈 리스트 전달
+
+@application.route("/like_review", methods=['POST'])
+def like_review():
+    try:
+        review_id = request.json.get('review_id')
+        if not review_id:
+            return jsonify({"success": False, "message": "Missing review ID"}), 400
+
+        # 좋아요 수 업데이트
+        updated_likes = DB.update_likes(review_id)
+
+        if updated_likes is not None:
+            return jsonify({"success": True, "new_likes": updated_likes})
+        else:
+            return jsonify({"success": False, "message": "Review not found"}), 404
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
     
-    DB.insert_review(data, img_list)
-    
-    return render_template("list.html", items=items)
+@application.route("/review_detail/<review_id>")
+def review_detail(review_id):
+    # 데이터베이스에서 해당 리뷰 ID에 맞는 리뷰 정보를 가져옵니다.
+    try:
+        review = DB.get_review_by_id(review_id)
+        if review:
+            return render_template("detailed_review.html", review=review)
+        else:
+            return "Review not found", 404
+    except Exception as e:
+        return f"An error occurred: {str(e)}", 500
+
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)

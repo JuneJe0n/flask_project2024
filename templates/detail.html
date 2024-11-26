@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <form action=".php" class="detail-info">
+        <label class="detail-info">
             <p style="color:gray;"><img src="/static/images/user_icon.png" alt="user_icon" width="30" height="30">
                 {{data.user}}</p>
             <p style="font-size:30px; margin: 20px 0;"><b>{{name}}</b></p>
@@ -52,18 +52,22 @@
                 <input type="button" value="장바구니" style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
                 <input type="submit" value="구매하기" style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
             </div>
-        </form>
+            {% if name %}
+                <button onclick="location.href='/reg_review_init/{{name}}/';">리뷰 등록</button>
+            {% endif %}
+        </label>
     </div>
 
     <footer>
         <div class="footer_nav">
             <ul>
                 <li><a href="#" class="active">상품 설명</a></li>
-                <li><a href="#">리뷰</a></li>
+                <li><a href="{{ url_for('view_review_page') }}">리뷰</a></li>
                 <li><a href="#">상품 문의</a></li>
             </ul>
         </div>
     </footer>
+    
 
     {% endblock %}
     {% block extra_js %}
