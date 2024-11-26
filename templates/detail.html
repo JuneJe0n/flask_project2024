@@ -54,6 +54,7 @@
             </div>
             {% if name %}
                 <button onclick="location.href='/reg_review_init/{{name}}/';">리뷰 등록</button>
+                <i class="fa fa-heart" id="heart" ></i>
             {% endif %}
         </label>
     </div>
@@ -62,14 +63,16 @@
         <div class="footer_nav">
             <ul>
                 <li><a href="#" class="active">상품 설명</a></li>
-                <li><a href="{{ url_for('view_review_page') }}">리뷰</a></li>
+                <li><a href="/review_page">리뷰</a></li>
                 <li><a href="#">상품 문의</a></li>
             </ul>
         </div>
     </footer>
-    
 
     {% endblock %}
     {% block extra_js %}
     <script src="/static/detail.js"></script>
+    <script>
+        
+    </script>
     {% endblock %}
