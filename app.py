@@ -138,9 +138,32 @@ def view_item_detail(name):
     return render_template("detail.html", name=name, data=data, finalprice=finalprice)
 
 
-@application.route("/review_page")
+@application.route("/review_page", methods=['GET'])
 def view_review_page():
-    return render_template("review_page.html")
+    # Fetch reviews from the database
+    page = request.args.get("page", 1, type=int)  # 현재 페이지 번호, 기본값은 1
+    per_page = 5  # 페이지당 표시할 리뷰 수
+
+    reviews = DB.get_reviews()  
+    total_reviews = len(reviews)
+    
+    # 리뷰 리스트를 현재 페이지에 맞게 슬라이싱
+    start_idx = (page - 1) * per_page
+    end_idx = start_idx + per_page
+    paginated_reviews = reviews[start_idx:end_idx]
+    
+    # 총 페이지 수 계산
+    total_pages = (total_reviews + per_page - 1) // per_page
+
+    return render_template(
+        "review_page.html",
+        reviews=paginated_reviews,
+        current_page=page,
+        total_pages=total_pages,
+        has_prev=page > 1,
+        has_next=page < total_pages
+    )
+
 
 @application.route("/reg_items")
 def reg_items():
@@ -250,7 +273,34 @@ def search():
         flash(f"Error occurred while fetching items: {str(e)}")
         return render_template('search_results.html', items=[], keyword=keyword)  # 오류 발생 시 빈 리스트 전달
 
+@application.route("/like_review", methods=['POST'])
+def like_review():
+    try:
+        review_id = request.json.get('review_id')
+        if not review_id:
+            return jsonify({"success": False, "message": "Missing review ID"}), 400
 
+        # 좋아요 수 업데이트
+        updated_likes = DB.update_likes(review_id)
+
+        if updated_likes is not None:
+            return jsonify({"success": True, "new_likes": updated_likes})
+        else:
+            return jsonify({"success": False, "message": "Review not found"}), 404
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+    
+@application.route("/review_detail/<review_id>")
+def review_detail(review_id):
+    # 데이터베이스에서 해당 리뷰 ID에 맞는 리뷰 정보를 가져옵니다.
+    try:
+        review = DB.get_review_by_id(review_id)
+        if review:
+            return render_template("detailed_review.html", review=review)
+        else:
+            return "Review not found", 404
+    except Exception as e:
+        return f"An error occurred: {str(e)}", 500
 
 
 if __name__ == "__main__":
