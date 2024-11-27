@@ -72,6 +72,10 @@
                 </div>
             </form>
             
+            {% if name %}
+                <button onclick="location.href='/reg_review_init/{{name}}/';">리뷰 등록</button>
+                <i class="fa fa-heart" id="heart" ></i>
+            {% endif %}
         </label>
     </div>
 
@@ -93,4 +97,60 @@
     {% endblock %}
     {% block extra_js %}
     <script src="/static/detail.js"></script>
+    <script>
+        //찜 기능
+function showHeart() { $.ajax({
+    type: 'GET',
+    url: '/show_heart/{{name}}/',
+    data: {},
+    success: function (response) {
+        let my_heart = response['my_heart'];
+        if (my_heart['interested'] == 'Y')
+        {
+            $("#heart").css("color","red");
+            $("#heart").attr("onclick","unlike()");
+        }
+        else
+        {
+        $("#heart").css("color","gray");
+        $("#heart").attr("onclick","like()");
+    }
+        //alert("showheart!")
+        }
+    });
+}
+
+function like() {
+    $.ajax({
+        type: 'POST',
+        url: '/like/{{name}}/',
+        data: {
+            interested : "Y",
+            image: $("#center_img").attr("src")
+        },
+        success: function (response) {
+            alert(response['msg']);
+            window.location.reload() 
+        }
+    });
+}
+
+function unlike() {
+    $.ajax({
+        type: 'POST',
+        url: '/unlike/{{name}}/',
+        data: {
+            interested : "N"
+        },
+        success: function (response) {
+            alert(response['msg']);
+            window.location.reload() 
+        }
+    });
+}
+$(document).ready(function () {
+    showHeart();
+});
+
+    </script>
     {% endblock %}

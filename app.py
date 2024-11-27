@@ -263,5 +263,49 @@ def buying():
 
     return render_template('buying.html', name=name, image=image, total_price=total_price, options=options)
 
+
+#찜 기능
+@application.route('/show_heart/<name>/', methods=['GET'])
+def show_heart(name):
+    my_heart = DB.get_heart_byname(session['id'],name)
+    
+    return jsonify({'my_heart': my_heart})
+
+@application.route('/like/<name>/', methods=['POST'])
+def like(name):
+    image = request.form.get('image')
+    my_heart = DB.update_heart(session['id'],'Y',name, image)
+    return jsonify({'msg': '좋아요 완료!'})
+
+@application.route('/unlike/<name>/', methods=['POST'])
+def unlike(name):
+    my_heart = DB.update_heart(session['id'],'N',name)
+    return jsonify({'msg': '안좋아요 완료!'})
+
+@application.route('/likelist')
+def likelist():
+    user_id = session.get('id')
+    like_items = []
+
+    if user_id:
+        hearts = DB.db.child("heart").child(user_id).get()
+
+        if hearts.val():
+            for heart in hearts.each():
+                item_name = heart.key()  # 아이템 이름
+                item_data = heart.val()  # 찜 데이터
+                
+                # 관심 데이터만 추가
+                if item_data.get('interested') == 'Y':
+                    like_items.append({
+                        "name": item_name,
+                        "image": item_data.get("image"),  # 이미지 추가
+                        "data": item_data
+                    })
+    
+    return render_template('likelist.html', like_items=like_items)
+
+
+
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)
