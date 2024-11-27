@@ -185,9 +185,15 @@ def reg_review():
             image_path = f"static/images/{image_file.filename}"
             image_file.save(image_path)
             img_list.append(image_path)
-    
+
+    # username과 현재 날짜를 추가
+    data = dict(data)
+    data['username'] = session.get('nickname', 'unknown_user')  # 현재 로그인된 사용자 이름
+    data['date'] = datetime.now().strftime("%Y-%m-%d")  # 현재 날짜를 'YYYY-MM-DD' 형식으로 추가
+    data['image_url'] = img_list[0] if img_list else None  # 첫 번째 이미지를 image_url로 추가
+
     DB.insert_review(data, img_list)
-    return render_template("review_page.html")
+    return redirect(url_for('view_review_page'))
 
 @application.route("/submit_item_post", methods=['POST'])
 def submit_item_post():
