@@ -24,12 +24,17 @@ class DBhandler:
         return True
 
     def insert_review(self, data, img_list):
+
+        img_list = [f"/{img}" for img in img_list]  
+
         reivew_info = {
             "preview": data['info'][:10],
             "info": data['info'],
             "option": data['options'], #name으로 받음
             "star": data['clovers'],
             "img_path": img_list,
+            "username": data.get('username', 'unknown_user'),
+            "date": data.get('date', 'unknown_date'),
             "likes": 0
         }
         self.db.child("review").child(data['info'][:10]).set(reivew_info)
