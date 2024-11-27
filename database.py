@@ -157,12 +157,13 @@ class DBhandler:
                 review_data["name"] = review.key()  # 리뷰 이름(key)을 추가 (필요에 따라)
                 review_data["username"] = review_data.get("username", "unknown_user") 
                 review_data["date"] = review_data.get("date", "unknown_date")
+                review_data["image_url"] = review_data["img_path"][0] if review_data.get("img_path") else None
                 result.append(review_data)
 
             return result  # 리뷰 리스트 반환
         except Exception as e:
             print(f"Error fetching reviews: {str(e)}")
-            return []    
+            return [] 
         
     def get_review_by_id(self, review_id):
         try:
