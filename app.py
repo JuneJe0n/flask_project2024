@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from database import DBhandler
 import hashlib
 import os
+import math
 
 application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
@@ -75,15 +76,26 @@ def check_id():
 @application.route("/list")
 def view_list():
     page = request.args.get("page", 0, type=int)
+    category = request.args.get("category", "all")
     per_page = 8  # item count to display per page
     per_row = 4  # item count to display per row
     row_count = int(per_page / per_row)
     start_idx = per_page * page
     end_idx = per_page * (page + 1)
 
-    data = DB.get_items()  # read the table
+    if category == "all":
+        data = DB.get_items() #read the table
+    else:
+        data = DB.get_items_bycategory(category)
+
+    data = dict(sorted(data.items(), key=lambda x: x[0], reverse=False)) #key는 상품명, 상품명을 사용해서 정렬
     item_counts = len(data)
-    data = dict(list(data.items())[start_idx:end_idx])
+
+    if item_counts<=per_page:
+        data = dict(list(data.items())[:item_counts])
+    else:
+        data =dict(list(data.items())[start_idx:end_idx])
+
     tot_count = len(data)
 
     for i in range(row_count):  # last row
@@ -101,7 +113,7 @@ def view_list():
             finalprices[key] = finalprice
 
 
-    # 이후 finalprices를 템플릿에 넘길 수 있습니다.
+    # 이후 finalprices를 템플릿에 넘길 수 있음.
     return render_template(
         "list.html",
         datas=data.items(),
@@ -109,9 +121,10 @@ def view_list():
         row2=locals()['data_1'].items(),
         limit=per_page,
         page=page,
-        page_count=int((item_counts / per_page) + 1),
+        page_count=int(math.ceil(item_counts/per_page)),
         total=item_counts,
-        finalprices=finalprices  # 템플릿으로 finalprices 전달
+        finalprices=finalprices, # 템플릿으로 finalprices 전달
+        category=category
     )
 
 

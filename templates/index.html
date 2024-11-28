@@ -43,14 +43,22 @@
 
         {% block nav %}
         <!-- <h2 class="hide">내비게이션</h2> -->
+        <script>
+            $(document).ready(function () {
+                //alert("{{category}}");
+                $('#category option:contains("{{category}}")').prop("selected", true)
+            });
+        </script>
+        
         <nav class="lnb">
             <ul>
-                <li><a href="/reg_items">헤어</a></li>
-                <li><a href="/review_page">귀걸이</a></li>
-                <li><a href="/reg_reviews">목걸이</a></li>
-                <li class="active"><a href="/list">팔찌</a></li>
-                <li><a href="#a">식품</a></li>
-                <li><a href="#a">기타</a></li>
+                <li><a href="{{ url_for('view_list', page=i, category='all') }}">전체 카테고리</a></li>
+                <li><a href="{{ url_for('view_list', page=i, category='Home') }}">홈/리빙</a></li>
+                <li><a href="{{ url_for('view_list', page=i, category='Clothes') }}">패션/옷</a></li>
+                <li><a href="{{ url_for('view_list', page=i, category='Accessory') }}">악세사리</a></li>
+                <li><a href="{{ url_for('view_list', page=i, category='Food') }}">식품</a></li>
+                <li><a href="{{ url_for('view_list', page=i, category='Cosmitic') }}">뷰티/화장품</a></li>
+                <li><a href="{{ url_for('view_list', page=i, category='ETC') }}">ETC</a></li>
             </ul>
         </nav>
         {% endblock %}
