@@ -95,3 +95,12 @@ hr {
     width: 100%;
     margin: 0;
 }
+
+#heart {
+    color: grey;
+    font-size: 20px;
+  }
+  
+  #heart.red {
+    color:red;
+  }

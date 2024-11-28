@@ -54,6 +54,7 @@
             </div>
             {% if name %}
                 <button onclick="location.href='/reg_review_init/{{name}}/';">리뷰 등록</button>
+                <i class="fa fa-heart" id="heart" ></i>
             {% endif %}
         </label>
     </div>
@@ -62,14 +63,67 @@
         <div class="footer_nav">
             <ul>
                 <li><a href="#" class="active">상품 설명</a></li>
-                <li><a href="{{ url_for('view_review_page') }}">리뷰</a></li>
+                <li><a href="/review_page">리뷰</a></li>
                 <li><a href="#">상품 문의</a></li>
             </ul>
         </div>
     </footer>
-    
 
     {% endblock %}
     {% block extra_js %}
     <script src="/static/detail.js"></script>
+    <script>
+        //찜 기능
+function showHeart() { $.ajax({
+    type: 'GET',
+    url: '/show_heart/{{name}}/',
+    data: {},
+    success: function (response) {
+        let my_heart = response['my_heart'];
+        if (my_heart['interested'] == 'Y')
+        {
+            $("#heart").css("color","red");
+            $("#heart").attr("onclick","unlike()");
+        }
+        else
+        {
+        $("#heart").css("color","grey");
+        $("#heart").attr("onclick","like()");
+    }
+        //alert("showheart!")
+        }
+    });
+}
+
+function like() {
+    $.ajax({
+        type: 'POST',
+        url: '/like/{{name}}/',
+        data: {
+            interested : "Y"
+        },
+        success: function (response) {
+            alert(response['msg']);
+            window.location.reload() 
+        }
+    });
+}
+
+function unlike() {
+    $.ajax({
+        type: 'POST',
+        url: '/unlike/{{name}}/',
+        data: {
+            interested : "N"
+        },
+        success: function (response) {
+            alert(response['msg']);
+            window.location.reload() 
+        }
+    });
+}
+$(document).ready(function () {
+    showHeart();
+});
+    </script>
     {% endblock %}

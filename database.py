@@ -24,12 +24,17 @@ class DBhandler:
         return True
 
     def insert_review(self, data, img_list):
+
+        img_list = [f"/{img}" for img in img_list]  
+
         reivew_info = {
             "preview": data['info'][:10],
             "info": data['info'],
             "option": data['options'], #name으로 받음
             "star": data['clovers'],
             "img_path": img_list,
+            "username": data.get('username', 'unknown_user'),
+            "date": data.get('date', 'unknown_date'),
             "likes": 0
         }
         self.db.child("review").child(data['info'][:10]).set(reivew_info)
@@ -157,12 +162,13 @@ class DBhandler:
                 review_data["name"] = review.key()  # 리뷰 이름(key)을 추가 (필요에 따라)
                 review_data["username"] = review_data.get("username", "unknown_user") 
                 review_data["date"] = review_data.get("date", "unknown_date")
+                review_data["image_url"] = review_data["img_path"][0] if review_data.get("img_path") else None
                 result.append(review_data)
 
             return result  # 리뷰 리스트 반환
         except Exception as e:
             print(f"Error fetching reviews: {str(e)}")
-            return []    
+            return [] 
         
     def get_review_by_id(self, review_id):
         try:
@@ -182,3 +188,22 @@ class DBhandler:
             print(f"Error fetching review by id: {str(e)}")
             return None
     
+    def get_heart_byname(self, uid, name):
+        hearts = self.db.child("heart").child(uid).get()
+        target_value=""
+        if hearts.val() == None:
+            return target_value
+        
+        for res in hearts.each():
+            key_value = res.key()
+
+        if key_value == name:
+            target_value=res.val()
+        return target_value
+    
+    def update_heart(self, user_id, isHeart, item):
+        heart_info ={
+            "interested": isHeart
+        }
+        self.db.child("heart").child(user_id).child(item).set(heart_info)
+        return True
