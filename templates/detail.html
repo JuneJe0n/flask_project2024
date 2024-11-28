@@ -48,10 +48,28 @@
             <p style="display: flex; justify-content: flex-end; align-items: flex-end; margin: 20px 0;">총 금액
             <span id="totalPrice" style="font-size:30px;  margin-left: 10px;"><b>0원</b></span></p>
 
-            <div style="float: right; margin: 20px 0;">
-                <input type="button" value="장바구니" style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
-                <input type="submit" value="구매하기" style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;">
-            </div>
+            <form action="/add_to_cart" method="POST">
+                <input type="hidden" name="name" value="{{ name }}">
+                <input type="hidden" name="image" value="{{ data.images[0] }}">
+                <input type="hidden" name="price" value="{{ finalprice }}">
+                <input type="hidden" name="totalPrice" id="totalPrice">
+                <input type="hidden" name="selectedOption" id="selectedOptionInput">
+                
+                <div style="float: right; margin: 20px 0;">
+                    <div style="margin-bottom: 10px;">
+                        <input type="submit" value="장바구니" 
+                            style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px; margin-right: 10px;"
+                            onclick="addToCart();">
+                        <input type="button" value="구매하기" 
+                            style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;"
+                            onclick="buyingItem()">
+                    </div>
+                    <input type="button" value="커스터마이징 요청하기" 
+                        style="margin-left:10px; background-color:aliceblue; border: none; border-radius: 4px; width: 200px; height: 30px; font-size: 15px;"
+                        onclick="reqCustomization()">
+                </div>
+            </form>
+
             {% if name %}
                 <button onclick="location.href='/reg_review_init/{{name}}/';">리뷰 등록</button>
                 <i class="fa fa-heart" id="heart" ></i>
@@ -62,10 +80,14 @@
     <footer>
         <div class="footer_nav">
             <ul>
-                <li><a href="#" class="active">상품 설명</a></li>
-                <li><a href="/review_page">리뷰</a></li>
-                <li><a href="#">상품 문의</a></li>
+                <li><a onclick="loadIframe('/detail_info', this)" class="active">상품 설명</a></li>
+                <li><a onclick="loadIframe('/review_page', this)">리뷰</a></li>
+                <li><a onclick="loadIframe('/seller_email', this)">판매자 메일</a></li>
             </ul>
+        </div>
+    
+        <div id="iframe_container" style="margin-top: 20px;">
+            <iframe id="footer_iframe" src="" style="width: 100%; border: none;" hidden></iframe>
         </div>
     </footer>
 
@@ -74,56 +96,57 @@
     <script src="/static/detail.js"></script>
     <script>
         //찜 기능
-function showHeart() { $.ajax({
-    type: 'GET',
-    url: '/show_heart/{{name}}/',
-    data: {},
-    success: function (response) {
-        let my_heart = response['my_heart'];
-        if (my_heart['interested'] == 'Y')
-        {
-            $("#heart").css("color","red");
-            $("#heart").attr("onclick","unlike()");
-        }
-        else
-        {
-        $("#heart").css("color","grey");
-        $("#heart").attr("onclick","like()");
-    }
-        //alert("showheart!")
-        }
-    });
-}
+        function showHeart() {
+            $.ajax({
+                type: 'GET',
+                url: '/show_heart/{{name}}/',
+                data: {},
+                success: function (response) {
+                    let my_heart = response['my_heart'];
+                    if (my_heart['interested'] == 'Y')
+                    {
+                        $("#heart").css("color","red");
+                        $("#heart").attr("onclick","unlike()");
+                    }
+                    else
+                    {
+                        $("#heart").css("color","grey");
+                        $("#heart").attr("onclick","like()");
+                    }
+                    //alert("showheart!")
+                    }
+                });
+            }
 
-function like() {
-    $.ajax({
-        type: 'POST',
-        url: '/like/{{name}}/',
-        data: {
-            interested : "Y"
-        },
-        success: function (response) {
-            alert(response['msg']);
-            window.location.reload() 
+        function like() {
+            $.ajax({
+                type: 'POST',
+                url: '/like/{{name}}/',
+                data: {
+                    interested : "Y"
+                },
+                success: function (response) {
+                    alert(response['msg']);
+                    window.location.reload() 
+                }
+            });
         }
-    });
-}
 
-function unlike() {
-    $.ajax({
-        type: 'POST',
-        url: '/unlike/{{name}}/',
-        data: {
-            interested : "N"
-        },
-        success: function (response) {
-            alert(response['msg']);
-            window.location.reload() 
+        function unlike() {
+            $.ajax({
+                type: 'POST',
+                url: '/unlike/{{name}}/',
+                data: {
+                    interested : "N"
+                },
+                success: function (response) {
+                    alert(response['msg']);
+                    window.location.reload() 
+                }
+            });
         }
-    });
-}
-$(document).ready(function () {
-    showHeart();
-});
+        $(document).ready(function () {
+            showHeart();
+        });
     </script>
     {% endblock %}

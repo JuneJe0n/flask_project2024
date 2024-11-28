@@ -1,0 +1,31 @@
+<table>
+    <tbody>
+        {% for item in cart %}
+        <tr>
+            <td>
+                <div style="display: flex; justify-content: space-between;">
+                    <img src="/{{ item.image }}" alt="{{ item.name }}" width="100px" height="100px">
+                    <div style="display: block; font-size: 12px">
+                        <span style="color:gray;">판매자: {{ item.nickname}}</span>
+                        <p><b>상품 이름: {{ item.name }}</b></p>
+                        <p style="margin: 10px 0;"><span class="price">가격: {{ item.totalPrice }}</span></p>
+                        <p>옵션:</p>
+                        <ul>
+                            {% for opt in item.options %}
+                            <li>{{ opt.option }} - 수량: {{ opt.quantity }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <p>
+                        <input type="button" value="X" 
+                           style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 30px; height: 30px; font-size: 15px;" 
+                           onclick="Delete('{{ loop.index0 }}', this)">
+                    </p>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script src="/static/shoppingcart.js"></script>

@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from database import DBhandler
 import hashlib
 import os
+import json
+import math
+from datetime import datetime
 
 application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
@@ -323,6 +326,37 @@ def like(name):
 def unlike(name):
     my_heart = DB.update_heart(session['id'],'N',name)
     return jsonify({'msg': '안좋아요 완료!'})
+
+# 장바구니에 항목 추가
+@application.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    return render_template('shoppingcart.html')
+
+
+# 장바구니 페이지
+@application.route('/shoppingcart')
+def view_cart():
+    return render_template('shoppingcart.html')
+
+#커스터마이징 요청서
+@application.route('/customizing')
+def customazing():
+    name = request.args.get('name')
+    image = request.args.get('image')
+    price = request.args.get('price')
+    
+    return render_template('customizing.html', name=name, image=image, price=price)
+
+@application.route('/buying')
+def buying():
+    name = request.args.get('name')
+    image = request.args.get('image')
+    total_price = request.args.get('totalPrice')
+    options_json = request.args.get('selectedOption')  # JSON 형식으로 전달받음
+
+    options = json.loads(options_json)
+
+    return render_template('buying.html', name=name, image=image, total_price=total_price, options=options)
 
 
 if __name__ == "__main__":
