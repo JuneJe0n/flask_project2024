@@ -1,9 +1,91 @@
-<h1>구매하기</h1>
-<p>상품명: {{ name }}</p>
-<p><img src="{{ image }}" alt="상품 이미지"></p>
-<ul>
-    {% for option in options %}
-        <li>옵션: {{ option[0] }}, 수량: {{ option[1] }}</li>
-    {% endfor %}
-</ul>
-<p>총 가격: {{ total_price }}</p>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니</title>
+    <link rel="stylesheet" href="/static/buying.css">
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+    <!-- 네비게이션과 헤더는 이미 구현됨 -->
+    <header>
+        <h1 id="logo">
+            <a href="/"><img src="/static/images/logo.png" width="200px"></a>
+        </h1>
+        <div class="userBox">
+            <form class="search-box" action="/search" method="get">
+                <input class="search-txt" type="text" id="search_kw" name="search_kw" placeholder="검색어를 입력하세요">
+                <button class="search-btn" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <div class="userRegister">
+                <button id="login" onclick="location.href='/login'">로그인</button>
+                <button id="signup" onclick="location.href='/signup'">회원가입</button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="lnb">
+        <ul>
+            <li><a href="/reg_items">헤어</a></li>
+            <li><a href="/review_page">귀걸이</a></li>
+            <li><a href="/reg_reviews">목걸이</a></li>
+            <li class="active"><a href="/list">팔찌</a></li>
+            <li><a href="#a">식품</a></li>
+            <li><a href="#a">기타</a></li>
+        </ul>
+    </nav>
+
+    <main class="cart-page">
+        <h2>{{session['nickname']}}님</h2>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>상품 정보</th>
+                    <th>수량</th>
+                    <th>수령 방법</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 상품 아이템 -->
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="product-info">
+                        <img src="{{ image }}" alt="상품 이미지">
+                        <div>
+                            <p class="category">배꽃헤어</p>
+                            <h3>{{ name }}</h3>
+                            <p class="discount">{{ discount }}% <span class="price">{{ total_price }}원</span></p>
+                            <p class="rating">⭐ 5.0 (20)</p>
+                        </div>
+                    </td>
+                    {% for option in options %}
+                    <td class="quantity">
+                        <div class="quantity-wrapper">
+                            <button class="decrease">-</button>
+                            <input type="text" value="{{ option[1]}}" readonly>
+                            <button class="increase">+</button>
+                            {{option[0]}}
+                        </div>
+                    </td>
+                    {% endfor %}
+                    <td>
+                        <select>
+                            <option>수령방법 선택</option>
+                            <option>택배</option>
+                            <option>직접 수령</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="cart-actions">
+            <button class="continue">CONTINUE SHOPPING</button>
+            <button class="buy">BUY</button>
+        </div>
+    </main>
+</body>
+</html>

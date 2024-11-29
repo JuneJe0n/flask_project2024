@@ -69,18 +69,18 @@ function addOption(OptionText) {
     optnum += 1;
 }
 
-// document.getElementById("option-receive").addEventListener("keydown", function(event) {
-//     if (event.key === "Enter" && this.value.trim() !== "") {
-//         event.preventDefault();
-//         addOption(this.value.trim());
-//         this.value = "";
-//     }
+document.getElementById("option-receive").addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && this.value.trim() !== "") {
+        event.preventDefault();
+        addOption(this.value.trim());
+        this.value = "";
+    }
 
-//     if (!optnum) {
-//         const a = document.getElementById("option-notice");
-//         a.style.display = 'none';
-//     }
-// });
+    if (!optnum) {
+        const a = document.getElementById("option-notice");
+        a.style.display = 'none';
+    }
+});
 
 
 function addItem() {

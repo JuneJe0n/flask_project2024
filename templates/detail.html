@@ -53,6 +53,7 @@
             <form action="/add_to_cart" method="POST">
                 <input type="hidden" name="name" value="{{ name }}">
                 <input type="hidden" name="image" value="{{ data.images[0] }}">
+                <input type="hidden" name="discount" value="{{ data.discount }}">
                 <input type="hidden" name="price" value="{{ finalprice }}">
                 <input type="hidden" name="totalPrice" id="totalPrice">
                 <input type="hidden" name="selectedOption" id="selectedOptionInput">
@@ -99,26 +100,29 @@
     <script src="/static/detail.js"></script>
     <script>
         //찜 기능
-function showHeart() { $.ajax({
-    type: 'GET',
-    url: '/show_heart/{{name}}/',
-    data: {},
-    success: function (response) {
-        let my_heart = response['my_heart'];
-        if (my_heart['interested'] == 'Y')
-        {
-            $("#heart").css("color","red");
-            $("#heart").attr("onclick","unlike()");
-        }
-        else
-        {
-        $("#heart").css("color","gray");
-        $("#heart").attr("onclick","like()");
-    }
-        //alert("showheart!")
-        }
-    });
-}
+        function showHeart() { 
+            alert("showHeart!!!!")
+            $.ajax({
+                type: 'GET',
+                url: '/show_heart/{{name}}/',
+                data: {},
+                success: function (response) {
+                    
+                    let my_heart = response['my_heart'];
+                    if (my_heart['interested'] == 'Y')
+                    {
+                        $("#heart").css("color","red");
+                        $("#heart").attr("onclick","unlike()");
+                    }
+                    else
+                    {
+                        $("#heart").css("color","gray");
+                        $("#heart").attr("onclick","like()");
+                    }
+                    
+                }
+            });
+            }
 
 function like() {
     $.ajax({

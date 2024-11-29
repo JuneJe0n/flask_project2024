@@ -93,8 +93,9 @@ class DBhandler:
         for res in hearts.each():
             key_value = res.key()
 
-        if key_value == name:
-            target_value=res.val()
+            if key_value == name:
+                target_value=res.val()
+        print("###target_value##",target_value)
         return target_value
     
     def update_heart(self, user_id, isHeart, item, image):
@@ -108,3 +109,26 @@ class DBhandler:
     def get_heart(self):
         likes = self.db.child("heart").get().val()
         return likes
+
+
+    #카테고리별 상품리스트 보여주기
+    def get_items_bycategory(self, cate):
+        items = self.db.child("item").get()
+        target_value = []
+        target_key = []
+        
+        for res in items.each():
+            value = res.val()
+            key_value = res.key()
+
+            if value['category'] == cate:
+                target_value.append(value)
+                target_key.append(key_value)
+        
+        print("######target_value", target_value)
+
+        new_dict = {}
+        for k, v in zip(target_key, target_value):
+            new_dict[k] = v
+        
+        return new_dict

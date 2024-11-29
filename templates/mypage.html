@@ -11,7 +11,8 @@
     <header class="header">
         <span>마이페이지</span>
         <div class="user-menu">
-            <a href="/logout">로그아웃</a>
+            <button name="reg_items" id="reg_items" onclick="location.href='/reg_items'">상품 등록</button>
+            <button name="logout" id="logout" onclick="location.href='/logout'">로그아웃</button>
             <img src="/static/images/profile-icon.png" alt="Profile Icon" class="profile-icon">
         </div>
     </header>
@@ -19,7 +20,7 @@
     <!-- Greeting Section -->
     <section class="greeting-section">
         {% if session['id'] %}
-        <h2>{{session['id']}}님 안녕하세요!</h2>
+        <h2>{{session['nickname']}}님 안녕하세요!</h2>
         <!--firebase에 email 저장 field 만들면 아래에 자동으로 반영됩니다.-->
         <p>{{session['email']}}</p>
         {% endif %}
@@ -27,24 +28,24 @@
 
     <!-- Actions Section -->
     <section class="actions-section">
-        <div class="action-card" onclick="location.href='/shipping'">
+        <div class="action-card">
             <img src="/static/images/truck-icon.png" alt="주문 / 배송" class="truck-icon">
             <p>주문 / 배송</p>
             <span>보기</span>
         </div>
-        <div class="action-card" onclick="location.href='/myreview'">
-            <img src="/static/images/review-icon.png" alt="작성한 리뷰">
-            <p>작성한 리뷰</p>
+        <div class="action-card">
+            <img src="/static/images/review-icon.png" alt="리뷰">
+            <p>리뷰</p>
             <span>6</span>
         </div>
-
-        <div class="action-card" onclick="location.href='/likelist'">
-            <img src="/static/images/heart-icon.png" alt="찜한상품">
-            <p>찜한 상품</p>
-            <span>14</span>
+        <div class="action-card">
+            <a href="/likelist" style="text-decoration: none; color: inherit;">
+                <img src="/static/images/heart-icon.png" alt="찜한 상품">
+                <p>찜한 상품</p>
+                <span>14</span>
+            </a>
         </div>
-        
-        <div class="action-card" onclick="location.href='/shoppingcart'">
+        <div class="action-card">
             <img src="/static/images/cart-icon.png" alt="장바구니">
             <p>장바구니</p>
             <span>4</span>

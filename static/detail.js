@@ -94,16 +94,55 @@ document.addEventListener('input', function(event) {
 // select 요소의 변경 이벤트에 함수 연결
 select.addEventListener('change', updateSelectedOptions);
 
+
+function changeCenterImage(thumbnail) {
+    const centerImage = document.getElementById('center_img');
+    centerImage.src = thumbnail.src;
+
+    if (thumbnail) {
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(img => img.classList.remove('active-thumbnail'));
+        thumbnail.classList.add('active-thumbnail');
+    }
+}
+
+window.onload = () => {
+    thumbnails[0].classList.add('active-thumbnail');
+};
+
+function loadIframe(url, element = null) {
+    const iframe = document.getElementById('footer_iframe');
+    iframe.src = url;
+    iframe.hidden = false;
+
+    iframe.onload = () => {
+        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+        iframe.style.height = iframeDocument.body.scrollHeight + "px";
+    };
+
+    if (element) {
+        const buttons = document.querySelectorAll('.footer_nav a');
+        buttons.forEach(button => button.classList.remove('active'));
+        element.classList.add('active');
+    }
+}
+
+window.onload = () => {
+    const defaultButton = document.querySelector('.footer_nav a[href="/review_page"]');
+    loadIframe('/detail_info', defaultButton);
+};
+
 // 구매 버튼 클릭 시 실행될 함수
 function buyingItem() {
     const name = document.querySelector('input[name="name"]').value;
     const image = document.querySelector('input[name="image"]').value;
+    const discount = document.querySelector('input[name="discount"]').value;
     const totalPrice = calculateTotalPrice();
 
     // 선택된 옵션과 수량을 JSON 형식으로 변환
     const selectedOptionQuery = encodeURIComponent(JSON.stringify(selectedOptions));
 
-    window.location.href = `/buying?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&totalPrice=${totalPrice}&selectedOption=${selectedOptionQuery}`;
+    window.location.href = `/buying?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&discount=${encodeURIComponent(discount)}&totalPrice=${totalPrice}&selectedOption=${selectedOptionQuery}`;
 }
 
 // 커스터마이징 요청 버튼 클릭 시 실행될 함수

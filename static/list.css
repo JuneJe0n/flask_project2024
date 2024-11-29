@@ -5,13 +5,13 @@
 
 .items {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     width: 100%;
     min-width: 800px;
     height: 100%;
     overflow: hidden;
     text-align: center;
-    padding: 20px;
+    padding: 10px 35px;
     background-color: white;
 }
 

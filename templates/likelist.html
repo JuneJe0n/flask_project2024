@@ -1,19 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>찜 목록</title>
+    <title>좋아요 목록</title>
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="/static/likelist.css">
 </head>
 <body>
-    <h1>찜 목록</h1>
-    <ul>
-        {% for item in like_items %}
-        <li>
-            <h3>{{ item.name }}</h3>
-            <img src="{{ item.image }}" alt="{{ item.name }}" width="100">
-        </li>
-        {% endfor %}
-    </ul>
+    <!-- 네비게이션과 헤더는 이미 구현됨 -->
+    <header>
+        <h1 id="logo">
+            <a href="/"><img src="/static/images/logo.png" width="200px"></a>
+        </h1>
+        <div class="userBox">
+            <form class="search-box" action="/search" method="get">
+                <input class="search-txt" type="text" id="search_kw" name="search_kw" placeholder="검색어를 입력하세요">
+                <button class="search-btn" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <div class="userRegister">
+                <button id="login" onclick="location.href='/login'">로그인</button>
+                <button id="signup" onclick="location.href='/signup'">회원가입</button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="lnb">
+        <ul>
+            <li><a href="/reg_items">헤어</a></li>
+            <li><a href="/review_page">귀걸이</a></li>
+            <li><a href="/reg_reviews">목걸이</a></li>
+            <li class="active"><a href="/list">팔찌</a></li>
+            <li><a href="#a">식품</a></li>
+            <li><a href="#a">기타</a></li>
+        </ul>
+    </nav>
+
+    <main class="like-page">
+        <div class="user-info">
+            <h2>{{ session['nickname']}} 님</h2>
+            <p>좋아요 13</p>
+        </div>
+        <div class="column-items">
+                <table>
+                    <tr>
+                        {% for item in like_items %}
+                            <td onclick="location.href='/view_detail/{{item}}/';" style="cursor:pointer;">
+                                <div id="itemsection">
+                                    <img src="{{item.image}}" alt="item_img" width="240px" height="192px" style="display: block;">
+                                    <p style="margin: 10px 0;">
+                                        <img src="/static/images/user_icon.png" alt="user_icon" width="20" height="20">
+                                        <span style="color:gray;">판매자이름</span>
+                                    </p>
+                                    <p style="font-size: 18px"><b>{{item.name}}</b></p>
+                                    <p style="margin: 10px 0;"><span style="color:red"><b>20% </b></span><span class="price">8000원</span></p>
+                                    <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> 5.0 <span style="color:lightgray">리뷰 20개</span></p>
+                                </div>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+        </div>
+    </main>
 </body>
 </html>
+
