@@ -28,37 +28,52 @@
 
     <!-- Actions Section -->
     <section class="actions-section">
-        <div class="action-card">
-            <img src="/static/images/truck-icon.png" alt="주문 / 배송" class="truck-icon">
-            <p>주문 / 배송</p>
-            <span>보기</span>
-        </div>
-        <div class="action-card">
-            <img src="/static/images/review-icon.png" alt="리뷰">
-            <p>리뷰</p>
-            <span>6</span>
-        </div>
-        <div class="action-card">
-            <img src="/static/images/heart-icon.png" alt="찜한 상품">
-            <p>찜한 상품</p>
-            <span>14</span>
-        </div>
-        <div class="action-card">
-            <img src="/static/images/cart-icon.png" alt="장바구니">
-            <p>장바구니</p>
-            <span>4</span>
-        </div>
+        <a href="/buy" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/truck-icon.png" alt="주문 / 배송" class="truck-icon">
+                <p>주문 / 배송</p>
+                <span>보기</span>
+            </div>
+        </a>
+        <a href="/" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/review-icon.png" alt="리뷰">
+                <p>리뷰</p>
+                <span>6</span>
+            </div>
+        </a>
+
+        <a href="/like" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/heart-icon.png" alt="찜한 상품">
+                <p>찜한 상품</p>
+                <span>14</span>
+            </div>
+        </a>
+
+        <a href="/buy" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/cart-icon.png" alt="장바구니">
+                <p>장바구니</p>
+                <span>4</span>
+            </div>
+        </a>
     </section>
 
     <!-- Recent Products Section -->
     <section class="recent-products">
-        <h3>최근 본 상품</h3>
+        <h3>찜한 상품</h3>
         <div class="product-list">
-            <div class="product"></div>
-            <div class="product"></div>
-            <div class="product"></div>
-            <div class="product"></div>
-            <a href="#" class="more-link">더보기 &gt;</a>
+            {% if recent_items %}
+                {% for item in recent_items %}
+                <div class="product" onclick="location.href='/view_detail/{{ item.name }}/';" style="cursor:pointer;">
+                    <img src="{{ item.image }}" alt="{{ item.name }}" width="250px" height="250px" style="display: block; border-radius: 5px;">
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>찜한 상품이 없습니다.</p>
+            {% endif %}
+            <a href="/like" class="more-link">더보기 ></a>
         </div>
     </section>
 

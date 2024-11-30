@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from database import DBhandler
 import hashlib
 import os
+import json
+import math
+from datetime import datetime
 
 application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
@@ -75,15 +78,26 @@ def check_id():
 @application.route("/list")
 def view_list():
     page = request.args.get("page", 0, type=int)
+    category = request.args.get("category", "all")
     per_page = 8  # item count to display per page
     per_row = 4  # item count to display per row
     row_count = int(per_page / per_row)
     start_idx = per_page * page
     end_idx = per_page * (page + 1)
 
-    data = DB.get_items()  # read the table
+    if category == "all":
+        data = DB.get_items() #read the table
+    else:
+        data = DB.get_items_bycategory(category)
+
+    data = dict(sorted(data.items(), key=lambda x: x[0], reverse=False)) #key는 상품명, 상품명을 사용해서 정렬
     item_counts = len(data)
-    data = dict(list(data.items())[start_idx:end_idx])
+
+    if item_counts<=per_page:
+        data = dict(list(data.items())[:item_counts])
+    else:
+        data =dict(list(data.items())[start_idx:end_idx])
+
     tot_count = len(data)
 
     for i in range(row_count):  # last row
@@ -101,7 +115,7 @@ def view_list():
             finalprices[key] = finalprice
 
 
-    # 이후 finalprices를 템플릿에 넘길 수 있습니다.
+    # 이후 finalprices를 템플릿에 넘길 수 있음.
     return render_template(
         "list.html",
         datas=data.items(),
@@ -109,9 +123,10 @@ def view_list():
         row2=locals()['data_1'].items(),
         limit=per_page,
         page=page,
-        page_count=int((item_counts / per_page) + 1),
+        page_count=int(math.ceil(item_counts/per_page)),
         total=item_counts,
-        finalprices=finalprices  # 템플릿으로 finalprices 전달
+        finalprices=finalprices, # 템플릿으로 finalprices 전달
+        category=category
     )
 
 
@@ -311,18 +326,106 @@ def review_detail(review_id):
 #찜 기능
 @application.route('/show_heart/<name>/', methods=['GET'])
 def show_heart(name):
+    print("###show_heart#####",session['id'],name)
     my_heart = DB.get_heart_byname(session['id'],name)
+    print("####show_heart####",my_heart)
     return jsonify({'my_heart': my_heart})
 
 @application.route('/like/<name>/', methods=['POST'])
 def like(name):
-    my_heart = DB.update_heart(session['id'],'Y',name)
-    return jsonify({'msg': '좋아요 완료!'})
+    image = request.form.get('image')
+    my_heart = DB.update_heart(session['id'],'Y',name, image)
+    return jsonify({})
 
 @application.route('/unlike/<name>/', methods=['POST'])
 def unlike(name):
-    my_heart = DB.update_heart(session['id'],'N',name)
-    return jsonify({'msg': '안좋아요 완료!'})
+    image = request.form.get('image')
+    my_heart = DB.update_heart(session['id'],'N',name, image)
+    return jsonify({})
+
+@application.route('/like')
+def view_like():
+    page = request.args.get("page", 0, type=int)
+    
+    user_id = session.get('id')
+    like_items = []
+    recent_items = []
+
+    if user_id:
+        hearts = DB.db.child("heart").child(user_id).get()
+
+        if hearts.val():
+            for heart in hearts.each():
+                item_name = heart.key()  # 아이템 이름
+                item_data = heart.val()  # 찜 데이터
+                
+                # 관심 데이터만 추가
+                if item_data.get('interested') == 'Y':
+                    like_items.append({
+                        "name": item_name,
+                        "image": item_data.get("image"),  # 이미지 추가
+                        "data": item_data
+                    })
+        
+        # 최근 아이템 4개 선택
+        recent_items = like_items[-4:] if len(like_items) > 4 else like_items
+
+    return render_template('like.html', like_items=like_items, recent_items=recent_items)
+
+
+
+#구매하기
+@application.route('/buy')
+def buy():
+    name = request.args.get('name')
+    image = request.args.get('image')
+    total_price = request.args.get('totalPrice')
+    discount = request.args.get('discount')
+
+    options_json = request.args.get('selectedOption')  # JSON 형식으로 전달받음
+    options = json.loads(options_json)
+
+    return render_template('buying.html', name=name, image=image, total_price=total_price, options=options, discount=discount)
+
+#커스터마이징 요청서
+@application.route('/reg_custom')
+def reg_custom():
+    name = request.args.get('name')
+    image = request.args.get('image')
+    price = request.args.get('price')
+    
+    return render_template('reg_custom.html', name=name, image=image, price=price)
+
+
+@application.route('/submit_customs_post', methods=['POST'])
+def submit_custom_post():
+    data = request.form
+    
+    DB.insert_custom(data)
+
+    return redirect('/custom')
+
+
+@application.route('/custom')
+def view_custom():
+    all_customs = DB.get_customs()
+
+    if all_customs:
+        custom_list = [{
+            "name": item["name"], "image": item["image"],
+            "price": item["price"]}
+            for item in all_customs.values()]
+    else:
+        custom_list = []
+    return render_template('custom.html', data=custom_list)
+
+@application.route('/delete_custom/<item_name>', methods=['POST'])
+def delete_custom(item_name):
+    # Firebase에서 해당 아이템 삭제
+    DB.delete_custom(item_name)
+    return redirect('/custom')
+
+
 
 
 if __name__ == "__main__":

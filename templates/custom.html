@@ -1,0 +1,25 @@
+{% if data %}
+    <h2>폼 데이터 목록</h2>
+    <ul>
+        {% for item in data %}
+            <div>
+                <p onclick="location.href='/view_detail/{{item.name}}/'">
+                    상품명: {{item.name}}<br>
+                    <img src="{{item.image}}" alt="상품 이미지">
+                    {{item.price}}원
+                </p>
+                <form method="POST" action="/delete_custom/{{item.name}}">
+                    <button type="submit" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 5px;">
+                        삭제
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>폼 데이터가 전달되지 않았습니다.</p>
+{% endif %}
+
+<a href="/">
+    home
+</a>

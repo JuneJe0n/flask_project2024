@@ -188,6 +188,7 @@ class DBhandler:
             print(f"Error fetching review by id: {str(e)}")
             return None
     
+    #찜 기능
     def get_heart_byname(self, uid, name):
         hearts = self.db.child("heart").child(uid).get()
         target_value=""
@@ -197,13 +198,59 @@ class DBhandler:
         for res in hearts.each():
             key_value = res.key()
 
-        if key_value == name:
-            target_value=res.val()
+            if key_value == name:
+                target_value=res.val()
+        print("###target_value##",target_value)
         return target_value
     
-    def update_heart(self, user_id, isHeart, item):
+    def update_heart(self, user_id, isHeart, item, image):
         heart_info ={
+            "image" : image,
             "interested": isHeart
         }
         self.db.child("heart").child(user_id).child(item).set(heart_info)
+        return True
+    
+    def get_heart(self):
+        likes = self.db.child("heart").get().val()
+        return likes
+
+
+    #카테고리별 상품리스트 보여주기
+    def get_items_bycategory(self, cate):
+        items = self.db.child("item").get()
+        target_value = []
+        target_key = []
+        
+        for res in items.each():
+            value = res.val()
+            key_value = res.key()
+
+            if value['category'] == cate:
+                target_value.append(value)
+                target_key.append(key_value)
+        
+        print("######target_value", target_value)
+
+        new_dict = {}
+        for k, v in zip(target_key, target_value):
+            new_dict[k] = v
+        
+        return new_dict
+    
+    def insert_custom(self, data):
+        custom_info = {
+            "name": data['name'],
+            "image": data['image'],
+            "price": data['price']
+        }
+        self.db.child("custom").child(data['name']).set(custom_info)
+        return True
+    
+    def get_customs(self):
+        items = self.db.child("custom").get().val()
+        return items  
+    
+    def delete_custom(self, item_name):
+        self.db.child("custom").child(item_name).remove()  # 아이템 이름으로 삭제
         return True

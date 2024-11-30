@@ -149,9 +149,6 @@ header .user-menu{display:flex;gap: 10px;}
 
 .product {
     flex: 1; /* Make product items responsive */
-    height: 250px;
-    background-color: #ddd;
-    border-radius: 5px;
 }
 
 .more-link {
