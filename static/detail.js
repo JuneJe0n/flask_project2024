@@ -142,7 +142,7 @@ function buyingItem() {
     // 선택된 옵션과 수량을 JSON 형식으로 변환
     const selectedOptionQuery = encodeURIComponent(JSON.stringify(selectedOptions));
 
-    window.location.href = `/buying?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&discount=${encodeURIComponent(discount)}&totalPrice=${totalPrice}&selectedOption=${selectedOptionQuery}`;
+    window.location.href = `/buy?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&discount=${encodeURIComponent(discount)}&totalPrice=${totalPrice}&selectedOption=${selectedOptionQuery}`;
 }
 
 // 커스터마이징 요청 버튼 클릭 시 실행될 함수
@@ -151,5 +151,5 @@ function reqCustomization() {
     const image = document.querySelector('input[name="image"]').value;
     const price = document.querySelector('input[name="price"]').value;
 
-    window.location.href = `/reg_customizing?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&price=${price}`;
+    window.location.href = `/reg_custom?name=${encodeURIComponent(name)}&image=${encodeURIComponent(image)}&price=${price}`;
 }

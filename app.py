@@ -18,9 +18,32 @@ items = []
 def Hello():
     return render_template("index.html")
 
-@application.route("/mypage")
+@application.route('/mypage')
 def mypage():
-    return render_template("mypage.html")
+    user_id = session.get('id')
+    like_items = []
+    recent_items = []
+
+    if user_id:
+        hearts = DB.db.child("heart").child(user_id).get()
+
+        if hearts.val():
+            for heart in hearts.each():
+                item_name = heart.key()  # 아이템 이름
+                item_data = heart.val()  # 찜 데이터
+                
+                # 관심 데이터만 추가
+                if item_data.get('interested') == 'Y':
+                    like_items.append({
+                        "name": item_name,
+                        "image": item_data.get("image"),  # 이미지 추가
+                        "data": item_data
+                    })
+
+        # 최신 아이템 4개 선택
+        recent_items = like_items[-4:] if len(like_items) > 4 else like_items
+    
+    return render_template('mypage.html', recent_items=recent_items)
 
 @application.route("/login")
 def login():
