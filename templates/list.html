@@ -1,95 +1,80 @@
 {% extends "index.html" %}
 
-{% block section %}
-<head>
-  <meta charset="UTF-8">
-  <title>list_accessories</title>
-  <style>
-          #title {
-              background-color: white;
-              float: left;
-              width: 200px;
-              height: 100%;
-          }
-          .nav a {
-          display: inline-block;
-          padding: 5px 10px;
-          border: 5px solid black;
-          background-color: gray;
-          color: white;
-          text-decoration: none;
-          }
-          .nav a:hover {
-          background-color: darkgray; /* Optional hover effect */
-          }
-          #section {
-              background-color: lightgreen;
-              color: white;
-              margin-left: 220px;
-              padding: 10px;
-          }
-          #itemsection {
-            border: 1px solid #ccc;
-            padding: 10px;
-          }
-          #footer {
-              background-color: plum;
-              color: white;
-              height: 100px;
-              clear: both;
-              text-align: center;
-          }
-  </style>
-  </head>
-  <body>>
-      <h2 id="title">
-        <ul class="navbar__menu" style="list-style-type: none;">
-          <li id><b><span style="color:black">액세서리</span></b></li><br>
-          <li id="nav"><a href="#">#헤어</a></li><br>
-          <li id="nav"><a href="#">#안경</a></li><br>
-          <li id="nav"><a href="#">#귀걸이</a></li><br>
-          <li id="nav"><a href="#">#목걸이</a></li><br>
-          <li id="nav"><a href="#">#팔찌</a></li><br>
-          <li id="nav"><a href="#">#시계</a></li><br>
-        </ul>
-  
-        <a href="#" class="navbar__toogleBtn">
-            <i class="fas fa-bars"></i>
-        </a>
-    </h2>
+{% block extra_css %}
+  <link rel="stylesheet" href="/static/list.css">
+{% endblock %}
 
-  <div id="section">
-    <table>
-        {% for item in items %}
-            {% if loop.index0 % 4 == 0 %}  <!-- Start a new row every 4 items -->
-                <tr>
-            {% endif %}
-  
-            <td>
-                <div id="itemsection">
-                    <img src="{{ item.img_path }}" alt="item_img">
-                    <br>
-                    <p><img src="static/images/user_icon.png" alt="user_icon" width="20" height="20">{{ item.seller }}</p>
-                    <br>
-                    <p>{{ item.name }}</p>
-                    <br>
-                    <p>가격: {{ item.price or '정보 없음' }}</p>  <!-- Placeholder for price -->
-                    <p>평균별점: {{ item.rating or '정보 없음' }}</p>  <!-- Placeholder for rating -->
-                </div>
-            </td>
-  
-            {% if loop.index % 4 == 0 %}  <!-- Close the row after 4 items -->
-                </tr>
-            {% endif %}
-        {% endfor %}
-  
-        <!-- Close the last row if it was not completed -->
-        {% if items|length % 4 != 0 %}
-            </tr>
-        {% endif %}
-    </table>
+{% block content %}
+<div class="row" style="justify-self: center;">
+  <div class="column">
+      <div class="column-nav">
+          <ul style="list-style-type: none; justify-self: start;">
+              <li><b><span style="font-size: 40px; color: black;">액세서리</span></b></li><br>
+              <li><a href="#" class="active">#헤어</a></li>
+              <li><a href="#">#안경</a></li>
+              <li><a href="#">#귀걸이</a></li>
+              <li><a href="#">#목걸이</a></li>
+              <li><a href="#">#팔찌</a></li>
+              <li><a href="#">#시계</a></li>
+          </ul>
+      </div>
+
+      <div class="column-items">
+          {% if row1 or row2 %}
+              <table>
+                  <tr>
+                      {% for key, value in row1 %}
+                          <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
+                              <div id="itemsection">
+                                  <img src="{{value.images[0]}}" alt="item_img" width="240px" height="192px" style="display: block;">
+                                  <p style="margin: 10px 0;">
+                                      <img src="/static/images/user_icon.png" alt="user_icon" width="20" height="20">
+                                      <span style="color:gray;">{{value.nickname}}</span>
+                                  </p>
+                                  <p style="font-size: 18px"><b>{{key}}</b></p>
+                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
+                                  <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
+                              </div>
+                          </td>
+                      {% endfor %}
+                  </tr>
+
+                  <tr>
+                      {% for key, value in row2 %}
+                          <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
+                              <div id="itemsection">
+                                  <img src="{{value.images[0]}}" alt="item_img" width="240" height="192" style="display: block;">
+                                  <p style="margin: 10px 0;">
+                                      <img src="../static/images/user_icon.png" alt="user_icon" width="20" height="20">
+                                      <span style="color:gray;">{{value.user}}</span>
+                                  </p>
+                                  <p style="font-size: 18px"><b>{{key}}</b></p>
+                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
+                                  <p><img src="../static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
+                              </div>
+                          </td>
+                      {% endfor %}
+                  </tr>
+              </table>
+          {% else %}
+              <p>등록된 상품이 없습니다.</p>
+          {% endif %}
+      </div>
   </div>
+</div>
 
-  <div id="footer"><h2>pagenation</h2></div>
-  </body>
-{% endblock section %}
+<footer>
+    <div class="pagination" style="justify-self: center;">
+      <a href="#" class="prev" style="color: gray;">← Previous</a>
+      {% for i in range(page_count) %}
+        <a href="{{url_for('view_list', page=i)}}" class="page {% if page == i %}active{% endif %}">{{i+1}}</a>
+      {% endfor %}
+      <a href="#" class="next" style="color: #006400;">Next →</a>
+    </div>
+</footer>  
+
+{% block extra_js %}
+<script src="/static/list.js"></script>
+{% endblock %}
+
+{% endblock content %}
