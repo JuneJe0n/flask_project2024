@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>요청서</title>
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="/static/request.css">
+</head>
+<body>
+    <!-- 기존 네비게이션과 헤더 유지 -->
+    <header>
+        <h1 id="logo">
+            <a href="/"><img src="/static/images/logo.png" width="200px"></a>
+        </h1>
+        <div class="userBox">
+            <form class="search-box" action="/search" method="get">
+                <input class="search-txt" type="text" id="search_kw" name="search_kw" placeholder="검색어를 입력하세요">
+                <button class="search-btn" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <div class="userRegister">
+                <button id="login" onclick="location.href='/login'">로그인</button>
+                <button id="signup" onclick="location.href='/signup'">회원가입</button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="lnb">
+        <ul>
+            <li><a href="/reg_items">헤어</a></li>
+            <li><a href="/review_page">귀걸이</a></li>
+            <li><a href="/reg_reviews">목걸이</a></li>
+            <li class="active"><a href="/list">팔찌</a></li>
+            <li><a href="#a">식품</a></li>
+            <li><a href="#a">기타</a></li>
+        </ul>
+    </nav>
+
+    <!-- 요청서 화면 -->
+    <main class="request-page">
+        <h2>이*화 님의 요청서</h2>
+        <div class="request-tabs">
+            <button class="tab active">수신</button>
+            <button class="tab">발신</button>
+        </div>
+        <table class="request-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>상품 정보</th>
+                    <th>구매자 정보</th>
+                    <th>요청서</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="product-info">
+                        <img src="/static/images/스크런치 2.jpg" alt="상품 이미지">
+                        <div>
+                            <p class="category">배꽃헤어</p>
+                            <h3>핸드메이드 행운 크런치</h3>
+                            <p class="discount">20% <span class="price">8,000원</span></p>
+                            <p class="rating">⭐ 5.0 (20)</p>
+                        </div>
+                    </td>
+                    <td>구매자 정보 없음</td>
+                    <td><button class="view-request">요청서 보기</button></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="product-info">
+                        <img src="/static/images/스크런치 2.jpg" alt="상품 이미지">
+                        <div>
+                            <p class="category">배꽃헤어</p>
+                            <h3>핸드메이드 행운 크런치</h3>
+                            <p class="discount">20% <span class="price">8,000원</span></p>
+                            <p class="rating">⭐ 5.0 (20)</p>
+                        </div>
+                    </td>
+                    <td>구매자 정보 없음</td>
+                    <td><button class="view-request">요청서 보기</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
