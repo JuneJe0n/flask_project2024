@@ -349,7 +349,10 @@ def review_detail(review_id):
             return "Review not found", 404
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
-
+        
+@application.route("/request")
+def request():
+    return render_template("request.html")
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)
