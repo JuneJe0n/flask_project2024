@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>인덱스</title>
+        <link rel="stylesheet" href="/static/index.css">
+        <script src="https://kit.fontawesome.com/2d9d20b888.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/static/style.css">
+        <script src="/static/main.js" defer></script>
+    </head>
+
+    <body>
+        <!-- <a href="#contents" class="skip">본문바로가기</a> -->
+
+        <header>
+            <h1 id="logo">
+                <a href="/"><img src="/static/images/logo.png" width = 200px;/></a>
+            </h1>
+
+            <!-- <h1><a href="#a">이화메이드</a></h1> --> 
+
+
+            <div class="userBox">
+                <!-- <h2 class="hide">검색창</h2> -->
+                <form class="search-box" action="/search" method="get">
+                    <input class="search-txt" type="text" id="search_kw" name="search_kw" value="{{ kw or '' }}" placeholder="검색어를 입력하세요">
+                    <button class="search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+                <!-- <h2 class="hide">로그인/회원가입</h2> -->
+                <div class="userRegister">
+                    {% if session['id'] %}
+                    <button name="mypage" id="mypage" onclick="location.href='/mypage'">{{session['nickname']}}의 마이페이지</button>
+                    {% else %}
+                    <button name="login" id="login" onclick="location.href='/login'">로그인</button>
+                    <button name="signup" id="signup" onclick="location.href='/signup'">회원가입</button>                    
+                    {% endif %}
+                </div>
+            </div>
+        </header> 
+
+        {% block nav %}
+        <!-- <h2 class="hide">내비게이션</h2> -->
+        <nav class="lnb">
+            <ul>
+                <li><a href="/reg_items">헤어</a></li>
+                <li><a href="/review_page">귀걸이</a></li>
+                <li><a href="/reg_reviews">목걸이</a></li>
+                <li class="active"><a href="/list">팔찌</a></li>
+                <li><a href="#a">식품</a></li>
+                <li><a href="#a">기타</a></li>
+            </ul>
+        </nav>
+        {% endblock %}
+        
+        {% block extra_css %}
+        {% endblock %}
+
+        {% block content %}
+        {% endblock %}
+
+        {% block extra_js %}
+        {% endblock %}
+    </body>
+</html>
