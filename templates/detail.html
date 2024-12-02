@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-
+<input type="hidden" name="seller" id="seller" value="{{session['nickname']}}">
 <div class="detail">
     <div class="detail-image">
         <img id="center_img" src="/{{data.images[0]}}" alt="center_img" width="550px" height="450px">
@@ -22,7 +22,7 @@
 
         <label class="detail-info">
             <p style="color:gray;"><img src="/static/images/user_icon.png" alt="user_icon" width="30" height="30">
-                {{data.user}}</p>
+                {{data.seller}}</p>
             <p style="font-size:30px; margin: 20px 0;"><b>{{name}}</b></p>
             <p style="color:gray; display: flex; justify-content: flex-end; margin: 0;"><del id="price">{{data.price}}원</del></p>
                 <p style="font-size: 30px; display: flex; justify-content: flex-end; margin: 10px 0;"><b>
@@ -69,7 +69,7 @@
                     </div>
                     <input type="button" value="커스터마이징 요청하기" 
                         style="margin-left:10px; background-color:aliceblue; border: none; border-radius: 4px; width: 200px; height: 30px; font-size: 15px;"
-                        onclick="reqCustomization()">
+                        onclick="location.href='/apply_custom_init/{{name}}/';">
                 </div>
             </form>
             

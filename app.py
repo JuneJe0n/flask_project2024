@@ -212,6 +212,11 @@ def reg_review_init(name):
     data = DB.get_item_byname(str(name))
     return render_template("reg_reviews.html", name=name, data=data)
 
+@application.route("/apply_custom_init/<name>/")
+def apply_custom_init(name):
+    data = DB.get_item_byname(str(name))
+    return render_template("apply_custom.html", name=name, data=data)
+
 @application.route("/reg_review", methods=['POST'])
 def reg_review():
     data = request.form
@@ -283,6 +288,91 @@ def submit_item_post():
         page=page, page_count=int((item_counts/per_page)+1),
         total=item_counts,
         finalprices=finalprices)
+
+@application.route("/submit_custom_post", methods=['POST'])
+def submit_custom_post():
+    data = request.form
+    img_list = []
+
+    # 이미지 파일 저장 및 경로 리스트에 추가
+    for i in range(1, 10):  # 최대 9개의 이미지를 처리
+        image_file = request.files.get(f'file{i}')
+        if image_file:
+            image_path = f"static/images/{image_file.filename}"
+            image_file.save(image_path)
+            img_list.append(image_path)
+    
+    DB.apply_custom(data['name'], data, img_list)
+
+    return render_template("mypage.html")
+
+
+@application.route('/custom')
+def view_customs():
+    data = DB.get_customs()
+
+    if not isinstance(data, dict):
+        print("Error: Data is not a dictionary. Data:", data)
+        data = {}
+
+    print("##### Data:", data)
+    
+    combined_data = []  # datas와 items를 결합한 데이터 리스트
+
+    current_user = session.get('nickname')
+
+    if not current_user:
+            print("Error: User is not logged in or 'nickname' not in session.")
+            return render_template("custom.html", combined_data=combined_data)  # 빈 리스트 반환
+
+    for seller, customs in data.items():
+        if seller != current_user:
+            continue  # 현재 사용자와 seller가 일치하지 않으면 무시
+
+        for name, appliers in customs.items():
+            for applier, applier_details in appliers.items():
+                item_data = DB.get_item_byname(name)
+                if item_data:
+                    combined_data.append({
+                        "seller": seller,
+                        "custom_name": name,
+                        "custom_data": applier_details,
+                        "item_data": item_data,
+                        "images": item_data.get("images", []),
+                        "applier": applier
+                    })
+
+    return render_template("custom.html", combined_data=combined_data)
+
+@application.route('/applier_custom')
+def view_applier_customs():
+    data = DB.get_customs()
+
+    if not isinstance(data, dict):
+        print("Error: Data is not a dictionary. Data:", data)
+        data = {}
+
+    # session['nickname']과 일치하는 applier만 필터링
+    applier_data = []
+    
+    for seller, customs in data.items():
+        for name, appliers in customs.items():
+            for applier, applier_details in appliers.items():
+                if applier == session.get('nickname'):  # applier가 session['nickname']과 일치하면
+                    item_data = DB.get_item_byname(name)
+                    if item_data:
+                        applier_data.append({
+                            "seller": seller,
+                            "custom_name": name,
+                            "custom_data": applier_details,
+                            "item_data": item_data,
+                            "images": item_data.get("images", [])
+                        })
+
+    return render_template("applier_custom.html", combined_data=applier_data)
+
+
+
 
 @application.route("/search", methods=['GET'])
 def search():
@@ -404,50 +494,12 @@ def buy():
     image = request.args.get('image')
     total_price = request.args.get('totalPrice')
     discount = request.args.get('discount')
+    seller = request.args.get('seller')
 
     options_json = request.args.get('selectedOption')  # JSON 형식으로 전달받음
     options = json.loads(options_json)
 
-    return render_template('buying.html', name=name, image=image, total_price=total_price, options=options, discount=discount)
-
-#커스터마이징 요청서
-@application.route('/reg_custom')
-def reg_custom():
-    name = request.args.get('name')
-    image = request.args.get('image')
-    price = request.args.get('price')
-    
-    return render_template('reg_custom.html', name=name, image=image, price=price)
-
-
-@application.route('/submit_customs_post', methods=['POST'])
-def submit_custom_post():
-    data = request.form
-    
-    DB.insert_custom(data)
-
-    return redirect('/custom')
-
-
-@application.route('/custom')
-def view_custom():
-    all_customs = DB.get_customs()
-
-    if all_customs:
-        custom_list = [{
-            "name": item["name"], "image": item["image"],
-            "price": item["price"]}
-            for item in all_customs.values()]
-    else:
-        custom_list = []
-    return render_template('custom.html', data=custom_list)
-
-@application.route('/delete_custom/<item_name>', methods=['POST'])
-def delete_custom(item_name):
-    # Firebase에서 해당 아이템 삭제
-    DB.delete_custom(item_name)
-    return redirect('/custom')
-
+    return render_template('buy.html', name=name, image=image, total_price=total_price, options=options, discount=discount, seller=seller)
 
 
 

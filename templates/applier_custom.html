@@ -7,10 +7,10 @@
 {% block content %}
     <!-- 요청서 화면 -->
     <main class="request-page">
-        <h2>{{session['nickname']}} 님의 요청서</h2>
+        <h2>{{session['nickname']}}님의 요청서</h2>
         <div class="request-tabs">
-            <button class="tab active">수신</button>
-            <button class="tab" onclick="location.href='/applier_custom'">발신</button>
+            <button class="tab" onclick="location.href='/custom'">수신</button>
+            <button class="tab active">발신</button>
         </div>
         <table class="request-table">
             <thead>
@@ -36,15 +36,11 @@
                             <p class="rating">⭐ {{ data.item_data.rating }} ({{ data.item_data.review_count }})</p>
                         </div>
                     </td>
-                    <td>
-                        {% if data.applier %}
-                            {{ data.applier }}
-                        {% endif %}
-                    </td>
+                    <td>{{ session['nickname'] }}</td>
                     <td><button class="view-request">요청서 보기</button></td>
                 </tr>
                 {% endfor %}
             </tbody>                 
         </table>
     </main>
-    {% endblock %}
+{% endblock %}

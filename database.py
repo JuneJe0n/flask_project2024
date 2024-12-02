@@ -9,14 +9,45 @@ class DBhandler:
         firebase = pyrebase.initialize_app(config)
         self.db = firebase.database()
     
+    def apply_custom(self, name, data, img_list):
+        custom = {
+            "amount": data['amount'],
+            "size": data['size'],
+            "color": data['color'],
+            "material": data['material'],
+            "상세 요청사항": data['info'],
+            "images": img_list
+        }
+        self.db.child("application").child(data['seller']).child(name).child(data['applier']).set(custom)
+        return True
+    
+        # 아이템 가져오는 메서드 추가
+
+    def get_customs(self):
+        try:
+            # Firebase에서 데이터를 가져오기
+            customs = self.db.child("application").get()
+            if customs.val() is None:
+                return {}  # 데이터가 없으면 빈 딕셔너리 반환
+            
+            # 데이터 구조를 출력하여 확인
+            print("Fetched customs data:", customs.val())
+
+            return customs.val()  # 딕셔너리 형태로 반환
+        except Exception as e:
+            print(f"Error fetching customs: {str(e)}")
+            return {}  
+
+
     def insert_item(self, name, data, img_list, opt_list):
         item_info = {
-            #seller에 대한 정보는 reg_items에서 사용하가 작성하지 않으므로 백엔드 서버에서 더 작업 필요
+            "seller": data['seller'],
             "amount": data['amount'],
             "category": data['category'],
             "price": data['price'],
             "discount": data['discount'],
             "info": data['info'],
+            "custom": data['customizing'],
             "images": img_list,
             "options": opt_list
         }
@@ -28,6 +59,7 @@ class DBhandler:
         img_list = [f"/{img}" for img in img_list]  
 
         reivew_info = {
+            "writer": data['writer'],
             "preview": data['info'][:10],
             "info": data['info'],
             "option": data['options'], #name으로 받음
@@ -237,20 +269,3 @@ class DBhandler:
             new_dict[k] = v
         
         return new_dict
-    
-    def insert_custom(self, data):
-        custom_info = {
-            "name": data['name'],
-            "image": data['image'],
-            "price": data['price']
-        }
-        self.db.child("custom").child(data['name']).set(custom_info)
-        return True
-    
-    def get_customs(self):
-        items = self.db.child("custom").get().val()
-        return items  
-    
-    def delete_custom(self, item_name):
-        self.db.child("custom").child(item_name).remove()  # 아이템 이름으로 삭제
-        return True
