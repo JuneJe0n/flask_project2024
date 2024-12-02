@@ -152,6 +152,64 @@ def view_list():
         category=category
     )
 
+@application.route("/myitems")
+def view_myitems():
+    page = request.args.get("page", 0, type=int)
+    category = request.args.get("category", "all")
+    per_page = 8  # item count to display per page
+    per_row = 4  # item count to display per row
+    row_count = int(per_page / per_row)
+    start_idx = per_page * page
+    end_idx = per_page * (page + 1)
+
+    current_user = session.get('nickname')  # 현재 사용자 확인
+
+    if category == "all":
+        data = DB.get_items()  # 모든 아이템 가져오기
+    else:
+        data = DB.get_items_bycategory(category)  # 카테고리별 아이템 가져오기
+
+    # seller가 session['nickname']과 일치하는 데이터만 필터링
+    if current_user:
+        data = {key: value for key, value in data.items() if value.get('seller') == current_user}
+
+    data = dict(sorted(data.items(), key=lambda x: x[0], reverse=False))  # 상품명으로 정렬
+    item_counts = len(data)
+
+    if item_counts <= per_page:
+        data = dict(list(data.items())[:item_counts])
+    else:
+        data = dict(list(data.items())[start_idx:end_idx])
+
+    tot_count = len(data)
+
+    for i in range(row_count):  # 마지막 행 처리
+        if (i == row_count - 1) and (tot_count % per_row != 0):
+            locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:])
+        else:
+            locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:(i + 1) * per_row])
+
+    finalprices = {}
+    if data:
+        for key, item in data.items():
+            price = float(item.get('price', 0))
+            discount = float(item.get('discount', 0))
+            finalprice = int(price * (100 - discount) * 0.01)
+            finalprices[key] = finalprice
+
+    return render_template(
+        "myitems.html",
+        datas=data.items(),
+        row1=locals()['data_0'].items(),
+        row2=locals()['data_1'].items(),
+        limit=per_page,
+        page=page,
+        page_count=int(math.ceil(item_counts / per_page)),
+        total=item_counts,
+        finalprices=finalprices,  # 템플릿으로 finalprices 전달
+        category=category
+    )
+
 
 
 @application.route('/dynamicrul/<varible_name>/')
