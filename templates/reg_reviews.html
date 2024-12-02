@@ -20,6 +20,7 @@
                         {% if data %}
                         <label style="font-weight: bold;" type="text" id="user" name="user">제작자명: {{data.user}}</label>
                         <label type="text" id="name" name="name">상품명: {{name}}</label>
+                        <input type="hidden" id="itemname" name="itemname" value="{{name}}">
                         {% endif %}
                     </div>                
                 </div>

@@ -71,6 +71,17 @@ function updateSelectedOptions() {
 
         // 선택된 옵션과 수량을 이차원 배열 형태로 저장
         selectedOptions.push([selectedText, quantity]);
+    } else if (selectedValue) {
+        existingOptions.forEach(option => {
+            if (option.textContent === selectedText) {
+                const inputElement = option.querySelector('.quantity-input');
+        
+                if (inputElement) {
+                    const currentValue = parseInt(inputElement.value, 10);
+                    inputElement.value = currentValue + 1;
+                }
+            }
+        });
     }
 
     updateTotalPrice();

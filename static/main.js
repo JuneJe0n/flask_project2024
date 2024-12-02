@@ -98,3 +98,12 @@ function changeIMG(boxIndex) {
         }
     }
 }
+
+const checkbox = document.getElementById("customizing-check");
+const custom = document.getElementById("customizing");
+
+checkbox.addEventListener("change", function () {
+    if (checkbox.checked) {
+        custom.value = 1;
+    }
+});

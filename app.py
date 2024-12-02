@@ -364,44 +364,6 @@ def submit_custom_post():
 
     return render_template("mypage.html")
 
-
-@application.route('/custom')
-def view_customs():
-    data = DB.get_customs()
-
-    if not isinstance(data, dict):
-        print("Error: Data is not a dictionary. Data:", data)
-        data = {}
-
-    print("##### Data:", data)
-    
-    combined_data = []  # datas와 items를 결합한 데이터 리스트
-
-    current_user = session.get('nickname')
-
-    if not current_user:
-            print("Error: User is not logged in or 'nickname' not in session.")
-            return render_template("custom.html", combined_data=combined_data)  # 빈 리스트 반환
-
-    for seller, customs in data.items():
-        if seller != current_user:
-            continue  # 현재 사용자와 seller가 일치하지 않으면 무시
-
-        for name, appliers in customs.items():
-            for applier, applier_details in appliers.items():
-                item_data = DB.get_item_byname(name)
-                if item_data:
-                    combined_data.append({
-                        "seller": seller,
-                        "custom_name": name,
-                        "custom_data": applier_details,
-                        "item_data": item_data,
-                        "images": item_data.get("images", []),
-                        "applier": applier
-                    })
-
-    return render_template("custom.html", combined_data=combined_data)
-
 @application.route('/applier_custom')
 def view_applier_customs():
     data = DB.get_customs()
@@ -418,19 +380,70 @@ def view_applier_customs():
             for applier, applier_details in appliers.items():
                 if applier == session.get('nickname'):  # applier가 session['nickname']과 일치하면
                     item_data = DB.get_item_byname(name)
+                    progress_data = DB.get_customs_byinfo(seller, name, applier)
                     if item_data:
                         applier_data.append({
                             "seller": seller,
                             "custom_name": name,
                             "custom_data": applier_details,
                             "item_data": item_data,
-                            "images": item_data.get("images", [])
+                            "images": item_data.get("images", []),
+                            "applier": applier,
+                            "progress": progress_data.get("progress")
                         })
 
     return render_template("applier_custom.html", combined_data=applier_data)
 
+def get_custom_data():
+    data = DB.get_customs()
 
+    if not isinstance(data, dict):
+        print("Error: Data is not a dictionary. Data:", data)
+        return []
 
+    combined_data = []
+    current_user = session.get('nickname')
+
+    if not current_user:
+        print("Error: User is not logged in or 'nickname' not in session.")
+        return combined_data  # 빈 리스트 반환
+
+    for seller, customs in data.items():
+        if seller != current_user:
+            continue  # 현재 사용자와 seller가 일치하지 않으면 무시
+
+        for name, appliers in customs.items():
+            for applier, applier_details in appliers.items():
+                item_data = DB.get_item_byname(name)
+                progress_data = DB.get_customs_byinfo(seller, name, applier)
+                if item_data:
+                    combined_data.append({
+                        "seller": seller,
+                        "custom_name": name,
+                        "custom_data": applier_details,
+                        "item_data": item_data,
+                        "images": item_data.get("images", []),
+                        "applier": applier,
+                        "progress": progress_data.get("progress")
+                    })
+
+    return combined_data
+
+@application.route('/custom')
+def view_customs():
+    combined_data = get_custom_data()
+    return render_template("custom.html", combined_data=combined_data)
+
+@application.route('/end/<user>/<category>/<detail_key>', methods=['GET'])
+def change_details(user, category, detail_key):
+    DB.change_custom_progress(user, category, detail_key)
+    combined_data = get_custom_data()
+    return render_template("custom.html", combined_data=combined_data)
+
+@application.route('/application/<user>/<category>/<detail_key>', methods=['GET'])
+def get_data_details(user, category, detail_key):
+    data = DB.get_customs_byinfo(user, category, detail_key)
+    return render_template('application.html', data=data, seller=user, itemname=category, applier=detail_key)
 
 @application.route("/search", methods=['GET'])
 def search():

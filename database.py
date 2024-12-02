@@ -16,12 +16,15 @@ class DBhandler:
             "color": data['color'],
             "material": data['material'],
             "상세 요청사항": data['info'],
-            "images": img_list
+            "images": img_list,
+            "progress": "요청됨"
         }
         self.db.child("application").child(data['seller']).child(name).child(data['applier']).set(custom)
         return True
     
-        # 아이템 가져오는 메서드 추가
+    def change_custom_progress(self, seller, name, applier):
+        self.db.child("application").child(seller).child(name).child(applier).update({"progress": "완료됨"})
+        return True
 
     def get_customs(self):
         try:
@@ -38,6 +41,15 @@ class DBhandler:
             print(f"Error fetching customs: {str(e)}")
             return {}  
 
+    def get_customs_byinfo(self, seller, item, writer):
+        try:
+            data = self.db.child("application").child(seller).child(item).child(writer).get()
+            if data.val() is None:
+                return {}
+            return data.val()
+        except Exception as e:
+            print(f"Error fetching customs: {str(e)}")
+            return {}  
 
     def insert_item(self, name, data, img_list, opt_list):
         item_info = {
@@ -69,7 +81,7 @@ class DBhandler:
             "date": data.get('date', 'unknown_date'),
             "likes": 0
         }
-        self.db.child("review").child(data['info'][:10]).set(reivew_info)
+        self.db.child("review").child(data['itemname']).child(data['info'][:10]).set(reivew_info)
         return True
 
 
@@ -97,8 +109,6 @@ class DBhandler:
         except Exception as e:
             print(f"Error in insert_user: {e}")
             return False
-
-
 
     def user_duplicate_check(self, id_string):
         try:
