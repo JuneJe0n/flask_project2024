@@ -529,19 +529,34 @@ def view_like():
             for heart in hearts.each():
                 item_name = heart.key()  # 아이템 이름
                 item_data = heart.val()  # 찜 데이터
-                
+                    
                 # 관심 데이터만 추가
                 if item_data.get('interested') == 'Y':
-                    like_items.append({
-                        "name": item_name,
-                        "image": item_data.get("image"),  # 이미지 추가
-                        "data": item_data
-                    })
+                        items = DB.get_item_byname(item_name)
+
+                        price = float(items.get("price") or 0)
+                        discount = float(items.get("discount") or 0)
+
+                        finalprice = int(price * (100 - discount) * 0.01)
+            
+                        like_items.append({
+                            "name": item_name,
+                            "image": item_data.get("image"),  # 이미지 추가
+                            "data": items,
+                            "seller": items.get("seller"),
+                            "discount": items.get("discount"),
+                            "price": items.get("price"),
+                            "finalprice": finalprice
+                        })
+
+                print("########like_items",like_items)
+
+                item_counts=len(like_items)
         
         # 최근 아이템 4개 선택
         recent_items = like_items[-4:] if len(like_items) > 4 else like_items
 
-    return render_template('like.html', like_items=like_items, recent_items=recent_items)
+    return render_template('like.html', like_items=like_items, total=item_counts, recent_items=recent_items, finalprice=finalprice)
 
 
 

@@ -1,66 +1,15 @@
-<!doctype html>
-<html lang="ko">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>좋아요 목록</title>
-    <link rel="stylesheet" href="/static/index.css">
-    <link rel="stylesheet" href="/static/like.css">
-</head>
-<body>
-    <!-- 네비게이션과 헤더는 이미 구현됨 -->
-    <header>
-        <h1 id="logo">
-            <a href="/"><img src="/static/images/logo.png" width = 200px;/></a>
-        </h1>
+{% extends "index.html" %}
 
-        <!-- <h1><a href="#a">이화메이드</a></h1> --> 
+{% block extra_css %}
+  <link rel="stylesheet" href="/static/like.css">
+{% endblock %}
 
-
-        <div class="userBox">
-            <!-- <h2 class="hide">검색창</h2> -->
-            <form class="search-box" action="/search" method="get">
-                <input class="search-txt" type="text" id="search_kw" name="search_kw" value="{{ kw or '' }}" placeholder="검색어를 입력하세요">
-                <button class="search-btn" type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </form>
-            <!-- <h2 class="hide">로그인/회원가입</h2> -->
-            <div class="userRegister">
-                {% if session['id'] %}
-                <button name="mypage" id="mypage" onclick="location.href='/mypage'">{{session['nickname']}}의 마이페이지</button>
-                {% else %}
-                <button name="login" id="login" onclick="location.href='/login'">로그인</button>
-                <button name="signup" id="signup" onclick="location.href='/signup'">회원가입</button>                    
-                {% endif %}
-            </div>
-        </div>
-    </header> 
-
-    <!-- <h2 class="hide">내비게이션</h2> -->
-    <script>
-        $(document).ready(function () {
-            //alert("{{category}}");
-            $('#category option:contains("{{category}}")').prop("selected", true)
-        });
-    </script>
-    
-    <nav class="lnb">
-        <ul>
-            <li><a href="{{ url_for('view_list', page=i, category='all') }}">전체 카테고리</a></li>
-            <li><a href="{{ url_for('view_list', page=i, category='Home') }}">홈/리빙</a></li>
-            <li><a href="{{ url_for('view_list', page=i, category='Clothes') }}">패션/옷</a></li>
-            <li><a href="{{ url_for('view_list', page=i, category='Accessory') }}">악세사리</a></li>
-            <li><a href="{{ url_for('view_list', page=i, category='Food') }}">식품</a></li>
-            <li><a href="{{ url_for('view_list', page=i, category='Cosmitic') }}">뷰티/화장품</a></li>
-            <li><a href="{{ url_for('view_list', page=i, category='ETC') }}">ETC</a></li>
-        </ul>
-    </nav>
+{% block content %}
 
     <main class="like-page">
         <div class="user-info">
             <h2>{{ session['nickname']}} 님</h2>
-            <p>좋아요 13</p>
+            <p>좋아요 {{total}}</p>
         </div>
         <div class="column-items">
                 <table>
@@ -71,10 +20,10 @@
                                     <img src="{{item.image}}" alt="item_img" width="240px" height="192px" style="display: block;">
                                     <p style="margin: 10px 0;">
                                         <img src="/static/images/user_icon.png" alt="user_icon" width="20" height="20">
-                                        <span style="color:gray;">판매자이름</span>
+                                        <span style="color:gray;">{{item.seller}}</span>
                                     </p>
                                     <p style="font-size: 18px"><b>{{item.name}}</b></p>
-                                    <p style="margin: 10px 0;"><span style="color:red"><b>20% </b></span><span class="price">{{item.finalprice}}원</span></p>
+                                    <p style="margin: 10px 0;"><span style="color:red"><b>{{item.discount}}% </b></span><span class="price">{{item.finalprice}}원</span></p>
                                     <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> 5.0 <span style="color:lightgray">리뷰 20개</span><i class="fa fa-heart" id="heart" ></i></p>
                                 </div>
                             </td>
@@ -83,6 +32,24 @@
                 </table>
         </div>
     </main>
-</body>
-</html>
 
+<script>
+    window.onload = function () {
+    const priceElements = document.querySelectorAll('.price'); // 모든 .price 요소 선택
+
+    priceElements.forEach(priceElement => {
+        let price = priceElement.textContent.trim();  // 텍스트 가져오기
+
+        // "원"과 쉼표(,) 제거 후 숫자로 변환
+        price = price.replace(/[^0-9]/g, '');  // 숫자가 아닌 모든 문자 제거
+
+        // 가격을 천 단위 구분자로 포맷팅
+        const formattedPrice = Number(price).toLocaleString();  // 천 단위 구분 기호 추가
+
+        // 수정된 가격을 다시 HTML에 표시
+        priceElement.textContent = formattedPrice + "원";
+    });
+};
+</script>
+    
+    {% endblock content %}

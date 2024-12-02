@@ -43,4 +43,9 @@
             </tbody>                 
         </table>
     </main>
-{% endblock %}
+
+    {% block extra_js %}
+    <script src="/static/custom.js"></script>
+    {% endblock %}
+
+    {% endblock content %}
