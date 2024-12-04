@@ -98,6 +98,7 @@ def check_id():
     else:
         return jsonify({"available": False})
 
+
 @application.route("/list")
 def view_list():
     page = request.args.get("page", 0, type=int)
@@ -109,21 +110,28 @@ def view_list():
     end_idx = per_page * (page + 1)
 
     if category == "all":
-        data = DB.get_items() #read the table
+        data = DB.get_items()  # 모든 아이템 데이터 가져오기
     else:
         data = DB.get_items_bycategory(category)
 
-    data = dict(sorted(data.items(), key=lambda x: x[0], reverse=False)) #key는 상품명, 상품명을 사용해서 정렬
+    # 리뷰 개수를 계산하여 데이터에 추가
+    for key, value in data.items():
+        if "reviews" in value and isinstance(value["reviews"], dict):
+            value["reviews"] = len(value["reviews"])  # 리뷰 개수로 변환
+        else:
+            value["reviews"] = 0  # 리뷰가 없으면 0으로 설정
+
+    data = dict(sorted(data.items(), key=lambda x: x[0], reverse=False))  # 상품명 기준 정렬
     item_counts = len(data)
 
-    if item_counts<=per_page:
+    if item_counts <= per_page:
         data = dict(list(data.items())[:item_counts])
     else:
-        data =dict(list(data.items())[start_idx:end_idx])
+        data = dict(list(data.items())[start_idx:end_idx])
 
     tot_count = len(data)
 
-    for i in range(row_count):  # last row
+    for i in range(row_count):  # 마지막 행 처리
         if (i == row_count - 1) and (tot_count % per_row != 0):
             locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:])
         else:
@@ -137,8 +145,6 @@ def view_list():
             finalprice = int(price * (100 - discount) * 0.01)
             finalprices[key] = finalprice
 
-
-    # 이후 finalprices를 템플릿에 넘길 수 있음.
     return render_template(
         "list.html",
         datas=data.items(),
@@ -146,11 +152,13 @@ def view_list():
         row2=locals()['data_1'].items(),
         limit=per_page,
         page=page,
-        page_count=int(math.ceil(item_counts/per_page)),
+        page_count=int(math.ceil(item_counts / per_page)),
         total=item_counts,
-        finalprices=finalprices, # 템플릿으로 finalprices 전달
+        finalprices=finalprices,  # 템플릿으로 finalprices 전달
         category=category
     )
+
+
 
 @application.route("/myitems")
 def view_myitems():
@@ -220,35 +228,34 @@ def DynamicUrl(varible_name):
 def view_itemdetail():
     return render_template("detail.html")
 
-@application.route("/view_detail/<name>/")
-def view_item_detail(name):
-    print("###name:",name)
-    data = DB.get_item_byname(str(name))
-    print("####data:",data)
 
-    price = float(data['price'] or 0)
-    discount = float(data['discount'] or 0)
+@application.route("/review_page/<name>", methods=['GET'])
+def view_review_page(name):
+    # 특정 아이템의 리뷰 가져오기
+    data = DB.get_item_byname(name) or {}  # 데이터가 없을 경우 빈 딕셔너리 반환
+    reviews = data.get('reviews', {}).values()  # 'reviews' 키가 없는 경우 빈 리스트로 처리
 
-    finalprice = int(price * (100 - discount) * 0.01)
+    # 정렬 기준 파라미터 받기 (최신순 또는 별점순)
+    sort_order = request.args.get("sort", "latest")
 
-    return render_template("detail.html", name=name, data=data, finalprice=finalprice)
+    # 날짜 또는 별점 기준 정렬
+    try:
+        if sort_order == "best":
+            reviews = sorted(reviews, key=lambda r: int(r.get('star', 0)), reverse=True)
+        else:
+            reviews = sorted(reviews, key=lambda r: datetime.strptime(r.get('date', '1900-01-01'), '%Y-%m-%d'), reverse=True)
+    except Exception as e:
+        print(f"Error in sorting reviews: {e}")
+        reviews = list(reviews)
 
-
-@application.route("/review_page", methods=['GET'])
-def view_review_page():
-    # Fetch reviews from the database
-    page = request.args.get("page", 1, type=int)  # 현재 페이지 번호, 기본값은 1
-    per_page = 5  # 페이지당 표시할 리뷰 수
-
-    reviews = DB.get_reviews()  
+    # 페이지네이션
+    page = request.args.get("page", 1, type=int)
+    per_page = 5
     total_reviews = len(reviews)
-    
-    # 리뷰 리스트를 현재 페이지에 맞게 슬라이싱
     start_idx = (page - 1) * per_page
-    end_idx = start_idx + per_page
+    end_idx = min(start_idx + per_page, total_reviews)  # 범위 체크 추가
     paginated_reviews = reviews[start_idx:end_idx]
-    
-    # 총 페이지 수 계산
+
     total_pages = (total_reviews + per_page - 1) // per_page
 
     return render_template(
@@ -256,45 +263,48 @@ def view_review_page():
         reviews=paginated_reviews,
         current_page=page,
         total_pages=total_pages,
-        has_prev=page > 1,
-        has_next=page < total_pages
+        name=name,
+        sort_order=sort_order  # 현재 정렬 기준 전달
     )
+
+
+
 
 
 @application.route("/reg_items")
 def reg_items():
     return render_template("reg_items.html")
 
-@application.route("/reg_review_init/<name>/")
-def reg_review_init(name):
-    data = DB.get_item_byname(str(name))
-    return render_template("reg_reviews.html", name=name, data=data)
-
-@application.route("/apply_custom_init/<name>/")
-def apply_custom_init(name):
-    data = DB.get_item_byname(str(name))
-    return render_template("apply_custom.html", name=name, data=data)
-
 @application.route("/reg_review", methods=['POST'])
 def reg_review():
     data = request.form
     img_list = []
 
-    for i in range(1, 3):
+    for i in range(1, 3):  # 최대 2개의 이미지를 처리
         image_file = request.files.get(f'file{i}')
         if image_file:
             image_path = f"static/images/{image_file.filename}"
             image_file.save(image_path)
             img_list.append(image_path)
 
-    # username과 현재 날짜를 추가
+    # 리뷰 데이터 준비
     data = dict(data)
     data['username'] = session.get('nickname', 'unknown_user')  # 현재 로그인된 사용자 이름
-    data['date'] = datetime.now().strftime("%Y-%m-%d")  # 현재 날짜를 'YYYY-MM-DD' 형식으로 추가
-    data['image_url'] = img_list[0] if img_list else None  # 첫 번째 이미지를 image_url로 추가
+    data['date'] = datetime.now().strftime("%Y-%m-%d")  # 현재 날짜 추가
+    item_name = data.get('itemname')  # 리뷰가 속한 아이템 이름
 
-    DB.insert_review(data, img_list)
-    return redirect(url_for('view_review_page'))
+    # Firebase에 리뷰 저장
+    DB.insert_review(item_name, data, img_list)
+
+    return redirect(url_for('view_item_detail', name=item_name))  # 아이템 상세 페이지로 리다이렉트
+
+
+@application.route("/apply_custom_init/<name>/")
+def apply_custom_init(name):
+    data = DB.get_item_byname(str(name))
+    return render_template("apply_custom.html", name=name, data=data)
+
+
 
 @application.route("/submit_item_post", methods=['POST'])
 def submit_item_post():
@@ -495,17 +505,27 @@ def like_review():
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
     
-@application.route("/review_detail/<review_id>")
-def review_detail(review_id):
-    # 데이터베이스에서 해당 리뷰 ID에 맞는 리뷰 정보를 가져옵니다.
-    try:
-        review = DB.get_review_by_id(review_id)
-        if review:
-            return render_template("detailed_review.html", review=review)
-        else:
-            return "Review not found", 404
-    except Exception as e:
-        return f"An error occurred: {str(e)}", 500
+@application.route("/view_detail/<name>/")
+def view_item_detail(name):
+    data = DB.get_item_byname(name)  # 특정 아이템 데이터 가져오기
+    reviews = data.get('reviews', {})  # 'reviews' 키가 없으면 빈 딕셔너리를 반환
+
+    # 리뷰 데이터를 리스트로 변환하고 정렬
+    review_list = list(reviews.values()) if reviews else []
+    review_list = sorted(review_list, key=lambda r: r.get('date', ''), reverse=True)  # 최신순 정렬
+
+    # 가격 계산
+    price = float(data.get('price', 0))
+    discount = float(data.get('discount', 0))
+    finalprice = int(price * (100 - discount) * 0.01)
+
+    return render_template(
+        "detail.html",
+        name=name,
+        data=data,
+        reviews=review_list,  # 템플릿으로 리뷰 전달
+        finalprice=finalprice
+    )
 
 #찜 기능
 @application.route('/show_heart/<name>/', methods=['GET'])
@@ -586,6 +606,21 @@ def buy():
     options = json.loads(options_json)
 
     return render_template('buy.html', name=name, image=image, total_price=total_price, options=options, discount=discount, seller=seller)
+
+@application.route('/review/<item_name>/<review_id>')
+def review_detail(item_name, review_id):
+    # DBhandler 인스턴스인 DB를 사용하여 리뷰 데이터를 가져옵니다.
+    review_data = DB.get_review_by_id(item_name, review_id)
+    
+    # 리뷰 데이터가 없을 경우를 처리합니다.
+    if review_data is None:
+        return "리뷰를 찾을 수 없습니다.", 404
+
+    # 리뷰 데이터를 템플릿에 전달하여 렌더링합니다.
+    return render_template('detailed_review.html', review=review_data)
+
+
+
 
 
 

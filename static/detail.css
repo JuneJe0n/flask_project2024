@@ -87,6 +87,11 @@ footer {
     border-top: 2px solid #006400;
     color: #006400;          
 }
+.sort-buttons a.active {
+    border-color: #2d4b29 !important;
+    background-color: #2d4b29 !important;
+    color: #fff !important;
+}
 
 hr {
     border: none;
@@ -104,3 +109,4 @@ hr {
   #heart.red {
     color:red;
   }
+

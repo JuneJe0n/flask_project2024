@@ -21,7 +21,11 @@
                                   </p>
                                   <p style="font-size: 18px"><b>{{key}}</b></p>
                                   <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
-                                  <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
+                                  <p>
+                                      <img src="/static/images/greenclover.png" alt="clover" width="20" height="20">
+                                      {{value.rating}} 
+                                      <span style="color:lightgray">({{value.reviews}}개)</span> <!-- 리뷰 개수만 표시 -->
+                                  </p>
                               </div>
                           </td>
                       {% endfor %}
@@ -34,11 +38,15 @@
                                   <img src="{{value.images[0]}}" alt="item_img" width="300px" height="240px" style="display: block;">
                                   <p style="margin: 10px 0;">
                                       <img src="../static/images/user_icon.png" alt="user_icon" width="20" height="20">
-                                      <span style="color:gray;">{{value.user}}</span>
+                                      <span style="color:gray;">{{value.seller}}</span>
                                   </p>
                                   <p style="font-size: 18px"><b>{{key}}</b></p>
                                   <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
-                                  <p><img src="../static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{value.reviews}})</span></p>
+                                  <p>
+                                      <img src="../static/images/greenclover.png" alt="clover" width="20" height="20">
+                                      {{value.rating}} 
+                                      <span style="color:lightgray">({{value.reviews}}개)</span> <!-- 리뷰 개수만 표시 -->
+                                  </p>
                               </div>
                           </td>
                       {% endfor %}

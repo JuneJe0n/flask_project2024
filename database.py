@@ -1,5 +1,6 @@
 import pyrebase
 import json
+from datetime import datetime
 
 class DBhandler:
     def __init__(self):
@@ -66,24 +67,25 @@ class DBhandler:
         self.db.child("item").child(name).set(item_info)
         return True
 
-    def insert_review(self, data, img_list):
+    def insert_review(self, item_name, data, img_list):
 
-        img_list = [f"/{img}" for img in img_list]  
+        review_id = data['info'][:10]
 
-        reivew_info = {
+        review_data = {
             "writer": data['writer'],
             "preview": data['info'][:10],
             "info": data['info'],
-            "option": data['options'], #name으로 받음
+            "option": data['options'],
             "star": data['clovers'],
             "img_path": img_list,
             "username": data.get('username', 'unknown_user'),
             "date": data.get('date', 'unknown_date'),
-            "likes": 0
         }
-        self.db.child("review").child(data['itemname']).child(data['info'][:10]).set(reivew_info)
+
+        self.db.child("item").child(item_name).child("reviews").child(review_id).set(review_data)
         return True
 
+        
 
     def insert_user(self, data, pw):
         if not data.get('id') or not data.get('nickname'):
@@ -189,7 +191,7 @@ class DBhandler:
             print(f"Error in search_items: {e}")
             return []
     
-    def get_reviews(self):
+    def get_reviews(self, sort_order: str = "latest") -> list:
         try:
             # Firebase에서 리뷰 데이터 가져오기
             reviews = self.db.child("review").get()
@@ -203,28 +205,75 @@ class DBhandler:
                 review_data["star"] = int(review_data.get("star", 0)) 
                 review_data["name"] = review.key()  # 리뷰 이름(key)을 추가 (필요에 따라)
                 review_data["username"] = review_data.get("username", "unknown_user") 
-                review_data["date"] = review_data.get("date", "unknown_date")
+                try:
+                    review_data["date"] = datetime.strptime(review_data.get("date", "1970-01-01"), "%Y-%m-%d")
+                except ValueError:
+                    review_data["date"] = datetime(1970, 1, 1)
+                # review_data["date"] = review_data.get("date", "unknown_date")
+
                 review_data["image_url"] = review_data["img_path"][0] if review_data.get("img_path") else None
                 result.append(review_data)
+
+            if sort_order == "latest":
+                result.sort(key=lambda r: r["date"], reverse=True)  # 최신순
+            elif sort_order == "best":
+                result.sort(key=lambda r: r["star"], reverse=True)  # 별점순
+            
 
             return result  # 리뷰 리스트 반환
         except Exception as e:
             print(f"Error fetching reviews: {str(e)}")
             return [] 
-        
-    def get_review_by_id(self, review_id):
+    
+    def get_reviews_by_item(self, item_name, sort_order="latest"):
+    
         try:
-            # Firebase에서 리뷰 ID에 맞는 리뷰 가져오기
-            review = self.db.child("review").child(str(review_id)).get()
+            # 아이템의 리뷰 가져오기
+            reviews = self.db.child("item").child(item_name).child("reviews").get()
+            if not reviews.each():
+                return []  # 리뷰가 없으면 빈 리스트 반환
+
+            # 리뷰 데이터를 리스트로 변환
+            result = []
+            for review in reviews.each():
+                review_data = review.val()
+                review_data["name"] = review.key()  # 리뷰 ID를 추가
+                review_data["star"] = int(review_data.get("star", 0))
+                review_data["image_url"] = review_data["img_path"][0] if review_data.get("img_path") else None
+                review_data["username"] = review_data.get("username", "unknown_user")
+
+                # 날짜 변환 (에러 방지)
+                try:
+                    review_data["date"] = datetime.strptime(review_data.get("date", "1970-01-01"), "%Y-%m-%d")
+                except ValueError:
+                    review_data["date"] = datetime(1970, 1, 1)
+
+                result.append(review_data)
+
+        # 정렬 로직
+            if sort_order == "latest":
+                result.sort(key=lambda r: r["date"], reverse=True)
+            elif sort_order == "best":
+                result.sort(key=lambda r: r["star"], reverse=True)
+
+            return result
+        except Exception as e:
+            print(f"Error fetching reviews for item {item_name}: {str(e)}")
+            return []
+
+    def get_review_by_id(self, item_name, review_id):
+        try:
+            # 아이템 내의 리뷰 가져오기
+            print(f"Fetching review for item: {item_name}, review_id: {review_id}")
+            review = self.db.child("item").child(item_name).child("reviews").child(str(review_id)).get()
             if review.val():
                 review_data = review.val()
                 # star 값 변환
-                try:
-                    review_data["star"] = int(review_data.get("star", 0))
-                except ValueError:
-                    review_data["star"] = 0
+                review_data["star"] = int(review_data.get("star", 0))
+                print(f"Review data fetched: {review_data}")
                 return review_data
             else:
+                print(f"No review found for item: {item_name} with ID {review_id}")
                 return None
         except Exception as e:
             print(f"Error fetching review by id: {str(e)}")
@@ -279,3 +328,16 @@ class DBhandler:
             new_dict[k] = v
         
         return new_dict
+
+    def get_review_by_item_name(self, item_name):
+        try:
+            # Firebase에서 해당 아이템의 리뷰 데이터를 가져오기
+            reviews = self.db.child("item").child(item_name).child("reviews").get()
+            if reviews.each():
+                return [review.val() for review in reviews.each()]
+            else:
+                return []  # 리뷰가 없을 경우 빈 리스트 반환
+        except Exception as e:
+            print(f"Error fetching reviews for item {item_name}: {str(e)}")
+            return []
+  

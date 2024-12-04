@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Review Page</title>
-    <link rel="stylesheet" href="../static/detailed_review.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='detailed_review.css') }}">
 </head>
 <body>
     <div class="container">
@@ -36,9 +36,13 @@
                 <div class="username">
                     {{ review.username }}
                     <span class="stars">
-                        {% for i in range(review.star) %}
-                        <img src="../static/images/greenclover.png" alt="greenclover" width="20" height="20">
-                        {% endfor %}
+                        {% if review.star is defined and review.star is not none %}
+                            {% for i in range(review.star) %}
+                            <img src="{{ url_for('static', filename='images/greenclover.png') }}" alt="greenclover" width="20" height="20">
+                            {% endfor %}
+                        {% else %}
+                            <p>별점 정보가 없습니다.</p>
+                        {% endif %}
                     </span>
                 </div>
                 <p>{{ review.info }}</p>
