@@ -1,0 +1,128 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 1341px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+.footer_nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    margin: 0; 
+    padding: 0;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.footer_nav ul {
+    display: flex;
+    padding: 0;
+    width: 100%;
+    margin: 0;
+}
+
+.footer_nav li {
+    list-style: none;
+    flex: 1;
+}
+
+.footer_nav a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    color: #ddd;
+    transition: color 0.3s;
+    padding: 15px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.footer_nav a:hover {
+    border-bottom: 2px solid #2d4b29;
+    color: #2d4b29;
+}
+
+.footer_nav a.active {
+    border-bottom: 2px solid #2d4b29;
+    color: #2d4b29;        
+}
+
+.review-summary {
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 24px;
+    color: #000000;
+}
+.divider {
+    border: none;
+    height: 1px;
+    background-color: #ddd;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.review-images {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 20px 0;
+}
+.review-images div {
+    width: 400px;
+    height: 400px;
+    background-color: #ddd;
+    border-radius: 5px;
+}
+.review-content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    align-items: flex-start;
+}
+.review-content .text {
+    max-width: 70%;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.review-content .text .username {
+    color: #000000;
+    margin-bottom: 10px;
+}
+.review-content .text .stars {
+    color: #000000;
+    margin-left: 5px;
+}
+.review-content .date-like {
+    text-align: right;
+    color: #000000;
+    font-size: 14px;
+    margin-top: 10px;
+}
+.review-content .date-like .like {
+    color: #000000;
+    margin-top: 0px;
+}
+.back-to-list {
+    text-align: right;
+    margin-top: 30px;
+}
+.back-to-list button {
+    padding: 5px 20px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 31px;
+    width: 127px;
+}

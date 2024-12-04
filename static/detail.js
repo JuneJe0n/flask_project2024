@@ -129,7 +129,7 @@ function loadIframe(url, element = null) {
 
 window.onload = () => {
     const defaultButton = document.querySelector('.footer_nav a[href="/review_page"]');
-    loadIframe('/detail_info', defaultButton);
+    loadIframe(defaultButton);
 };
 
 // 구매 버튼 클릭 시 실행될 함수
