@@ -1,0 +1,56 @@
+{% extends "index.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="/static/custom.css">
+{% endblock %}
+
+{% block content %}
+    <!-- 요청서 화면 -->
+    <main class="request-page">
+        <h2>{{session['nickname']}}님의 요청서</h2>
+        <div class="request-tabs">
+            <button class="tab" onclick="location.href='/custom'">수신</button>
+            <button class="tab active">발신</button>
+        </div>
+        <table class="request-table">
+            <thead>
+                <tr>
+                    <th>진행 상황</th>
+                    <th>상품 정보</th>
+                    <th>구매자 정보</th>
+                    <th>요청서</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in combined_data %}
+                <tr>
+                    {% if data.progress == "요청됨" %}
+                        <td id="progress" style="color: black;">{{ data.progress }}</td>
+                    {% endif %}
+                    {% if data.progress == "완료됨" %}
+                        <td id="progress" style="color: blue;">{{ data.progress }}</td>
+                    {% endif %}
+                    <td class="product-info">
+                        {% if data.images and data.images[0] %}
+                        <img src="{{ data.images[0] }}" alt="상품 이미지">
+                        {% endif %}
+                        <div>
+                            <p class="category">{{ data.seller }}</p>
+                            <h3>{{ data.custom_name }}</h3>
+                            <p class="discount">{{ data.item_data.discount }}% <span class="price">{{ data.item_data.price }}원</span></p>
+                            <p class="rating">⭐ {{ data.item_data.rating }} ({{ data.item_data.review_count }})</p>
+                        </div>
+                    </td>
+                    <td>{{ session['nickname'] }}</td>
+                    <td><button class="view-request" onclick="location.href='/application/{{data.seller}}/{{data.custom_name}}/{{data.applier}}'">요청서 보기</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>                 
+        </table>
+    </main>
+
+    {% block extra_js %}
+    <script src="/static/custom.js"></script>
+    {% endblock %}
+
+    {% endblock content %}
