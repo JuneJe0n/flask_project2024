@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mypage</title>
+    <link rel="stylesheet" href="../static/mypage.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1 id="logo">
+            <a href="/"><img src="/static/images/logo.png" width="200px"></a>
+        </h1>
+        
+        <div class="user-menu">
+            <button name="reg_items" id="reg_items" onclick="location.href='/reg_items'">상품 등록</button>
+            <button name="logout" id="logout" onclick="location.href='/logout'">로그아웃</button>
+            <img src="/static/images/profile-icon.png" alt="Profile Icon" class="profile-icon">
+        </div>
+    </header>
+
+    <!-- Greeting Section -->
+    <section class="greeting-section">
+        {% if session['id'] %}
+        <h2>{{session['nickname']}}님 안녕하세요!</h2>
+        <!--firebase에 email 저장 field 만들면 아래에 자동으로 반영됩니다.-->
+        <p>{{session['email']}}</p>
+        {% endif %}
+    </section>
+
+    <!-- Actions Section -->
+    <section class="actions-section">
+        <a href="/" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/truck-icon.png" alt="주문/배송" class="truck-icon">
+                <p>주문/배송</p>
+                <span>보기</span>
+            </div>
+        </a>
+
+        <a href="/custom" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/custom-icon.png" alt="커스터마이징" class="custom-icon">
+                <p>커스터마이징</p>
+                <span>보기</span>
+            </div>
+        </a>
+
+        <a href="/" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/cart-icon.png" alt="장바구니" class="cart-icon">
+                <p>장바구니</p>
+                <span>보기</span>
+            </div>
+        </a>
+
+        <a href="/myitems" style="text-decoration: none; color: inherit;">
+            <div class="action-card">
+                <img src="/static/images/box-icon.png" alt="등록한 상품" class="box-icon">
+                <p>등록한 상품</p>
+                <span>보기</span>
+            </div>
+        </a>
+    </section>
+
+    <!-- Recent Products Section -->
+    <section class="recent-products">
+        <h3>찜한 상품</h3>
+        <div class="product-list">
+            {% if recent_items %}
+                {% for item in recent_items %}
+                <div class="product" onclick="location.href='/view_detail/{{ item.name }}/';" style="cursor:pointer;">
+                    <img src="{{ item.image }}" alt="{{ item.name }}" width="230px" height="230px" style="display: block; border-radius: 5px;">
+                    {{item.name}}
+                    {{item.finalprice}}
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>찜한 상품이 없습니다.</p>
+            {% endif %}
+            <a href="/like" class="more-link">더보기 ></a>
+        </div>
+    </section>
+
+    <!-- Customer Service Section -->
+    <footer class="customer-service">
+        <div class="service-link">고객센터</div>
+        <div class="service-links">
+            <a href="#">공지사항</a>
+            <a href="#">FAQ</a>
+        </div>
+    </footer>
+</body>
+</html>

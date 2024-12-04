@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Review Page</title>
+    <link rel="stylesheet" href="../static/detailed_review.css">
+</head>
+<body>
+    <div class="container">
+        <div class="footer_nav">
+            <ul>
+                <li><a href="#">상품 설명</a></li>
+                <li><a href="#" class="active">리뷰</a></li> <!-- 리뷰 항목에 active 클래스 적용 -->
+                <li><a href="#">상품 문의</a></li>
+            </ul>
+        </div>
+
+        <div class="review-summary">
+            상세 리뷰
+        </div>
+        <hr class="divider"> <!-- 회색 선 추가 -->
+
+        <div class="review-images">
+            {% if review.img_path %}
+                {% for img in review.img_path %}
+                    <img src="{{ img }}" alt="리뷰 이미지" width="200" height="200">
+                {% endfor %}
+            {% else %}
+                <p>이미지가 없습니다.</p>
+            {% endif %}
+        </div>
+
+        <div class="review-content">
+            <div class="text">
+                <div class="username">
+                    {{ review.username }}
+                    <span class="stars">
+                        {% for i in range(review.star) %}
+                        <img src="../static/images/greenclover.png" alt="greenclover" width="20" height="20">
+                        {% endfor %}
+                    </span>
+                </div>
+                <p>{{ review.info }}</p>
+            </div>
+            <div class="date-like">
+                <div>{{ review.date }}</div>
+            </div>
+        </div>
+
+        <div class="back-to-list">
+            <button onclick="history.back()">↩ 리뷰 목록</button>
+        </div>
+    </div>
+</body>
+</html>
