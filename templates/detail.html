@@ -50,7 +50,7 @@
             <p style="display: flex; justify-content: flex-end; align-items: flex-end; margin: 20px 0;">총 금액
             <span id="totalPrice" style="font-size:30px;  margin-left: 10px;"><b>0원</b></span></p>
 
-            <form action="/add_to_cart" method="POST">
+            <form action="/add_to_cart" method="POST" onsubmit="return false;">
                 <input type="hidden" name="name" value="{{ name }}">
                 <input type="hidden" name="image" value="{{ data.images[0] }}">
                 <input type="hidden" name="discount" value="{{ data.discount }}">
@@ -60,9 +60,10 @@
                 
                 <div style="float: right; margin: 20px 0;">
                     <div style="margin-bottom: 10px;">
-                        <input type="submit" value="장바구니" 
-                            style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px; margin-right: 10px;"
-                            onclick="addToCart();">
+                        <button onclick="addToCart('{{ name }}', '{{ data.images[0] }}', '{{ data.price }}', '{{ data.discount }}', '{{ finalprice }}')"
+                            style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px; margin-right: 10px;">
+                            장바구니
+                        </button>
                         <input type="button" value="구매하기" 
                             style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;"
                             onclick="buyingItem()">
@@ -78,6 +79,14 @@
                 <i class="fa fa-heart" id="heart" ></i>
             {% endif %}
         </label>
+    </div>
+
+    <div id="cartModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 20px; border-radius: 5px; width: 50%; max-width: 400px; text-align: center;">
+            <h2>장바구니</h2>
+            <p>상품이 장바구니에 추가되었습니다.</p>
+            <button onclick="closeCartModal()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">확인</button>
+        </div>
     </div>
 
     <footer>
@@ -98,60 +107,5 @@
     {% endblock %}
     {% block extra_js %}
     <script src="/static/detail.js"></script>
-    <script>
-        //찜 기능
-        function showHeart() { 
-            $.ajax({
-                type: 'GET',
-                url: '/show_heart/{{name}}/',
-                data: {},
-                success: function (response) {
-                    
-                    let my_heart = response['my_heart'];
-                    if (my_heart['interested'] == 'Y')
-                    {
-                        $("#heart").css("color","red");
-                        $("#heart").attr("onclick","unlike()");
-                    }
-                    else
-                    {
-                        $("#heart").css("color","gray");
-                        $("#heart").attr("onclick","like()");
-                    }
-                    
-                }
-            });
-            }
 
-function like() {
-    $.ajax({
-        type: 'POST',
-        url: '/like/{{name}}/',
-        data: {
-            interested : "Y",
-            image: $("#center_img").attr("src")
-        },
-        success: function (response) {
-            window.location.reload() 
-        }
-    });
-}
-
-function unlike() {
-    $.ajax({
-        type: 'POST',
-        url: '/unlike/{{name}}/',
-        data: {
-            interested : "N"
-        },
-        success: function (response) {
-            window.location.reload() 
-        }
-    });
-}
-$(document).ready(function () {
-    showHeart();
-});
-
-    </script>
     {% endblock %}

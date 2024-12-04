@@ -574,6 +574,50 @@ def buy():
 
     return render_template('buy.html', name=name, image=image, total_price=total_price, options=options, discount=discount, seller=seller)
 
+@application.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    if 'id' not in session:
+        return jsonify({"success": False, "message": "로그인이 필요합니다."}), 401
+
+    user_id = session['id']
+    try:
+        # JSON 요청 데이터 파싱
+        data = request.get_json(force=True)
+        if not data:
+            return jsonify({"success": False, "message": "Invalid JSON data"}), 400
+
+        # JSON 데이터에서 필드 추출
+        item_name = data.get('name')
+        item_image = data.get('image')
+        item_price = data.get('price')
+        item_discount = data.get('discount')
+        item_finalprice = data.get('finalprice')
+        item_option = data.get('option')  # 옵션 데이터
+        item_quantity = data.get('quantity', 1)
+
+        # 필수 데이터 확인
+        if not item_name or not item_option:
+            return jsonify({"success": False, "message": "필수 데이터가 누락되었습니다."}), 400
+
+        # 장바구니 데이터 생성
+        cart_data = {
+            "name": item_name,
+            "image": item_image,
+            "price": item_price,
+            "discount": item_discount,
+            "finalprice": item_finalprice,
+            "option": item_option,
+            "quantity": item_quantity,
+            "added_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        # Firebase에 데이터 추가
+        DB.db.child("cart").child(user_id).push(cart_data)
+
+        return jsonify({"success": True, "message": "장바구니에 상품이 추가되었습니다."}), 200
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
 
 
 if __name__ == "__main__":
