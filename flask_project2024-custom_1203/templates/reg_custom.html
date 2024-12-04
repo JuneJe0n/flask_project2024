@@ -1,0 +1,11 @@
+<form method="post" enctype="multipart/form-data" action="/submit_customs_post">
+    <h1>커스터마이징</h1>
+    <textarea>상품명: {{ name }}</textarea>
+    <input type="hidden" name="name" id="name" value="{{name}}">
+    <img src="{{ image }}" alt="상품 이미지">
+    <input type="hidden" name="image" id="image" value="{{image}}">
+    <textarea>가격: {{ price }}원</textarea>
+    <input type="hidden" name="price" id="price" value="{{price}}">
+
+    <input class="submit-button" type="submit" value="요청하기" style="width: 660px; height: 52px; background-color: #00462A; color: white; border-radius: 8px;">
+</form>
