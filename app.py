@@ -500,17 +500,21 @@ def like_review():
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
     
-@application.route("/review_detail/<review_id>")
-def review_detail(review_id):
-    # 데이터베이스에서 해당 리뷰 ID에 맞는 리뷰 정보를 가져옵니다.
+
+
+@application.route("/review_detail/<item_name>/<review_key>")
+def review_detail(item_name, review_key):
     try:
-        review = DB.get_review_by_id(review_id)
+        # 데이터베이스에서 리뷰 가져오기
+        review = DB.get_review_by_keys(item_name, review_key)
         if review:
             return render_template("detailed_review.html", review=review)
         else:
             return "Review not found", 404
     except Exception as e:
         return f"An error occurred: {str(e)}", 500
+
+
 
 #찜 기능
 @application.route('/show_heart/<name>/', methods=['GET'])
@@ -651,6 +655,48 @@ def add_to_cart():
 @application.route('/buy.html')
 def buy_page():
     return render_template('buy.html')
+
+@application.route('/reviews/sort', methods=['GET'])
+def sort_reviews():
+    name = request.args.get('name')  # 아이템 이름
+    sort_order = request.args.get('sort', 'latest')  # 정렬 기준
+    page = request.args.get('page', 1, type=int)  # 페이지 번호
+    per_page = 5  # 페이지당 표시할 리뷰 수
+
+    # 리뷰 데이터 가져오기
+    reviews = DB.get_reviews(name)
+    if not reviews:
+        print("No reviews found for item:", name)
+        return jsonify({"error": "No reviews found"}), 404
+
+    # 정렬 로직
+    if sort_order == 'latest':
+        reviews = sorted(reviews, key=lambda x: x['date'], reverse=True)
+    elif sort_order == 'best':
+        reviews = sorted(reviews, key=lambda x: x['star'], reverse=True)
+
+    # 페이지네이션 처리
+    total_reviews = len(reviews)
+    start_idx = (page - 1) * per_page
+    end_idx = start_idx + per_page
+    paginated_reviews = reviews[start_idx:end_idx]
+
+    total_pages = (total_reviews + per_page - 1) // per_page
+
+    print(f"Reviews after sorting ({sort_order}): {paginated_reviews}")
+
+    # 템플릿 렌더링에 필요한 모든 변수 전달
+    return render_template(
+        'review_page.html',
+        name=name,
+        reviews=paginated_reviews,
+        current_page=page,
+        total_pages=total_pages,
+        has_prev=page > 1,
+        has_next=page < total_pages
+    )
+
+
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)

@@ -278,3 +278,15 @@ class DBhandler:
             new_dict[k] = v
         
         return new_dict
+    
+    def get_review_by_keys(self, item_name, review_key):
+        try:
+            review = self.db.child("review").child(item_name).child(review_key).get()
+            if review.val():
+                review_data = review.val()
+                review_data["star"] = int(review_data.get("star", 0))  # 숫자로 변환
+                return review_data
+            return None
+        except Exception as e:
+            print(f"Error fetching review: {str(e)}")
+            return None
