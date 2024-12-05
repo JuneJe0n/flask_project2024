@@ -234,13 +234,13 @@ def view_item_detail(name):
     return render_template("detail.html", name=name, data=data, finalprice=finalprice)
 
 
-@application.route("/review_page", methods=['GET'])
-def view_review_page():
+@application.route("/review_page/<name>/", methods=['GET'])
+def view_review_page(name):
     # Fetch reviews from the database
     page = request.args.get("page", 1, type=int)  # 현재 페이지 번호, 기본값은 1
     per_page = 5  # 페이지당 표시할 리뷰 수
 
-    reviews = DB.get_reviews()  
+    reviews = DB.get_reviews(name)  
     total_reviews = len(reviews)
     
     # 리뷰 리스트를 현재 페이지에 맞게 슬라이싱
@@ -253,6 +253,7 @@ def view_review_page():
 
     return render_template(
         "review_page.html",
+        name=name,
         reviews=paginated_reviews,
         current_page=page,
         total_pages=total_pages,
@@ -278,9 +279,12 @@ def apply_custom_init(name):
 @application.route("/reg_review", methods=['POST'])
 def reg_review():
     data = request.form
+    print("#####이름", data['itemname'])
+    
     img_list = []
 
     for i in range(1, 3):
+
         image_file = request.files.get(f'file{i}')
         if image_file:
             image_path = f"static/images/{image_file.filename}"
@@ -294,7 +298,8 @@ def reg_review():
     data['image_url'] = img_list[0] if img_list else None  # 첫 번째 이미지를 image_url로 추가
 
     DB.insert_review(data, img_list)
-    return redirect(url_for('view_review_page'))
+    return redirect(url_for('view_item_detail', name=data['itemname']))
+
 
 @application.route("/submit_item_post", methods=['POST'])
 def submit_item_post():
