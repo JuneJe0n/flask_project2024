@@ -4,15 +4,16 @@ const finalPriceElement = document.getElementById('finalPrice');
 let finalPrice = parseFloat(finalPriceElement.textContent.replace(/[^0-9]/g, ''));
 finalPriceElement.textContent = finalPrice.toLocaleString() + "원";
 
+
 // 페이지 로드 시 가격 형식 업데이트
-window.onload = function() {
+window.onload = function () {
     const priceElement = document.getElementById('price');
     let price = priceElement.textContent.trim();
     price = price.replace(/[^0-9]/g, '');
     const formattedPrice = Number(price).toLocaleString();
     priceElement.textContent = formattedPrice + "원";
 
-    updateTotalPrice(); // totalPrice 초기화 및 반영
+    updateTotalPrice(); // 총 가격 초기화 및 반영
 };
 
 // 총 가격 계산 함수
@@ -77,7 +78,7 @@ function updateSelectedOptions() {
 }
 
 // 수량 변경 시 호출
-document.addEventListener('input', function(event) {
+document.addEventListener('input', function (event) {
     if (event.target.classList.contains('quantity-input')) {
         const optionText = event.target.closest('.newoptionDiv').querySelector('.optionText').textContent;
         const quantity = parseInt(event.target.value, 10);
@@ -94,44 +95,6 @@ document.addEventListener('input', function(event) {
 // select 요소의 변경 이벤트에 함수 연결
 select.addEventListener('change', updateSelectedOptions);
 
-
-function changeCenterImage(thumbnail) {
-    const centerImage = document.getElementById('center_img');
-    centerImage.src = thumbnail.src;
-
-    if (thumbnail) {
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        thumbnails.forEach(img => img.classList.remove('active-thumbnail'));
-        thumbnail.classList.add('active-thumbnail');
-    }
-}
-
-window.onload = () => {
-    thumbnails[0].classList.add('active-thumbnail');
-};
-
-function loadIframe(url, element = null) {
-    const iframe = document.getElementById('footer_iframe');
-    iframe.src = url;
-    iframe.hidden = false;
-
-    iframe.onload = () => {
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        iframe.style.height = iframeDocument.body.scrollHeight + "px";
-    };
-
-    if (element) {
-        const buttons = document.querySelectorAll('.footer_nav a');
-        buttons.forEach(button => button.classList.remove('active'));
-        element.classList.add('active');
-    }
-}
-
-window.onload = () => {
-    const defaultButton = document.querySelector('.footer_nav a[href="/review_page"]');
-    loadIframe(defaultButton);
-};
-
 // 구매 버튼 클릭 시 실행될 함수
 function buyingItem() {
     const name = document.querySelector('input[name="name"]').value;
@@ -141,114 +104,104 @@ function buyingItem() {
     const totalPrice = calculateTotalPrice();
 
     // 선택된 옵션과 수량을 JSON 형식으로 변환
-    const selectedOptionQuery = encodeURIComponent(JSON.stringify(selectedOptions));
+    const selectedOption = selectedOptions.map(option => ({
+        optionName: option[0],
+        quantity: option[1]
+    }));
 
-    window.location.href = `/buy?name=${encodeURIComponent(name)}&seller=${encodeURIComponent(seller)}&image=${encodeURIComponent(image)}&discount=${encodeURIComponent(discount)}&totalPrice=${totalPrice}&selectedOption=${selectedOptionQuery}`;
+    const buyData = {
+        name: name,
+        image: image,
+        discount: discount,
+        seller: seller,
+        totalPrice: totalPrice,
+        option: selectedOption
+    };
+
+    fetch('/buy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buyData)
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '/buy'; // 구매 페이지로 리다이렉트
+        } else {
+            alert('구매 처리 중 오류가 발생했습니다.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 
-function addToCart(name, image, price, discount, finalprice) {
-    const quantity = document.getElementById("quantity").value || 1; // 수량 입력 필드 (선택사항)
 
-    // 기본 동작 방지
-    event.preventDefault();
+function addToCart() {
+    const name = document.querySelector('input[name="name"]').value;
+    const image = document.querySelector('input[name="image"]').value;
+    const discount = document.querySelector('input[name="discount"]').value;
+    const seller = document.querySelector('input[name="seller"]').value;
+    const finalPrice = calculateTotalPrice();
+    const selectedOptionData = selectedOptions.map(option => ({
+        optionName: option[0],
+        quantity: option[1]
+    }));
 
+    // 장바구니 데이터 생성
+    const cartData = {
+        name: name,
+        image: image,
+        price: finalPrice, // 총 금액
+        discount: discount,
+        option: selectedOptionData, // 옵션 데이터
+        quantity: selectedOptionData.reduce((sum, option) => sum + option.quantity, 0) // 전체 수량 계산
+    };
+
+    // Flask 서버로 AJAX POST 요청
     fetch('/add_to_cart', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            name: name,
-            image: image,
-            price: price,
-            discount: discount,
-            finalprice: finalprice,
-            quantity: quantity
+        body: JSON.stringify(cartData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 팝업 메시지 표시
+                const modal = document.getElementById('cartModal');
+                modal.style.display = 'flex';
+
+                // 팝업 확인 버튼 클릭 시 buy.html로 이동
+                const confirmButton = document.getElementById('confirmButton');
+                confirmButton.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    window.location.href = '/buy';
+                });
+            } else {
+                alert(`장바구니 추가 실패: ${data.message}`);
+            }
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // 성공 시 모달 표시
-            showCartModal();
-        } else {
-            alert("장바구니 추가 실패: " + data.message);
-        }
-    })
-    .catch(error => {
-        alert("에러 발생: " + error.message);
-    });
+        .catch(error => {
+            console.error("Error adding to cart:", error);
+            alert("장바구니 추가 중 오류가 발생했습니다.");
+        });
 }
 
-// 모달 열기
-function showCartModal() {
-    const modal = document.getElementById('cartModal');
-    modal.style.display = 'flex'; // flex로 설정하여 화면 중앙에 표시
-}
 
-// 모달 닫기
-function closeCartModal() {
-    const modal = document.getElementById('cartModal');
-    modal.style.display = 'none';
-}
-
-// 장바구니 추가 후 모달 표시
-function addToCart(name, image, price, discount, finalprice) {
-    const selectedOption = document.getElementById('option').value; // 옵션 값 가져오기
-    if (!selectedOption) {
-        alert("옵션을 선택해주세요.");
-        return;
-    }
-
-    const quantity = 1; // 기본 수량 설정
-
-    fetch('/add_to_cart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: name,
-            image: image,
-            price: parseFloat(price),
-            discount: parseFloat(discount),
-            finalprice: parseFloat(finalprice),
-            option: selectedOption,
-            quantity: quantity
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showCartModal(); // 성공 시 모달 표시
-        } else {
-            alert("장바구니 추가 실패: " + data.message);
-        }
-    })
-    .catch(error => {
-        alert("에러 발생: " + error.message);
-    });
-}
-
-function showHeart() { 
+// 좋아요 표시 및 취소
+function showHeart() {
     $.ajax({
         type: 'GET',
         url: '/show_heart/{{name}}/',
         data: {},
         success: function (response) {
-            
             let my_heart = response['my_heart'];
-            if (my_heart['interested'] == 'Y')
-            {
-                $("#heart").css("color","red");
-                $("#heart").attr("onclick","unlike()");
+            if (my_heart['interested'] == 'Y') {
+                $("#heart").css("color", "red");
+                $("#heart").attr("onclick", "unlike()");
+            } else {
+                $("#heart").css("color", "gray");
+                $("#heart").attr("onclick", "like()");
             }
-            else
-            {
-                $("#heart").css("color","gray");
-                $("#heart").attr("onclick","like()");
-            }
-            
         }
     });
 }
@@ -258,11 +211,11 @@ function like() {
         type: 'POST',
         url: '/like/{{name}}/',
         data: {
-            interested : "Y",
+            interested: "Y",
             image: $("#center_img").attr("src")
         },
         success: function (response) {
-        window.location.reload() 
+            window.location.reload();
         }
     });
 }
@@ -272,10 +225,10 @@ function unlike() {
         type: 'POST',
         url: '/unlike/{{name}}/',
         data: {
-            interested : "N"
+            interested: "N"
         },
         success: function (response) {
-        window.location.reload() 
+            window.location.reload();
         }
     });
 }
