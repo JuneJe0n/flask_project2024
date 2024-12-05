@@ -197,19 +197,7 @@ body {
     margin-top: 40px;
     padding-top: 30px;
 }
-.write-review {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    padding: 0px 20px;
-    background-color: #2d4b29;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    height: 32px;
-}
+
 .pagination a {
     color: black;
     padding: 6px 12px; /* 패딩 */
@@ -248,3 +236,18 @@ body {
     color: black;  /* 채워진 하트 색상 */
 }
 
+.write-review-button {
+    display: inline-block;
+    background-color: #2d572c; /* 기존 버튼 배경색 */
+    color: white; /* 텍스트 색상 */
+    padding: 10px 20px; /* 여백 */
+    text-align: center;
+    text-decoration: none; /* 기본 링크 밑줄 제거 */
+    border-radius: 10px; /* 둥근 모서리 */
+    font-size: 14px; /* 글꼴 크기 */
+    font-weight: bold; /* 글꼴 두께 */
+}
+
+.write-review-button:hover {
+    background-color: #00462A; /* 호버 시 색상 변경 */
+}

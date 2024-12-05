@@ -660,41 +660,21 @@ def buy_page():
 def sort_reviews():
     name = request.args.get('name')  # 아이템 이름
     sort_order = request.args.get('sort', 'latest')  # 정렬 기준
-    page = request.args.get('page', 1, type=int)  # 페이지 번호
-    per_page = 5  # 페이지당 표시할 리뷰 수
 
     # 리뷰 데이터 가져오기
     reviews = DB.get_reviews(name)
     if not reviews:
-        print("No reviews found for item:", name)
         return jsonify({"error": "No reviews found"}), 404
 
     # 정렬 로직
     if sort_order == 'latest':
         reviews = sorted(reviews, key=lambda x: x['date'], reverse=True)
     elif sort_order == 'best':
-        reviews = sorted(reviews, key=lambda x: x['star'], reverse=True)
+        reviews = sorted(reviews, key=lambda x: int(x['star']), reverse=True)
 
-    # 페이지네이션 처리
-    total_reviews = len(reviews)
-    start_idx = (page - 1) * per_page
-    end_idx = start_idx + per_page
-    paginated_reviews = reviews[start_idx:end_idx]
+    # JSON 응답으로 반환
+    return jsonify(reviews=reviews)
 
-    total_pages = (total_reviews + per_page - 1) // per_page
-
-    print(f"Reviews after sorting ({sort_order}): {paginated_reviews}")
-
-    # 템플릿 렌더링에 필요한 모든 변수 전달
-    return render_template(
-        'review_page.html',
-        name=name,
-        reviews=paginated_reviews,
-        current_page=page,
-        total_pages=total_pages,
-        has_prev=page > 1,
-        has_next=page < total_pages
-    )
 
 
 

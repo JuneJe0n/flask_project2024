@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -17,57 +17,60 @@
         </div>
         <hr class="divider">
 
+        <!-- 리뷰 이미지 섹션 -->
         <div class="review-images">
             {% for review in reviews %}
                 {% if review.image_url %}
-                    <div class="review-image">
-                        <img src="{{ review.image_url }}" alt="Review Image" class="review-thumbnail" width="100%" height="100%">
-                    </div>
+                <div class="review-image">
+                    <img src="{{ review.image_url }}" alt="Review Image" class="review-thumbnail" width="100%" height="100%">
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
 
         <div class="review-options">
-            <select>
-                <option>옵션</option>
-            </select>
             <div class="sort-buttons">
                 <button class="active" onclick="sortBy('latest')">최신순</button>
                 <button onclick="sortBy('best')">별점순</button>
             </div>
         </div>
 
-        {% for review in reviews %}
-        <div class="review-item">
-            <div class="left">
-                <div class="content">
-                    <div class="username">{{ review.username }}
-                        <span class="stars">
-                            {% for i in range(review.star) %}
-                            <img src="/static/images/greenclover.png" alt="greenclover" width="20" height="20">
-                            {% endfor %}
-                        </span>
+        <!-- 리뷰 항목 섹션 -->
+        <div class="review-item-container">
+            {% for review in reviews %}
+            <div class="review-item">
+                <div class="left">
+                    <div class="content">
+                        <div class="username">{{ review.username }}
+                            <span class="stars">
+                                {% for i in range(review.star) %}
+                                <img src="/static/images/greenclover.png" alt="greenclover" width="20" height="20">
+                                {% endfor %}
+                            </span>
+                        </div>
+                        <div>{{ review.info }}</div>
                     </div>
-                    <div>{{ review.info }}</div>
+                </div>
+                <div class="right">
+                    <a href="{{ url_for('review_detail', item_name=name, review_key=review.preview) }}">
+                        <div class="avatar">
+                            {% if review.image_url %}
+                            <img src="{{ review.image_url }}" alt="Review Image" class="review-avatar-img" width="100%" height="100%">
+                            {% endif %}
+                        </div>
+                    </a>
+                    <div class="details">
+                        <div class="date">{{ review.date }}</div>
+                    </div>
                 </div>
             </div>
-            <div class="right">
-                <a href="{{ url_for('review_detail', item_name=name, review_key=review.preview) }}">
-                    <div class="avatar">
-                        {% if review.image_url %}
-                        <img src="{{ review.image_url }}" alt="Review Image" class="review-avatar-img" width="100%" height="100%">
-                        {% endif %}
-                    </div>
-                </a>
-                <div class="details">
-                    <div class="date">{{ review.date }}</div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
 
         <div class="review-button-container">
-            <button class="write-review">리뷰 작성하기</button>
+            <a href="{{ url_for('reg_review_init', name=name) }}" class="write-review-button">
+                리뷰 작성하기
+            </a>
         </div>
 
         <!-- Pagination Section -->
@@ -88,7 +91,39 @@
         </footer>
     </div>
 
-    <script src="/static/review_page.js"></script>
+    <script>
+        function sortBy(order) {
+            const buttons = document.querySelectorAll('.sort-buttons button');
+
+            // 버튼 'active' 클래스 관리
+            buttons.forEach(button => button.classList.remove('active'));
+            if (order === 'latest') {
+                buttons[0].classList.add('active');
+            } else if (order === 'best') {
+                buttons[1].classList.add('active');
+            }
+
+            // 리뷰 컨테이너와 리뷰 요소들 선택
+            const reviewContainer = document.querySelector('.review-item-container');
+            const reviews = Array.from(reviewContainer.children);
+
+            // 정렬 로직
+            reviews.sort((a, b) => {
+                if (order === 'latest') {
+                    const dateA = new Date(a.querySelector('.date').textContent.trim());
+                    const dateB = new Date(b.querySelector('.date').textContent.trim());
+                    return dateB - dateA; // 최신순 정렬
+                } else if (order === 'best') {
+                    const starA = a.querySelectorAll('.stars img').length;
+                    const starB = b.querySelectorAll('.stars img').length;
+                    return starB - starA; // 별점순 정렬
+                }
+            });
+
+            // 정렬된 리뷰를 다시 컨테이너에 추가
+            reviews.forEach(review => reviewContainer.appendChild(review));
+        }
+    </script>
 
 </body>
-</html> 
+</html>
