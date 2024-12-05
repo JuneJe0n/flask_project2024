@@ -559,19 +559,41 @@ def view_like():
 
 
 #구매하기
-@application.route('/buy')
+@application.route('/buy', methods=['POST', 'GET'])
 def buy():
-    name = request.args.get('name')
-    image = request.args.get('image')
-    total_price = request.args.get('totalPrice')
-    discount = request.args.get('discount')
-    seller = request.args.get('seller')
+    if 'id' not in session:
+        return redirect(url_for('login'))  # 로그인하지 않은 경우 로그인 페이지로 리다이렉트
 
-    options_json = request.args.get('selectedOption')  # JSON 형식으로 전달받음
-    options = json.loads(options_json)
+    user_id = session['id']
 
-    return render_template('buy.html', name=name, image=image, total_price=total_price, options=options, discount=discount, seller=seller)
+    if request.method == 'POST':
+        # POST 요청으로 전달된 상품 정보
+        data = request.get_json()
+        print(f"Received buy data: {data}")  # 디버깅용 출력
 
+        cart_data = {
+            "name": data.get('name'),
+            "image": data.get('image'),
+            "discount": data.get('discount'),
+            "seller": data.get('seller'),
+            "totalPrice": data.get('totalPrice'),
+            "option": data.get('option'),
+            "added_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        # Firebase에 데이터 추가
+        DB.db.child("cart").child(user_id).push(cart_data)
+
+    # Firebase에서 장바구니 데이터 가져오기
+    cart_items = DB.db.child("cart").child(user_id).get().val()
+    print(f"Cart items in Firebase: {cart_items}")  # 디버깅용 출력
+    cart_items = cart_items if cart_items else {}
+
+    return render_template('buy.html', cart_items=cart_items)
+
+
+
+# 장바구니에 상품 추가
 @application.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     if 'id' not in session:
@@ -612,11 +634,18 @@ def add_to_cart():
         # Firebase에 데이터 추가
         DB.db.child("cart").child(user_id).push(cart_data)
 
+
+        # 성공 응답
         return jsonify({"success": True, "message": "장바구니에 상품이 추가되었습니다."}), 200
+
     except Exception as e:
+        # 에러 응답
         return jsonify({"success": False, "message": str(e)}), 500
 
 
+@application.route('/buy.html')
+def buy_page():
+    return render_template('buy.html')
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)
