@@ -88,7 +88,7 @@ footer {
     color: #006400;          
 }
 
-hr {
+#hr {
     border: none;
     height: 2px;
     background-color: #006400;
@@ -101,6 +101,36 @@ hr {
     font-size: 20px;
   }
   
-  #heart.red {
+#heart.red {
     color:red;
   }
+  #cartModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#cartModal div {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    max-width: 400px;
+    text-align: center;
+}
+
+#cartModal button {
+    padding: 10px 20px;
+    background: #006400;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

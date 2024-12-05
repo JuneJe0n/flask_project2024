@@ -145,3 +145,141 @@ function buyingItem() {
 
     window.location.href = `/buy?name=${encodeURIComponent(name)}&seller=${encodeURIComponent(seller)}&image=${encodeURIComponent(image)}&discount=${encodeURIComponent(discount)}&totalPrice=${totalPrice}&selectedOption=${selectedOptionQuery}`;
 }
+
+function addToCart(name, image, price, discount, finalprice) {
+    const quantity = document.getElementById("quantity").value || 1; // 수량 입력 필드 (선택사항)
+
+    // 기본 동작 방지
+    event.preventDefault();
+
+    fetch('/add_to_cart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            image: image,
+            price: price,
+            discount: discount,
+            finalprice: finalprice,
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 성공 시 모달 표시
+            showCartModal();
+        } else {
+            alert("장바구니 추가 실패: " + data.message);
+        }
+    })
+    .catch(error => {
+        alert("에러 발생: " + error.message);
+    });
+}
+
+// 모달 열기
+function showCartModal() {
+    const modal = document.getElementById('cartModal');
+    modal.style.display = 'flex'; // flex로 설정하여 화면 중앙에 표시
+}
+
+// 모달 닫기
+function closeCartModal() {
+    const modal = document.getElementById('cartModal');
+    modal.style.display = 'none';
+}
+
+// 장바구니 추가 후 모달 표시
+function addToCart(name, image, price, discount, finalprice) {
+    const selectedOption = document.getElementById('option').value; // 옵션 값 가져오기
+    if (!selectedOption) {
+        alert("옵션을 선택해주세요.");
+        return;
+    }
+
+    const quantity = 1; // 기본 수량 설정
+
+    fetch('/add_to_cart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            image: image,
+            price: parseFloat(price),
+            discount: parseFloat(discount),
+            finalprice: parseFloat(finalprice),
+            option: selectedOption,
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showCartModal(); // 성공 시 모달 표시
+        } else {
+            alert("장바구니 추가 실패: " + data.message);
+        }
+    })
+    .catch(error => {
+        alert("에러 발생: " + error.message);
+    });
+}
+
+function showHeart() { 
+    $.ajax({
+        type: 'GET',
+        url: '/show_heart/{{name}}/',
+        data: {},
+        success: function (response) {
+            
+            let my_heart = response['my_heart'];
+            if (my_heart['interested'] == 'Y')
+            {
+                $("#heart").css("color","red");
+                $("#heart").attr("onclick","unlike()");
+            }
+            else
+            {
+                $("#heart").css("color","gray");
+                $("#heart").attr("onclick","like()");
+            }
+            
+        }
+    });
+}
+
+function like() {
+    $.ajax({
+        type: 'POST',
+        url: '/like/{{name}}/',
+        data: {
+            interested : "Y",
+            image: $("#center_img").attr("src")
+        },
+        success: function (response) {
+        window.location.reload() 
+        }
+    });
+}
+
+function unlike() {
+    $.ajax({
+        type: 'POST',
+        url: '/unlike/{{name}}/',
+        data: {
+            interested : "N"
+        },
+        success: function (response) {
+        window.location.reload() 
+        }
+    });
+}
+
+$(document).ready(function () {
+    showHeart();
+});
