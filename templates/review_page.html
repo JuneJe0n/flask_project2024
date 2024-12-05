@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Page</title>
-    <link rel="stylesheet" href="../static/review_page.css">
+    <link rel="stylesheet" href="/static/review_page.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Add Font Awesome link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -44,7 +44,7 @@
                     <div class="username">{{ review.username }}
                         <span class="stars">
                             {% for i in range(review.star) %}
-                            <img src="../static/images/greenclover.png" alt="greenclover" width="20" height="20">
+                            <img src="/static/images/greenclover.png" alt="greenclover" width="20" height="20">
                             {% endfor %}
                         </span>
                     </div>
@@ -74,15 +74,15 @@
         <footer>
             <div class="pagination" style="justify-self: center;">
                 {% if current_page > 1 %}
-                <a href="{{ url_for('view_review_page', page=current_page - 1) }}" class="prev" style="color: gray;">← Previous</a>
+                <a href="{{ url_for('view_review_page', name=name, page=current_page - 1) }}" class="prev" style="color: gray;">← Previous</a>
                 {% endif %}
                 
                 {% for i in range(1, total_pages + 1) %}
-                <a href="{{ url_for('view_review_page', page=i) }}" class="page {% if current_page == i %}active{% endif %}">{{ i }}</a>
+                <a href="{{ url_for('view_review_page', name=name, page=i) }}" class="page {% if current_page == i %}active{% endif %}">{{ i }}</a>
                 {% endfor %}
 
                 {% if current_page < total_pages %}
-                <a href="{{ url_for('view_review_page', page=current_page + 1) }}" class="next" style="color: #006400;">Next →</a>
+                <a href="{{ url_for('view_review_page', name=name, page=current_page + 1) }}" class="next" style="color: #006400;">Next →</a>
                 {% endif %}
             </div>
         </footer>

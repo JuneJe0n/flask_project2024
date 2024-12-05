@@ -188,10 +188,10 @@ class DBhandler:
             print(f"Error in search_items: {e}")
             return []
     
-    def get_reviews(self):
+    def get_reviews(self, name):
         try:
             # Firebase에서 리뷰 데이터 가져오기
-            reviews = self.db.child("review").get()
+            reviews = self.db.child("review").child(name).get()
             if not reviews.each():  # 리뷰 데이터가 없으면 빈 리스트 반환
                 return []
 
@@ -200,7 +200,7 @@ class DBhandler:
             for review in reviews.each():
                 review_data = review.val() 
                 review_data["star"] = int(review_data.get("star", 0)) 
-                review_data["name"] = review.key()  # 리뷰 이름(key)을 추가 (필요에 따라)
+                review_data["name"] = name  # 리뷰 이름(key)을 추가 (필요에 따라)
                 review_data["username"] = review_data.get("username", "unknown_user") 
                 review_data["date"] = review_data.get("date", "unknown_date")
                 review_data["image_url"] = review_data["img_path"][0] if review_data.get("img_path") else None
