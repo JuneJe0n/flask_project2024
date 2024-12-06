@@ -60,22 +60,19 @@
                 
                 <div style="float: right; margin: 20px 0;">
                     <div style="margin-bottom: 10px;">
-                        {% if name %}
-                            <i class="fa fa-heart" id="heart" style="padding: 0 10px"></i>
-                        {% endif %}
-                        <button onclick="addToCart('{{ name }}', '{{ data.images[0] }}', '{{ data.price }}', '{{ data.discount }}', '{{ finalprice }}')"
-                            style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px; margin-right: 10px;">
-                            장바구니
-                        </button>
-                        <input type="button" value="구매하기" 
-                            style="background-color:#006400; color: white; border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px;"
-                            onclick="buyingItem()">
-                    </div>
-                    {% if data.custom == "1" %}
+                        {% if data.custom == "1" %}
                         <input type="button" value="커스터마이징 요청하기" 
                             style="margin-left:10px; background-color:aliceblue; border: none; border-radius: 4px; width: 200px; height: 30px; font-size: 15px;"
                             onclick="location.href='/apply_custom_init/{{name}}/';">
-                    {% endif %}
+                        {% endif %}
+                        <button onclick="addToCart('{{ name }}', '{{ data.images[0] }}', '{{ data.price }}', '{{ data.discount }}', '{{ finalprice }}')"
+                            style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px; margin-right: 10px;">
+                            구매하기
+                        </button>
+                        {% if name %}
+                            <i class="fa fa-heart" id="heart" style="padding: 0 10px"></i>
+                        {% endif %}
+                    </div>
                 </div>
             </form>
         </label>
@@ -83,8 +80,8 @@
 
     <div id="cartModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
         <div style="background: white; padding: 20px; border-radius: 5px; width: 50%; max-width: 400px; text-align: center;">
-            <h2>장바구니</h2>
-            <p>상품이 장바구니에 추가되었습니다.</p>
+            <h2>구매완료</h2>
+            <p>구매가 완료되었습니다. 감사합니다.</p>
             <button onclick="closeCartModal()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">확인</button>
         </div>
     </div>

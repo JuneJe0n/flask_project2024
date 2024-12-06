@@ -622,7 +622,7 @@ def buy():
     if request.method == 'POST':
         # POST 요청으로 전달된 상품 정보
         data = request.get_json()
-        print(f"Received buy data: {data}")  # 디버깅용 출력
+
 
         cart_data = {
             "name": data.get('name'),
