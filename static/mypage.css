@@ -183,5 +183,6 @@ header .user-menu{display:flex;gap: 10px;}
 .customer-service {
     padding: 30px;
     border-top: 1px solid #ddd;
+    color: #888;
     text-align: center;
 }
