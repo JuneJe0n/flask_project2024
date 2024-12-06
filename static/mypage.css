@@ -152,25 +152,58 @@ header .user-menu{display:flex;gap: 10px;}
 }
 
 
-/* Recent Products */
 .recent-products {
     padding: 30px;
+    text-align: center;
 }
 
 .recent-products h3 {
     font-size: 20px;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
-.product-list {
+.recent-product-list {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 20px; /* 각 아이템 사이의 간격 */
+    justify-content: center; /* 아이템들을 가로 기준으로 중앙 정렬 */
+    align-items: flex-start;
 }
 
-.product {
-    flex: 1; /* Make product items responsive */
+.recent-product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 0; /* 패딩 제거해서 아이템이 꽉 차도록 */
+    width: 320px; /* 고정된 너비 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.recent-product:hover {
+    transform: scale(1.05); /* 마우스 오버 시 살짝 확대 효과 */
+}
+
+.recent-product-image {
+    width: 100%;
+    height: 180px; /* 고정된 높이로 설정 */
+    object-fit: cover; /* 이미지 비율을 유지하며 꽉 채우기 */
+    border-radius: 8px 8px 0 0; /* 상단 모서리 둥글게 */
+}
+
+.recent-product-name {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    background-color: #fff; /* 이름 부분 배경색 지정 */
+    width: 100%; /* 이름 부분이 이미지와 동일한 너비 */
+    border-radius: 0 0 8px 8px; /* 하단 모서리 둥글게 */
 }
 
 .more-link {
@@ -183,6 +216,5 @@ header .user-menu{display:flex;gap: 10px;}
 .customer-service {
     padding: 30px;
     border-top: 1px solid #ddd;
-    color: #888;
     text-align: center;
 }
