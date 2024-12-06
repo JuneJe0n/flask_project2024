@@ -1,6 +1,6 @@
 <p>{{data.info}}</p>
 {% for i in range(0, 9) %}
                 {% if data.images[i] %}
-                    <img src="/{{data.images[i]}}" alt="other_img" width="55px" height="45px" onclick="changeCenterImage(this)">
+                    <img src="{{data.images[i]}}" alt="other_img" width="55px" height="45px" onclick="changeCenterImage(this)">
                 {% endif %}
             {% endfor %}

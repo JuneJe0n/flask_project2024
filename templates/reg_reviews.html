@@ -15,10 +15,10 @@
             <div style="margin-left: 0px; font-size: 15px;">
                 <label for="name">상품<br><br></label>
                 <div style="display: flex; align-items: center;">
-                    <img src="/{{data.images[0]}}" style="width: 77px; height: 77px; background-color: dimgray; margin-right: 15px; border: 2px solid #00462A;">
+                    <img src="{{data.images[0]}}" style="width: 77px; height: 77px; background-color: dimgray; margin-right: 15px; border: 2px solid #00462A;">
                     <div style="gap: 8px; display: flex; flex-direction: column;">
                         {% if data %}
-                        <label style="font-weight: bold;" type="text" id="user" name="user">제작자명: {{data.user}}</label>
+                        <label style="font-weight: bold;" type="text" id="user" name="user">제작자명: {{data.seller}}</label>
                         <label type="text" id="name" name="ame">상품명: {{name}}</label>
                         <input type="hidden" id="itemname" name="itemname" value="{{name}}"></input>
                         {% endif %}

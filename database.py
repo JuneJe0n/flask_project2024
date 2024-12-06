@@ -262,6 +262,18 @@ class DBhandler:
         print("###target_value##",target_value)
         return target_value
     
+    # 사용자 찜한 상품 가져오기
+    def get_heart_by_user(self, user_id):
+        try:
+            hearts = self.db.child("heart").child(user_id).get()
+            if not hearts.val():
+                return {}  # 데이터가 없으면 빈 딕셔너리 반환
+            
+            return hearts.val()  # 찜한 상품 데이터를 딕셔너리 형태로 반환
+        except Exception as e:
+            print(f"Error fetching hearts: {str(e)}")
+            return {}
+    
     def update_heart(self, user_id, isHeart, item, image):
         heart_info ={
             "image" : image,

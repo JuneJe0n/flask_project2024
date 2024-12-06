@@ -22,28 +22,27 @@ def Hello():
 def mypage():
     user_id = session.get('id')
     like_items = []
-    recent_items = []
 
     if user_id:
         hearts = DB.db.child("heart").child(user_id).get()
 
         if hearts.val():
             for heart in hearts.each():
-                item_name = heart.key()  # 아이템 이름
-                item_data = heart.val()  # 찜 데이터
+                item_name = heart.key()
+                item_data = heart.val()
                 
-                # 관심 데이터만 추가
                 if item_data.get('interested') == 'Y':
                     like_items.append({
                         "name": item_name,
-                        "image": item_data.get("image"),  # 이미지 추가
+                        "image": item_data.get("image"),
                         "data": item_data
                     })
 
-        # 최신 아이템 4개 선택
-        recent_items = like_items[-4:] if len(like_items) > 4 else like_items
-    
+    # Get the 4 most recent liked items
+    recent_items = like_items[-4:] if len(like_items) > 4 else like_items
+
     return render_template('mypage.html', recent_items=recent_items)
+
 
 @application.route("/login")
 def login():
@@ -327,7 +326,8 @@ def submit_item_post():
         if image_file:
             image_path = f"static/images/{image_file.filename}"
             image_file.save(image_path)
-            img_list.append(image_path)
+            image_url = f"/static/images/{image_file.filename}"
+            img_list.append(image_url)
     
     DB.insert_item(data['name'], data, img_list, opt_list)
 
@@ -583,31 +583,45 @@ def unlike(name):
 @application.route('/like')
 def view_like():
     page = request.args.get("page", 0, type=int)
-    
+    per_page = 8  # items per page
+    start_idx = page * per_page
+    end_idx = start_idx + per_page
+
     user_id = session.get('id')
     like_items = []
-    recent_items = []
 
     if user_id:
-        hearts = DB.db.child("heart").child(user_id).get()
+        hearts = DB.get_heart_by_user(user_id)
 
-        if hearts.val():
-            for heart in hearts.each():
-                item_name = heart.key()  # 아이템 이름
-                item_data = heart.val()  # 찜 데이터
-                
-                # 관심 데이터만 추가
+        if hearts:
+            for item_name, item_data in hearts.items():
                 if item_data.get('interested') == 'Y':
-                    like_items.append({
-                        "name": item_name,
-                        "image": item_data.get("image"),  # 이미지 추가
-                        "data": item_data
-                    })
-        
-        # 최근 아이템 4개 선택
-        recent_items = like_items[-4:] if len(like_items) > 4 else like_items
+                    # 아이템의 상세 정보를 가져와서 필요한 데이터 추가
+                    item_info = DB.get_item_byname(item_name)
+                    if item_info:
+                        like_items.append({
+                            "name": item_name,
+                            "image": item_data.get("image"),
+                            "seller": item_info.get("seller"),
+                            "price": item_info.get("price"),
+                            "discount": item_info.get("discount"),
+                            "rating": item_info.get("rating", 5.0),
+                            "reviews": len(DB.get_reviews(item_name)),
+                            "final_price": int(float(item_info.get("price")) * (100 - float(item_info.get("discount"))) * 0.01)
+                        })
 
-    return render_template('like.html', like_items=like_items, recent_items=recent_items)
+    # Paginate liked items
+    total_items = len(like_items)
+    paginated_items = like_items[start_idx:end_idx]
+    page_count = (total_items + per_page - 1) // per_page
+
+    return render_template(
+        'like.html',
+        like_items=paginated_items,
+        total=total_items,
+        page=page,
+        page_count=page_count
+    )
 
 
 
