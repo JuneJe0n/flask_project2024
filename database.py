@@ -125,15 +125,17 @@ class DBhandler:
             return False
 
 
-    # 아이템 가져오는 메서드 추가
     def get_items(self):
         try:
             # Firebase에서 아이템들을 가져오기 (child().get()을 대체)
-            items = self.db.child("item").get()  # 이 부분을 DB의 구조에 맞게 수정해야 할 수 있음
+            items = self.db.child("item").get()
+            if items.val() is None:
+                return {}  # 데이터가 없을 때 빈 딕셔너리 반환
             return items.val()  # 아이템들을 딕셔너리 형태로 반환
         except Exception as e:
             print(f"Error fetching items: {str(e)}")
             return {}
+
   
 
     def get_item_byname(self, name):

@@ -467,35 +467,58 @@ def get_data_details(user, category, detail_key):
 @application.route("/search", methods=['GET'])
 def search():
     # 검색어 가져오기
-    keyword = request.args.get('search_kw', type=str, default='').strip()  # 'search_kw'는 검색창 input의 name
-    if not keyword:  # 검색어가 비어 있으면 검색 결과 페이지로 이동
+    keyword = request.args.get('search_kw', type=str, default='').strip()
+    page = request.args.get('page', 0, type=int)
+
+    if not keyword:
         flash("Please enter a search term.")
-        return redirect(url_for('view_list'))  # 'home' 페이지로 리디렉션 (view_list 대신)
+        return redirect(url_for('view_list'))
 
     try:
-        # Firebase에서 아이템 가져오기 (DB.child("item").get() 대신 직접 가져오기)
-        items = DB.get_items()  # DB에서 아이템을 가져오는 메서드 수정 필요 (DBhandler 객체에 맞게)
+        # Firebase에서 아이템 가져오기
+        items = DB.get_items()
+
+        if not items:  # 아이템이 없을 경우 빈 리스트로 처리
+            flash("No items found.")
+            return render_template('search_results.html', items=[], keyword=keyword, page=page, page_count=1)
+
         filtered_items = []
 
         # 아이템들 중에서 검색어와 일치하는 아이템 필터링
-        for item_name, item_data in items.items():  # items는 딕셔너리 형태로 반환됨
-            name = item_data.get("name", "").lower()  # 아이템 이름 (소문자로 처리하여 비교)
+        keyword_lower = keyword.lower()  # 검색어를 소문자로 변환
+        for item_name, item_data in items.items():
+            name = item_name.lower()  # 아이템 이름 (소문자로 처리하여 비교)
             info = item_data.get("info", "").lower()  # 아이템 설명 (소문자로 처리하여 비교)
 
             # 검색어가 이름이나 설명에 포함되면 필터링
-            if keyword.lower() in name or keyword.lower() in info:
-                filtered_items.append(item_data)
+            if keyword_lower in name or keyword_lower in info:
+                filtered_items.append({"name": item_name, **item_data})
 
         # 검색 결과가 있을 때
         if filtered_items:
-            return render_template('search_results.html', items=filtered_items, keyword=keyword)
+            total_items = len(filtered_items)
+            items_per_page = 8
+            start_idx = page * items_per_page
+            end_idx = start_idx + items_per_page
+            paginated_items = filtered_items[start_idx:end_idx]
+
+            return render_template(
+                'search_results.html',
+                items=paginated_items,
+                keyword=keyword,
+                page=page,
+                page_count=(total_items // items_per_page) + (1 if total_items % items_per_page > 0 else 0)
+            )
         else:
             flash("No items found.")
-            return render_template('search_results.html', items=[], keyword=keyword)  # 검색 결과가 없으면 빈 리스트 전달
+            return render_template('search_results.html', items=[], keyword=keyword, page=page, page_count=1)
     except Exception as e:
-        # 오류 처리: Firebase에서 데이터를 가져오는 중 예외가 발생한 경우
+        # 오류 처리
         flash(f"Error occurred while fetching items: {str(e)}")
-        return render_template('search_results.html', items=[], keyword=keyword)  # 오류 발생 시 빈 리스트 전달
+        return render_template('search_results.html', items=[], keyword=keyword, page=page, page_count=1)
+
+
+
 
 @application.route("/like_review", methods=['POST'])
 def like_review():
