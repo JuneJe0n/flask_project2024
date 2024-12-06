@@ -643,19 +643,7 @@ def buy_item():
 @application.route('/buy')
 def view_buyitems():
     username = session.get('nickname')
-    data = DB.get_buyitems()
-
-    # 데이터 구조 확인 후 수정
-    if isinstance(data, dict):  # 만약 data가 딕셔너리라면
-        for username, items in data.items():
-            for item_name, item in items.items():
-                # options가 문자열인 경우 파싱하여 딕셔너리로 변경
-                if isinstance(item.get('options'), str):
-                    item['options'] = json.loads(item['options'])
-    elif isinstance(data, list):  # data가 리스트라면
-        for item in data:
-            if isinstance(item.get('options'), str):
-                item['options'] = json.loads(item['options'])
+    data = DB.get_buyitems(username)
 
     return render_template('buy.html', data=data, username=username)
 

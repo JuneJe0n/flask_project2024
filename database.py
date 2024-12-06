@@ -334,7 +334,6 @@ class DBhandler:
         }
         self.db.child("item").child(name).set(item_info)
         return True
-    
 
     def buy_item(self, username, data, name, opt_list):
         buy_info = {
@@ -348,9 +347,9 @@ class DBhandler:
         self.db.child("buyitem").child(username).child(name).set(buy_info)
         return True
     
-    def get_buyitems(self):
+    def get_buyitems(self, username):
         try:
-            items = self.db.child("buyitem").get()
+            items = self.db.child("buyitem").child(username).get()
             if items.val() is None:
                 return {}
             return items.val()

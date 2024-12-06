@@ -17,38 +17,41 @@
         </thead>
         <tbody>
             {% if data %}
-                {% for username, items in data.items() %}
-                    {% for item_name, item in items.items() %}
-                    <tr>
-                        <td class="product-info">
-                            <img src="{{ item.image }}" alt="상품 이미지" width="100">
-                            <div>
-                                <h3>{{ item_name }}</h3>
-                                <p class="discount"><span style="color:red"><b>{{ item.discount }}% </b></span><span class="price"> {{ item.finalprice }}원</span></p>
-                            </div>
-                        </td>
-                        <td class="quantity">
-                            <div class="quantity-wrapper">
-                                {% for option, quantity in item.options.items() %}
-                                    <p>{{ option }}: {{ quantity }}개</p>
-                                {% endfor %}
-                            </div>
-                        </td>
-                        <td>
-                            <select>
-                                <option>수령방법 선택</option>
-                                <option>택배</option>
-                                <option>직접 수령</option>
-                            </select>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                {% endfor %}
-            {% else %}
+            {% for item_name, item in data.items() %}
                 <tr>
-                    <td colspan="3" style="text-align: center;">구매한 아이템이 없습니다.</td>
+                    <td class="product-info">
+                        <img src="{{ item.image }}" alt="상품 이미지" width="100">
+                        <div>
+                            <!-- item_name을 h3 태그 안에 출력 -->
+                            <h3>{{ item_name }}</h3>  <!-- item_name을 출력 -->
+                            <p class="discount">
+                                <span style="color:red"><b>{{ item.discount }}% </b></span>
+                                <span class="price">{{ item.finalprice }}원</span>
+                            </p>
+                        </div>
+                    </td>
+                    <td class="quantity">
+                        <div class="quantity-wrapper">
+                            {% for option, quantity in item.options.items() %}
+                                <p>{{ option }}: {{ quantity }}개</p>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <select>
+                            <option>수령방법 선택</option>
+                            <option>택배</option>
+                            <option>직접 수령</option>
+                        </select>
+                    </td>
                 </tr>
-            {% endif %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" style="text-align: center;">구매한 아이템이 없습니다.</td>
+            </tr>
+        {% endif %}
+        
         </tbody>               
     </table>
     <div class="cart-actions">
