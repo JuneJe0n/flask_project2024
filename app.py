@@ -492,7 +492,13 @@ def search():
 
             # 검색어가 이름이나 설명에 포함되면 필터링
             if keyword_lower in name or keyword_lower in info:
-                filtered_items.append({"name": item_name, **item_data})
+                # 할인율 적용된 가격 계산
+                price = float(item_data.get('price', 0))
+                discount = float(item_data.get('discount', 0))
+                final_price = int(price * (100 - discount) * 0.01)
+                
+                # 최종 가격을 추가한 아이템 데이터 생성
+                filtered_items.append({"name": item_name, **item_data, "final_price": final_price})
 
         # 검색 결과가 있을 때
         if filtered_items:
@@ -516,6 +522,7 @@ def search():
         # 오류 처리
         flash(f"Error occurred while fetching items: {str(e)}")
         return render_template('search_results.html', items=[], keyword=keyword, page=page, page_count=1)
+
 
 
 
