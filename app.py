@@ -16,7 +16,7 @@ items = []
 
 @application.route("/")
 def Hello():
-    return render_template("index.html")
+    return redirect(url_for('view_list'))
 
 @application.route('/mypage')
 def mypage():
