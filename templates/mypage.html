@@ -67,13 +67,12 @@
     <!-- Recent Products Section -->
     <section class="recent-products">
         <h3>찜한 상품</h3>
-        <div class="product-list">
+        <div class="recent-product-list">
             {% if recent_items %}
                 {% for item in recent_items %}
-                <div class="product" onclick="location.href='/view_detail/{{ item.name }}/';" style="cursor:pointer;">
-                    <img src="{{ item.image }}" alt="{{ item.name }}" width="230px" height="230px" style="display: block; border-radius: 5px;">
-                    {{item.name}}
-                    {{item.finalprice}}
+                <div class="recent-product" onclick="location.href='/view_detail/{{ item.name }}/';">
+                    <img src="{{ item.image }}" alt="{{ item.name }}" class="recent-product-image">
+                    <p class="recent-product-name">{{ item.name }}</p>
                 </div>
                 {% endfor %}
             {% else %}

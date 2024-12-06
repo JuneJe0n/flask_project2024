@@ -5,51 +5,58 @@
 {% endblock %}
 
 {% block content %}
+<main class="like-page">
+    <div class="user-info">
+        <h2>{{ session['nickname'] }} 님</h2>
+        <p>찜한 상품 개수: {{ total }}</p>
+    </div>
+    <div class="items-container">
+        {% if like_items %}
+            <div class="items {% if like_items|length < 8 %}few-items{% endif %}">
+                {% for item in like_items %}
+                <div id="itemsection" onclick="location.href='/view_detail/{{ item.name }}/';" style="cursor:pointer;">
+                    <!-- 상품 이미지 -->
+                    <img id="product-image" src="{{ item.image }}" alt="item_img" style="display: block;">
+                    <p style="margin: 10px 0;">
+                        <!-- 유저 프로필 이미지 -->
+                        <img class="user-icon" src="/static/images/user_icon.png" alt="user_icon">
+                        <span style="color:gray;">{{ item.seller }}</span>
+                    </p>
+                    <p style="font-size: 18px"><b>{{ item.name }}</b></p>
+                    <p style="margin: 10px 0;">
+                        <span style="color:red"><b>{{ item.discount }}% </b></span>
+                        <span class="price">{{ item.final_price }}</span>
+                    </p>
+                    <p>
+                        <!-- 네잎클로버 이미지 -->
+                        <img class="rating-icon" src="/static/images/greenclover.png" alt="clover">
+                        {{ item.rating }} 
+                        <span style="color:lightgray">({{ item.reviews }}개)</span>
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <p>찜한 상품이 없습니다.</p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="pagination">
+        {% if page > 0 %}
+        <a href="{{ url_for('view_like', page=page-1) }}" class="prev">← Previous</a>
+        {% endif %}
 
-    <main class="like-page">
-        <div class="user-info">
-            <h2>{{ session['nickname']}} 님</h2>
-            <p>좋아요 {{total}}</p>
-        </div>
-        <div class="column-items">
-                <table>
-                    <tr>
-                        {% for item in like_items %}
-                            <td onclick="location.href='/view_detail/{{item.name}}/';" style="cursor:pointer;">
-                                <div id="itemsection">
-                                    <img src="{{item.image}}" alt="item_img" width="240px" height="192px" style="display: block;">
-                                    <p style="margin: 10px 0;">
-                                        <img src="/static/images/user_icon.png" alt="user_icon" width="20" height="20">
-                                        <span style="color:gray;">{{item.seller}}</span>
-                                    </p>
-                                    <p style="font-size: 18px"><b>{{item.name}}</b></p>
-                                    <p style="margin: 10px 0;"><span style="color:red"><b>{{item.discount}}% </b></span><span class="price">{{item.finalprice}}원</span></p>
-                                    <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> 5.0 <span style="color:lightgray">리뷰 20개</span><i class="fa fa-heart" id="heart" ></i></p>
-                                </div>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                </table>
-        </div>
-    </main>
-    
+        {% for i in range(page_count) %}
+        <a href="{{ url_for('view_like', page=i) }}" class="page {% if page == i %}active{% endif %}">{{ i+1 }}</a>
+        {% endfor %}
 
-    <script>
-        window.onload = function () {
-        const priceElements = document.querySelectorAll('.price'); // 모든 .price 요소 선택
+        {% if page < page_count - 1 %}
+        <a href="{{ url_for('view_like', page=page+1) }}" class="next">Next →</a>
+        {% endif %}
+    </div>
+</main>
 
-        priceElements.forEach(priceElement => {
-            let price = priceElement.textContent.trim();  // 텍스트 가져오기
-
-            // "원"과 쉼표(,) 제거 후 숫자로 변환
-            price = price.replace(/[^0-9]/g, '');  // 숫자가 아닌 모든 문자 제거
-
-            // 가격을 천 단위 구분자로 포맷팅
-            const formattedPrice = Number(price).toLocaleString();  // 천 단위 구분 기호 추가
-
-            // 수정된 가격을 다시 HTML에 표시
-            priceElement.textContent = formattedPrice + "원";
-        });
-    };
-    </script>
+<!-- like.js 파일을 HTML 문서의 마지막에 추가합니다. -->
+<script src="/static/like.js"></script>
 {% endblock content %}

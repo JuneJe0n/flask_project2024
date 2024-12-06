@@ -8,11 +8,11 @@
 <input type="hidden" name="seller" id="seller" value="{{session['nickname']}}">
 <div class="detail">
     <div class="detail-image">
-        <img id="center_img" src="/{{data.images[0]}}" alt="center_img" width="550px" height="450px">
+        <img id="center_img" src="{{data.images[0]}}" alt="center_img" width="550px" height="450px">
         <div style="margin-top: 15px; display: flex; justify-content: center;">
             {% for i in range(0, 9) %}
                 {% if data.images[i] %}
-                    <img class="thumbnail" src="/{{data.images[i]}}" alt="other_img" width="55px" height="45px" onclick="changeCenterImage(this)">
+                    <img class="thumbnail" src="{{data.images[i]}}" alt="other_img" width="55px" height="45px" onclick="changeCenterImage(this)">
                 {% endif %}
             {% endfor %}
         </div>
