@@ -102,64 +102,59 @@
             <iframe id="footer_iframe" src="" style="width: 100%; border: none;" hidden></iframe>
         </div>
     </footer>
-    
 
-    {% endblock %}
-    {% block extra_js %}
     <script src="/static/detail.js"></script>
-    <scipt>
+    {% block extra_js %}
+    <script>
         function showHeart() { 
             $.ajax({
                 type: 'GET',
-                url: '/show_heart/{{name}}/',
+                url: '/show_heart/{{ name }}/',
                 data: {},
                 success: function (response) {
-                    
                     let my_heart = response['my_heart'];
-                    if (my_heart['interested'] == 'Y')
-                    {
-                        $("#heart").css("color","red");
-                        $("#heart").attr("onclick","unlike()");
+                    if (my_heart['interested'] == 'Y') {
+                        $("#heart").css("color", "red");
+                        $("#heart").attr("onclick", "unlike()");
+                    } else {
+                        $("#heart").css("color", "gray");
+                        $("#heart").attr("onclick", "like()");
                     }
-                    else
-                    {
-                        $("#heart").css("color","gray");
-                        $("#heart").attr("onclick","like()");
-                    }
-                    
                 }
             });
         }
-        
+    
         function like() {
             $.ajax({
                 type: 'POST',
-                url: '/like/{{name}}/',
+                url: '/like/{{ name }}/',
                 data: {
-                    interested : "Y",
+                    interested: "Y",
                     image: $("#center_img").attr("src")
                 },
                 success: function (response) {
-                window.location.reload() 
+                    window.location.reload(); 
                 }
             });
         }
-        
+    
         function unlike() {
             $.ajax({
                 type: 'POST',
-                url: '/unlike/{{name}}/',
+                url: '/unlike/{{ name }}/',
                 data: {
-                    interested : "N"
+                    interested: "N"
                 },
                 success: function (response) {
-                window.location.reload() 
+                    window.location.reload(); 
                 }
             });
         }
-        
+    
         $(document).ready(function () {
             showHeart();
         });
-    </scipt>
+    </script>
+    {% endblock %}
+
     {% endblock %}
