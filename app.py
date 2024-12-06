@@ -623,96 +623,44 @@ def view_like():
         page_count=page_count
     )
 
+@application.route('/buy_item', methods=['POST'])
+def buy_item():
+    username = session['nickname']
+    
+    # request.form에서 selectedOption을 가져옵니다.
+    options = request.form.get('selectedOption')
+    data = request.form
+    name = request.form.get('name')
+
+    optionsDict = json.loads(options) if options else {}
+
+    # DB에 데이터 저장
+    DB.buy_item(username, data, name, optionsDict)
+
+    # 데이터를 buy.html로 넘기기 위해 리다이렉트
+    return redirect(url_for('view_buyitems', username=username))
+
+@application.route('/buy')
+def view_buyitems():
+    username = session.get('nickname')
+    data = DB.get_buyitems()
+
+    # 데이터 구조 확인 후 수정
+    if isinstance(data, dict):  # 만약 data가 딕셔너리라면
+        for username, items in data.items():
+            for item_name, item in items.items():
+                # options가 문자열인 경우 파싱하여 딕셔너리로 변경
+                if isinstance(item.get('options'), str):
+                    item['options'] = json.loads(item['options'])
+    elif isinstance(data, list):  # data가 리스트라면
+        for item in data:
+            if isinstance(item.get('options'), str):
+                item['options'] = json.loads(item['options'])
+
+    return render_template('buy.html', data=data, username=username)
 
 
-#구매하기
-@application.route('/buy', methods=['POST', 'GET'])
-def buy():
-    if 'id' not in session:
-        return redirect(url_for('login'))  # 로그인하지 않은 경우 로그인 페이지로 리다이렉트
 
-    user_id = session['id']
-
-    if request.method == 'POST':
-        # POST 요청으로 전달된 상품 정보
-        data = request.get_json()
-
-
-        cart_data = {
-            "name": data.get('name'),
-            "image": data.get('image'),
-            "discount": data.get('discount'),
-            "seller": data.get('seller'),
-            "totalPrice": data.get('totalPrice'),
-            "option": data.get('option'),
-            "added_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
-
-        # Firebase에 데이터 추가
-        DB.db.child("cart").child(user_id).push(cart_data)
-
-    # Firebase에서 장바구니 데이터 가져오기
-    cart_items = DB.db.child("cart").child(user_id).get().val()
-    print(f"Cart items in Firebase: {cart_items}")  # 디버깅용 출력
-    cart_items = cart_items if cart_items else {}
-
-    return render_template('buy.html', cart_items=cart_items)
-
-
-
-# 장바구니에 상품 추가
-@application.route('/add_to_cart', methods=['POST'])
-def add_to_cart():
-    if 'id' not in session:
-        return jsonify({"success": False, "message": "로그인이 필요합니다."}), 401
-
-    user_id = session['id']
-    try:
-        # JSON 요청 데이터 파싱
-        data = request.get_json(force=True)
-        if not data:
-            return jsonify({"success": False, "message": "Invalid JSON data"}), 400
-
-        # JSON 데이터에서 필드 추출
-        item_name = data.get('name')
-        item_image = data.get('image')
-        item_price = data.get('price')
-        item_discount = data.get('discount')
-        item_finalprice = data.get('finalprice')
-        item_option = data.get('option')  # 옵션 데이터
-        item_quantity = data.get('quantity', 1)
-
-        # 필수 데이터 확인
-        if not item_name or not item_option:
-            return jsonify({"success": False, "message": "필수 데이터가 누락되었습니다."}), 400
-
-        # 장바구니 데이터 생성
-        cart_data = {
-            "name": item_name,
-            "image": item_image,
-            "price": item_price,
-            "discount": item_discount,
-            "finalprice": item_finalprice,
-            "option": item_option,
-            "quantity": item_quantity,
-            "added_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
-
-        # Firebase에 데이터 추가
-        DB.db.child("cart").child(user_id).push(cart_data)
-
-
-        # 성공 응답
-        return jsonify({"success": True, "message": "장바구니에 상품이 추가되었습니다."}), 200
-
-    except Exception as e:
-        # 에러 응답
-        return jsonify({"success": False, "message": str(e)}), 500
-
-
-@application.route('/buy.html')
-def buy_page():
-    return render_template('buy.html')
 
 @application.route('/reviews/sort', methods=['GET'])
 def sort_reviews():

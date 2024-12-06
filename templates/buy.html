@@ -5,37 +5,33 @@
 {% endblock %}
 
 {% block content %}
-    <main class="cart-page">
-        <h2>{{ session['nickname'] }}님</h2>
-        <table class="cart-table">
-            <thead>
-                <tr>
-                    <th>상품 정보</th>
-                    <th>수량</th>
-                    <th>수령 방법</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if cart_items %}
-                    {% for key, item in cart_items.items() %}
+<main class="cart-page">
+    <h2>{{ session['nickname'] }}님</h2>
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>상품 정보</th>
+                <th>수량</th>
+                <th>수령 방법</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data %}
+                {% for username, items in data.items() %}
+                    {% for item_name, item in items.items() %}
                     <tr>
                         <td class="product-info">
-                            <img src="{{ item['image'] }}" alt="상품 이미지" width="100">
+                            <img src="{{ item.image }}" alt="상품 이미지" width="100">
                             <div>
-                                <h3>{{ item['name'] }}</h3>
-                                <p class="discount">{{ item['discount'] }}% <span class="price">{{ item['finalprice'] }}원</span></p>
+                                <h3>{{ item_name }}</h3>
+                                <p class="discount"><span style="color:red"><b>{{ item.discount }}% </b></span><span class="price"> {{ item.finalprice }}원</span></p>
                             </div>
                         </td>
                         <td class="quantity">
                             <div class="quantity-wrapper">
-                                {% if item['option'] is iterable and item['option'] is not string %}
-                                {% for option in item['option'] %}
-                                    <p>{{ option }}: {{ item['quantity'] }}개</p>
+                                {% for option, quantity in item.options.items() %}
+                                    <p>{{ option }}: {{ quantity }}개</p>
                                 {% endfor %}
-                            {% else %}
-                                <p>{{ item['option'] }}: {{ item['quantity'] }}개</p>
-                            {% endif %}                            
-                            
                             </div>
                         </td>
                         <td>
@@ -47,15 +43,31 @@
                         </td>
                     </tr>
                     {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="4" style="text-align: center;">장바구니가 비어 있습니다.</td>
-                    </tr>
-                {% endif %}
-            </tbody>
-        </table>
-        <div class="cart-actions">
-            <button class="continue" onclick="window.history.back()">CONTINUE SHOPPING</button>
-        </div>
-    </main>
-    {% endblock %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" style="text-align: center;">구매한 아이템이 없습니다.</td>
+                </tr>
+            {% endif %}
+        </tbody>               
+    </table>
+    <div class="cart-actions">
+        <button class="continue" onclick="window.history.back()">CONTINUE SHOPPING</button>
+    </div>
+</main>
+
+<script>
+    window.onload = function () {
+        const priceElements = document.querySelectorAll('.price');
+
+        priceElements.forEach(priceElement => {
+            let price = priceElement.textContent.trim();
+            price = price.replace(/[^0-9]/g, ''); // 숫자가 아닌 모든 문자 제거
+            if (price) {
+                const formattedPrice = Number(price).toLocaleString(); // 천 단위 구분 기호 추가
+                priceElement.textContent = formattedPrice + "원"; // 포맷팅된 가격 표시
+            }
+        });
+    };
+</script>
+{% endblock %}
