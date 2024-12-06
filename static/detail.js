@@ -194,6 +194,7 @@ function showCartModal() {
 function closeCartModal() {
     const modal = document.getElementById('cartModal');
     modal.style.display = 'none';
+    window.location.href='/buy';
 }
 
 // 장바구니 추가 후 모달 표시

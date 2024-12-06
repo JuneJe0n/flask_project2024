@@ -1,50 +1,15 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>장바구니</title>
-    <link rel="stylesheet" href="/static/buy.css">
-    <link rel="stylesheet" href="/static/index.css">
-</head>
-<body>
-    <!-- 네비게이션과 헤더 -->
-    <header>
-        <h1 id="logo">
-            <a href="/"><img src="/static/images/logo.png" width="200px"></a>
-        </h1>
-        <div class="userBox">
-            <form class="search-box" action="/search" method="get">
-                <input class="search-txt" type="text" id="search_kw" name="search_kw" placeholder="검색어를 입력하세요">
-                <button class="search-btn" type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </form>
-            <div class="userRegister">
-                <button id="login" onclick="location.href='/login'">로그인</button>
-                <button id="signup" onclick="location.href='/signup'">회원가입</button>
-            </div>
-        </div>
-    </header>
+{% extends "index.html" %}
 
-    <nav class="lnb">
-        <ul>
-            <li><a href="{{ url_for('view_list', page=0, category='all') }}">전체 카테고리</a></li>
-            <li><a href="{{ url_for('view_list', page=0, category='Home') }}">홈/리빙</a></li>
-            <li><a href="{{ url_for('view_list', page=0, category='Clothes') }}">패션/옷</a></li>
-            <li><a href="{{ url_for('view_list', page=0, category='Accessory') }}">악세사리</a></li>
-            <li><a href="{{ url_for('view_list', page=0, category='Food') }}">식품</a></li>
-            <li><a href="{{ url_for('view_list', page=0, category='Cosmitic') }}">뷰티/화장품</a></li>
-            <li><a href="{{ url_for('view_list', page=0, category='ETC') }}">ETC</a></li>
-        </ul>
-    </nav>
+{% block extra_css %}
+<link rel="stylesheet" href="/static/buy.css">
+{% endblock %}
 
+{% block content %}
     <main class="cart-page">
         <h2>{{ session['nickname'] }}님</h2>
         <table class="cart-table">
             <thead>
                 <tr>
-                    <th><input type="checkbox"></th>
                     <th>상품 정보</th>
                     <th>수량</th>
                     <th>수령 방법</th>
@@ -54,7 +19,6 @@
                 {% if cart_items %}
                     {% for key, item in cart_items.items() %}
                     <tr>
-                        <td><input type="checkbox"></td>
                         <td class="product-info">
                             <img src="{{ item['image'] }}" alt="상품 이미지" width="100">
                             <div>
@@ -64,13 +28,14 @@
                         </td>
                         <td class="quantity">
                             <div class="quantity-wrapper">
-                                {% if item['option'] is iterable %}
-                                    {% for opt in item['option'] %}
-                                    <p>{{ opt['optionName'] }}: {{ opt['quantity'] }}개</p>
-                                    {% endfor %}
-                                {% else %}
-                                    <p>{{ item['option'] }}: {{ item['quantity'] }}개</p>
-                                {% endif %}
+                                {% if item['option'] is iterable and item['option'] is not string %}
+                                {% for option in item['option'] %}
+                                    <p>{{ option }}: {{ item['quantity'] }}개</p>
+                                {% endfor %}
+                            {% else %}
+                                <p>{{ item['option'] }}: {{ item['quantity'] }}개</p>
+                            {% endif %}                            
+                            
                             </div>
                         </td>
                         <td>
@@ -91,14 +56,6 @@
         </table>
         <div class="cart-actions">
             <button class="continue" onclick="window.history.back()">CONTINUE SHOPPING</button>
-            <button class="buy">BUY</button>
         </div>
     </main>
-
-    <script>
-        document.querySelector('.buy').addEventListener('click', function () {
-            alert('구매가 완료되었습니다. 감사합니다.');
-        });
-    </script>
-</body>
-</html>
+    {% endblock %}
