@@ -128,9 +128,13 @@ function loadIframe(url, element = null) {
 }
 
 window.onload = () => {
-    const defaultButton = document.querySelector('.footer_nav a[href="/review_page"]');
-    loadIframe(defaultButton);
+    const defaultButton = document.querySelector('.footer_nav a.active');
+    if (defaultButton) {
+        const url = defaultButton.getAttribute('onclick').match(/loadIframe\('([^']+)'/)[1];
+        loadIframe(url, defaultButton);
+    }
 };
+
 
 // 구매 버튼 클릭 시 실행될 함수
 function buyingItem() {

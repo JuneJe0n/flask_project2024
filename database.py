@@ -162,6 +162,22 @@ class DBhandler:
         except Exception as e:
             print(f"Error in find_user: {e}")
             return None
+        
+    def find_user_bynickname(self, nickname):
+        try:
+            users = self.db.child("user").get()
+            if users.each():
+                for user in users.each():
+                    user_data = user.val()
+                    if user_data.get("nickname") == nickname:
+                        return {
+                            "user_id": user.key(),
+                            "email": user_data.get("email")
+                        }
+            return None
+        except Exception as e:
+            print(f"Error fetching user info by nickname: {e}")
+            return None
 
 
     def search_items(self, keyword):

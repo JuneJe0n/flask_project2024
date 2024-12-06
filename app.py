@@ -136,6 +136,8 @@ def view_list():
             discount = float(item.get('discount', 0))
             finalprice = int(price * (100 - discount) * 0.01)
             finalprices[key] = finalprice
+            reviews = DB.get_reviews(key)
+            review_count = len(reviews)
 
 
     # 이후 finalprices를 템플릿에 넘길 수 있음.
@@ -149,7 +151,8 @@ def view_list():
         page_count=int(math.ceil(item_counts/per_page)),
         total=item_counts,
         finalprices=finalprices, # 템플릿으로 finalprices 전달
-        category=category
+        category=category,
+        review_count=review_count
     )
 
 @application.route("/myitems")
@@ -225,13 +228,15 @@ def view_item_detail(name):
     print("###name:",name)
     data = DB.get_item_byname(str(name))
     print("####data:",data)
+    sellernickname = data['seller']
+    seller = DB.find_user_bynickname(sellernickname)
 
     price = float(data['price'] or 0)
     discount = float(data['discount'] or 0)
 
     finalprice = int(price * (100 - discount) * 0.01)
 
-    return render_template("detail.html", name=name, data=data, finalprice=finalprice)
+    return render_template("detail.html", name=name, data=data, finalprice=finalprice, seller=seller)
 
 
 @application.route("/review_page/<name>/", methods=['GET'])
@@ -260,6 +265,14 @@ def view_review_page(name):
         has_prev=page > 1,
         has_next=page < total_pages
     )
+
+@application.route('/detail_info/<name>/',methods=['GET'])
+def view_detail_info(name):
+    print("##detailinfo#name:",name)
+    data = DB.get_item_byname(str(name))
+    print("####detailinfodata:",data)
+
+    return render_template("detail_info.html", name=name, data=data)
 
 
 @application.route("/reg_items")
