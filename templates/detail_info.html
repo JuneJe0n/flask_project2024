@@ -1,6 +1,14 @@
-<p>{{data.info}}</p>
-{% for i in range(0, 9) %}
-                {% if data.images[i] %}
-                    <img src="/{{data.images[i]}}" alt="other_img" width="55px" height="45px" onclick="changeCenterImage(this)">
-                {% endif %}
-            {% endfor %}
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/detail_info.css">
+</head>
+<div id="detail_info_container">
+    <p>{{data.info}}</p>
+    <div class="image-grid">
+        {% for i in range(0, 9) %}
+            {% if data.images[i] %}
+                <img src="/{{data.images[i]}}" alt="other_img" onclick="changeCenterImage(this)">
+                <br>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
