@@ -12,8 +12,15 @@
 <body>
     <div class="container">
         
+        <!-- 리뷰 요약 섹션 -->
         <div class="review-summary">
-            리뷰 ({{ reviews|length }})
+            <h3>
+                리뷰 (<span id="total-reviews">{{ reviews|length }}</span>)
+                <span>
+                    <img src="/static/images/greenclover.png" alt="평균 클로버" style="width: 20px; height: 20px; vertical-align: middle;">
+                    <span id="average-stars">{{ average_stars }}</span>
+                </span>
+            </h3>
         </div>
         <hr class="divider">
 
