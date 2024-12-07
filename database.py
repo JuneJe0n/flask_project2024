@@ -320,3 +320,41 @@ class DBhandler:
         except Exception as e:
             print(f"Error fetching review: {str(e)}")
             return None
+    def insert_item(self, name, data, img_list, opt_list):
+        item_info = {
+            "seller": data['seller'],
+            "amount": data['amount'],
+            "category": data['category'],
+            "price": data['price'],
+            "discount": data['discount'],
+            "info": data['info'],
+            "custom": data['customizing'],
+            "images": img_list,
+            "options": opt_list
+        }
+        self.db.child("item").child(name).set(item_info)
+        return True
+
+    def buy_item(self, username, data, name, opt_list):
+        buy_info = {
+            "seller": data['seller'],
+            "image": data['image'],
+            "finalprice": data['price'],
+            "discount": data['discount'],
+            "options": opt_list
+        }
+
+        self.db.child("buyitem").child(username).child(name).set(buy_info)
+        return True
+    
+    def get_buyitems(self, username):
+        try:
+            items = self.db.child("buyitem").child(username).get()
+            if items.val() is None:
+                return {}
+            return items.val()
+        except Exception as e:
+            print(f"Error fetching buyingitems: {str(e)}")
+            return {}
+        
+    

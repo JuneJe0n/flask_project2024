@@ -50,8 +50,9 @@
             <p style="display: flex; justify-content: flex-end; align-items: flex-end; margin: 20px 0;">총 금액
             <span id="totalPrice" style="font-size:30px;  margin-left: 10px;"><b>0원</b></span></p>
 
-            <form action="/add_to_cart" method="POST" onsubmit="return false;">
+            <form action="/buy_item" method="POST" id="buyForm">
                 <input type="hidden" name="name" value="{{ name }}">
+                <input type="hidden" name="seller" value="{{ data.seller }}">
                 <input type="hidden" name="image" value="{{ data.images[0] }}">
                 <input type="hidden" name="discount" value="{{ data.discount }}">
                 <input type="hidden" name="price" value="{{ finalprice }}">
@@ -65,7 +66,7 @@
                             style="margin-left:10px; background-color:aliceblue; border: none; border-radius: 4px; width: 200px; height: 30px; font-size: 15px;"
                             onclick="location.href='/apply_custom_init/{{name}}/';">
                         {% endif %}
-                        <button onclick="addToCart('{{ name }}', '{{ data.images[0] }}', '{{ data.price }}', '{{ data.discount }}', '{{ finalprice }}')"
+                        <button type="button" id="buyButton"
                             style="border: none; border-radius: 4px; width: 100px; height: 30px; font-size: 15px; margin-right: 10px;">
                             구매하기
                         </button>

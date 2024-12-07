@@ -94,6 +94,27 @@ document.addEventListener('input', function(event) {
 // select 요소의 변경 이벤트에 함수 연결
 select.addEventListener('change', updateSelectedOptions);
 
+function sendOptions() {
+    // selectedOptions 배열을 딕셔너리 형태로 변환
+    let optionsDict = selectedOptions.reduce((acc, [option, quantity]) => {
+        acc[option] = quantity;
+        return acc;
+    }, {});
+
+    // selectedOptionInput hidden input에 JSON 형태로 값 설정
+    const selectedOptionInput = document.getElementById('selectedOptionInput');
+    selectedOptionInput.value = JSON.stringify(optionsDict);
+
+    console.log('Selected Options:', optionsDict);  // 확인을 위한 로그 추가
+
+    // 폼 제출
+    document.getElementById('buyForm').submit(); // buyForm은 form 태그의 id
+}
+
+document.getElementById('buyButton').addEventListener('click', function(event) {
+    sendOptions();
+    alert('구매가 완료되었습니다! 감사합니다.');
+});
 
 function changeCenterImage(thumbnail) {
     const centerImage = document.getElementById('center_img');
@@ -134,103 +155,3 @@ window.onload = () => {
         loadIframe(url, defaultButton);
     }
 };
-
-
-// 구매 버튼 클릭 시 실행될 함수
-function buyingItem() {
-    const name = document.querySelector('input[name="name"]').value;
-    const image = document.querySelector('input[name="image"]').value;
-    const discount = document.querySelector('input[name="discount"]').value;
-    const seller = document.querySelector('input[name="seller"]').value;
-    const totalPrice = calculateTotalPrice();
-
-    // 선택된 옵션과 수량을 JSON 형식으로 변환
-    const selectedOptionQuery = encodeURIComponent(JSON.stringify(selectedOptions));
-
-    window.location.href = `/buy?name=${encodeURIComponent(name)}&seller=${encodeURIComponent(seller)}&image=${encodeURIComponent(image)}&discount=${encodeURIComponent(discount)}&totalPrice=${totalPrice}&selectedOption=${selectedOptionQuery}`;
-}
-
-function addToCart(name, image, price, discount, finalprice) {
-    const quantity = document.getElementById("quantity").value || 1; // 수량 입력 필드 (선택사항)
-
-    // 기본 동작 방지
-    event.preventDefault();
-
-    fetch('/add_to_cart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: name,
-            image: image,
-            price: price,
-            discount: discount,
-            finalprice: finalprice,
-            quantity: quantity
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // 성공 시 모달 표시
-            showCartModal();
-        } else {
-            alert("장바구니 추가 실패: " + data.message);
-        }
-    })
-    .catch(error => {
-        alert("에러 발생: " + error.message);
-    });
-}
-
-// 모달 열기
-function showCartModal() {
-    const modal = document.getElementById('cartModal');
-    modal.style.display = 'flex'; // flex로 설정하여 화면 중앙에 표시
-}
-
-// 모달 닫기
-function closeCartModal() {
-    const modal = document.getElementById('cartModal');
-    modal.style.display = 'none';
-    window.location.href='/buy';
-}
-
-// 장바구니 추가 후 모달 표시
-function addToCart(name, image, price, discount, finalprice) {
-    const selectedOption = document.getElementById('option').value; // 옵션 값 가져오기
-    if (!selectedOption) {
-        alert("옵션을 선택해주세요.");
-        return;
-    }
-
-    const quantity = 1; // 기본 수량 설정
-
-    fetch('/add_to_cart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: name,
-            image: image,
-            price: parseFloat(price),
-            discount: parseFloat(discount),
-            finalprice: parseFloat(finalprice),
-            option: selectedOption,
-            quantity: quantity
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showCartModal(); // 성공 시 모달 표시
-        } else {
-            alert("장바구니 추가 실패: " + data.message);
-        }
-    })
-    .catch(error => {
-        alert("에러 발생: " + error.message);
-    });
-}
