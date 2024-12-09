@@ -7,6 +7,10 @@
 {% block content %}
 <input type="hidden" name="seller" id="seller" value="{{session['nickname']}}">
 <div class="row" style="justify-self: center;">
+    <div class="user-info">
+        <h2>{{ session['nickname'] }}님</h2>
+        <p>등록한 상품 개수: {{ total }}</p>
+    </div>
       <div class="items">
           {% if row1 or row2 %}
               <table>

@@ -50,3 +50,20 @@ footer {
     color: white; /* 현재 페이지 글자 색상 */
     border: 1px solid #00462A; /* 현재 페이지 테두리 색상 */
 }
+
+.user-info {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.user-info h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.user-info p {
+    font-size: 18px;
+    color: #555;
+}
