@@ -381,7 +381,28 @@ def submit_custom_post():
     
     DB.apply_custom(data['name'], data, img_list)
 
-    return render_template("mypage.html")
+    user_id = session.get('id')
+    like_items = []
+
+    if user_id:
+        hearts = DB.db.child("heart").child(user_id).get()
+
+        if hearts.val():
+            for heart in hearts.each():
+                item_name = heart.key()
+                item_data = heart.val()
+
+                if item_data.get('interested') == 'Y':
+                    like_items.append({
+                        "name": item_name,
+                        "image": item_data.get("image"),  # 이미지 추가
+                        "data": item_data
+                    })
+
+
+    recent_items = like_items[-4:] if len(like_items) > 4 else like_items
+
+    return render_template("mypage.html",recent_items=recent_items)
 
 @application.route('/applier_custom')
 def view_applier_customs():
