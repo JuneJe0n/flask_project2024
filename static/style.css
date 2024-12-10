@@ -79,6 +79,39 @@ color: black;
   cursor: pointer;
 }
 
+.upload-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 636px;
+  height: 233px;
+  padding-right: 14px;
+  padding-left: 14px;
+  box-sizing: border-box;
+  position: relative;
+  justify-self: center;
+}
+
+/* 각 업로드 칸 스타일 */
+.upload-box-2 {
+  width: 196px;
+  aspect-ratio: 1; /* 정사각형 비율 유지 */
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px;
+  box-sizing: border-box;
+}
+
+.upload-box-2 input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
 /* 상품 등록하기 버튼 스타일 */
 .submit-button {
   font-size: 18px;
@@ -162,39 +195,6 @@ color: black;
   background-color: white;
   position: relative;
   left: 0px;
-}
-
-.upload-grid-2 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  width: 636px;
-  height: 233px;
-  padding-right: 14px;
-  padding-left: 14px;
-  box-sizing: border-box;
-  position: relative;
-  justify-self: center;
-}
-
-/* 각 업로드 칸 스타일 */
-.upload-box-2 {
-  width: 196px;
-  aspect-ratio: 1; /* 정사각형 비율 유지 */
-  background-color: #e0e0e0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 0px;
-
-}
-
-.upload-box-2 input[type="file"] {
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
 }
 
 .stars {

@@ -1,16 +1,3 @@
-function applyCustom() {
-    const newname = document.getElementById("name").value;
-    const newamount = document.getElementById("amount").value;
-    const newsize = document.getElementById("size").value;
-    const newcolor = document.getElementById("color").value;
-
-    if (newname && newamount && newsize && newcolor) {
-        alert(newname+" 상품의 커스터마이징 요청이 전송되었습니다!");
-    } else {
-        alert("필수 입력 요소를 입력해주세요!");
-    }
-}
-
 function openFileDialog(event, boxIndex) {
     // 클릭된 박스가 활성화된 경우에만 파일 선택 창 열기
     if (event.currentTarget.style.pointerEvents !== "none") {
@@ -45,5 +32,18 @@ function changeIMG(boxIndex) {
             nextplus.style.display = 'block';
             changed[boxIndex] = 0;
         }
+    }
+}
+
+function applyCustom() {
+    const newname = document.getElementById("name").value;
+    const newamount = document.getElementById("amount").value;
+    const newsize = document.getElementById("size").value;
+    const newcolor = document.getElementById("color").value;
+
+    if (newname && newamount && newsize && newcolor) {
+        alert(newname+" 상품의 커스터마이징 요청이 전송되었습니다!");
+    } else {
+        alert("필수 입력 요소를 입력해주세요!");
     }
 }

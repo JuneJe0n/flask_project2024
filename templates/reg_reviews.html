@@ -66,20 +66,22 @@
                 <br>
                 <div style="padding-left: 25px;">이미지를 추가해주세요<br><br></div>
                 <div class="upload-grid-2">
-                    <div class="upload-box-2" id="box1" onclick="openFileDialog(event, 1)">
-                        <img id="preview1" style="display: none; width: 196px; height: 100%; margin-top: px;" />
-                        <label id="plus1" style="width: 196px; font-size: 32pt; text-align: center; color: dimgrey; cursor: pointer;">+</label>
-                        <input id="fileInput1" type="file" name="file1" style="display: none;" onchange="changeIMG(1)" />
+                    <div class="upload-box-2" id="box1" onclick="openFileDialog_review(event, 1)">
+                        <img id="preview1" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                        <label id="plus1" style="width: 210px; font-size: 10pt; text-align: center; color: dimgrey; cursor: pointer;">
+                            <span style="font-size: 32pt;">+</span><br>리뷰 이미지를<br>등록해주세요</span>
+                        </label>
+                        <input id="fileInput1" type="file" name="file1" style="display: none;" onchange="changeIMG_review(1)" />
                     </div>
-                    <div class="upload-box-2" id="box2" onclick="openFileDialog(event, 2)">
-                        <img id="preview2" style="display: none; width: 196px; height: 100%; margin-top: px;" />
-                        <label id="plus2" style="width: 196px; font-size: 32pt; text-align: center; color: dimgrey; cursor: pointer;">+</label>
-                        <input id="fileInput2" type="file" name="file2" style="display: none;" onchange="changeIMG(2)" />
+                    <div class="upload-box-2" id="box2" onclick="openFileDialog_review(event, 2)" style="opacity: 0.5; pointer-events: none;">
+                        <img id="preview2" style="display: none; width: 220px; height: 100%; margin-top: 0px;" />
+                        <label id="plus2" style="display: none; width: 210px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                        <input id="fileInput2" type="file" name="file2" style="display: none;" onchange="changeIMG_review(2)" />
                     </div>
-                    <div class="upload-box-2" id="box3" onclick="openFileDialog(event, 3)">
+                    <div class="upload-box-2" id="box3" onclick="openFileDialog_review(event, 3)" style="opacity: 0.5; pointer-events: none;">
                         <img id="preview3" style="display: none; width: 196px; height: 100%; margin-top: px;" />
-                        <label id="plus3" style="width: 196px; font-size: 32pt; text-align: center; color: dimgrey; cursor: pointer;">+</label>
-                        <input id="fileInput3" type="file" name="file3" style="display: none;" onchange="changeIMG(3)" />
+                        <label id="plus3" style="display: none; width: 196px; font-size: 32pt; text-align: center; color: dimgrey;">+</label>
+                        <input id="fileInput3" type="file" name="file3" style="display: none;" onchange="changeIMG_review(3)" />
                     </div>
                 </div>
                 <br>

@@ -19,7 +19,7 @@ prevBtn.addEventListener('click', () => {
 
     if (currentIndex > 0) {
         currentIndex = currentIndex - 1;
-        imgElement.src = `/${images[currentIndex]}`;
+        imgElement.src = `${images[currentIndex]}`;
     }
 });
 
@@ -33,6 +33,6 @@ nextBtn.addEventListener('click', () => {
 
     if (currentIndex < maxIndex - 1) {
         currentIndex = currentIndex + 1;
-        imgElement.src = `/${images[currentIndex]}`;
+        imgElement.src = `${images[currentIndex]}`;
     }
 });

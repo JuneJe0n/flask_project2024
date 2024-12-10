@@ -292,7 +292,6 @@ def apply_custom_init(name):
 @application.route("/reg_review", methods=['POST'])
 def reg_review():
     data = request.form
-    print("#####이름", data['itemname'])
     
     img_list = []
 
@@ -302,7 +301,7 @@ def reg_review():
         if image_file:
             image_path = f"static/images/{image_file.filename}"
             image_file.save(image_path)
-            img_list.append(image_path)
+            img_list.append(image_file)
 
     # username과 현재 날짜를 추가
     data = dict(data)
@@ -377,7 +376,8 @@ def submit_custom_post():
         if image_file:
             image_path = f"static/images/{image_file.filename}"
             image_file.save(image_path)
-            img_list.append(image_path)
+            image_url = f"/static/images/{image_file.filename}"
+            img_list.append(image_url)
     
     DB.apply_custom(data['name'], data, img_list)
 

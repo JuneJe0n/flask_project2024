@@ -4,6 +4,10 @@
 <hr>
 {% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/apply_custom.css">
+{% endblock %}
+
 {% block content %}
     <br>
     <div id="title">
@@ -99,12 +103,8 @@
         </div>
     </form>
 
-{% endblock %}
-
-{% block extra_css %}
-    <link rel="stylesheet" href="/static/apply_custom.css">
-{% endblock %}
-
-{% block extra_js %}
+    {% block extra_js %}
     <script src="/static/apply_custom.js"></script>
+    {% endblock %}
+
 {% endblock %}
