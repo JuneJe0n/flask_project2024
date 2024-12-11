@@ -74,7 +74,7 @@ class DBhandler:
             "preview": data['info'][:10],
             "info": data['info'],
             "option": data['options'], #name으로 받음
-            "star": data['clovers'],
+            "star": data['star'],
             "img_path": img_list,
             "username": data.get('username', 'unknown_user'),
             "date": data.get('date', 'unknown_date'),
