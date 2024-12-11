@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="/static/list.css">
+  <link rel="stylesheet" href="/static/like.css">
 {% endblock %}
 
 {% block content %}
@@ -10,60 +10,66 @@
     <div class="user-info">
         <h2>{{ session['nickname'] }}님</h2>
         <p>등록한 상품 개수: {{ total }}</p>
-    </div>
-      <div class="items">
-          {% if row1 or row2 %}
-              <table>
-                  <tr>
-                      {% for key, value in row1 %}
-                          <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
-                              <div id="itemsection">
-                                  <img src="{{value.images[0]}}" alt="item_img" width="300px" height="240px" style="display: block;">
-                                  <p style="margin: 10px 0;">
-                                      <img src="/static/images/user_icon.png" alt="user_icon" width="20" height="20">
-                                      <span style="color:gray;">{{ value.seller }}</span>
-                                  </p>
-                                  <p style="font-size: 18px"><b>{{key}}</b></p>
-                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
-                                  <p><img src="/static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{review_count}})</span></p>
-                              </div>
-                          </td>
-                      {% endfor %}
-                  </tr>
-
-                  <tr>
-                      {% for key, value in row2 %}
-                          <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
-                              <div id="itemsection">
-                                  <img src="{{value.images[0]}}" alt="item_img" width="300px" height="240px" style="display: block;">
-                                  <p style="margin: 10px 0;">
-                                      <img src="../static/images/user_icon.png" alt="user_icon" width="20" height="20">
-                                      <span style="color:gray;">{{value.user}}</span>
-                                  </p>
-                                  <p style="font-size: 18px"><b>{{key}}</b></p>
-                                  <p style="margin: 10px 0;"><span style="color:red"><b>{{value.discount}}% </b></span><span class="price">{{ finalprices[key] }}</span></p>
-                                  <p><img src="../static/images/greenclover.png" alt="clover" width="20" height="20"> {{value.rating}} <span style="color:lightgray">({{review_count}})</span></p>
-                              </div>
-                          </td>
-                      {% endfor %}
-                  </tr>
-              </table>
-          {% else %}
-              <p>등록된 상품이 없습니다.</p>
-          {% endif %}
+        <div class="items-container">
+            <div class="items">
+                {% if row1 or row2 %}
+                    <table>
+                        <tr>
+                            {% for key, value in row1 %}
+                                <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
+                                    <div id="itemsection">
+                                        <img id="product-image" src="{{value.images[0]}}" alt="item_img" style="display: block;">
+                                        <p style="margin: 10px 0;">
+                                            <img class="user-icon" src="/static/images/user_icon.png" alt="user_icon">
+                                            <span style="color:gray;">{{ value.seller }}</span>
+                                        </p>
+                                        <p style="font-size: 18px"><b>{{key}}</b></p>
+                                        <p style="margin: 10px 0;">
+                                          <span style="color:red"><b>{{value.discount}}% </b></span>
+                                          <span class="price">{{ finalprices[key] }}</span></p>
+                                        <p><img class="rating-icon" src="/static/images/greenclover.png" alt="clover"> {{value.rating}} <span style="color:lightgray">({{review_count}})</span></p>
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+      
+                        <tr>
+                            {% for key, value in row2 %}
+                              <td onclick="location.href='/view_detail/{{key}}/';" style="cursor:pointer;">
+                                  <div id="itemsection">
+                                      <img id="product-image" src="{{value.images[0]}}" alt="item_img" style="display: block;">
+                                      <p style="margin: 10px 0;">
+                                          <img class="user-icon" src="/static/images/user_icon.png" alt="user_icon">
+                                          <span style="color:gray;">{{ value.seller }}</span>
+                                      </p>
+                                      <p style="font-size: 18px"><b>{{key}}</b></p>
+                                      <p style="margin: 10px 0;">
+                                      <span style="color:red"><b>{{value.discount}}% </b></span>
+                                      <span class="price">{{ finalprices[key] }}</span></p>
+                                      <p><img class="rating-icon" src="/static/images/greenclover.png" alt="clover"> {{value.rating}} <span style="color:lightgray">({{review_count}})</span></p>
+                                  </div>
+                              </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                {% else %}
+                    <p>등록된 상품이 없습니다.</p>
+                {% endif %}
+            </div>
+          </div>
       </div>
-</div>
-
-<footer>
-    <div class="pagination" style="justify-self: center;">
-      <a href="#" class="prev" style="color: gray;">← Previous</a>
-      {% for i in range(page_count) %}
-        <a href="{{url_for('view_list', page=i)}}" class="page {% if page == i %}active{% endif %}">{{i+1}}</a>
-      {% endfor %}
-      <a href="#" class="next" style="color: #006400;">Next →</a>
-    </div>
-</footer>  
-
-<script src="/static/list.js"></script>
-
-{% endblock content %}
+      
+      <footer>
+          <div class="pagination" style="justify-self: center;">
+            <a href="#" class="prev" style="color: gray;">← Previous</a>
+            {% for i in range(page_count) %}
+              <a href="{{url_for('view_list', page=i, category=category)}}" class="page {% if page == i %}active{% endif %}">{{i+1}}</a>
+            {% endfor %}
+            <a href="#" class="next" style="color: #006400;">Next →</a>
+          </div>
+      </footer> 
+      
+      <script src="/static/list.js"></script>
+      
+      {% endblock content %}
+      

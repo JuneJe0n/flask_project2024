@@ -193,7 +193,7 @@ def view_myitems():
             locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:(i + 1) * per_row])
 
     finalprices = {}
-    review_counts = 0
+    review_count = 0
     if data:
         for key, item in data.items():
             price = float(item.get('price', 0))
