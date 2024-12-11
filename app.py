@@ -243,33 +243,6 @@ def view_item_detail(name):
     return render_template("detail.html", name=name, data=data, finalprice=finalprice, seller=seller)
 
 
-@application.route("/review_page/<name>/", methods=['GET'])
-def view_review_page(name):
-    # Fetch reviews from the database
-    page = request.args.get("page", 1, type=int)  # 현재 페이지 번호, 기본값은 1
-    per_page = 5  # 페이지당 표시할 리뷰 수
-
-    reviews = DB.get_reviews(name)  
-    total_reviews = len(reviews)
-    
-    # 리뷰 리스트를 현재 페이지에 맞게 슬라이싱
-    start_idx = (page - 1) * per_page
-    end_idx = start_idx + per_page
-    paginated_reviews = reviews[start_idx:end_idx]
-    
-    # 총 페이지 수 계산
-    total_pages = (total_reviews + per_page - 1) // per_page
-
-    return render_template(
-        "review_page.html",
-        name=name,
-        reviews=paginated_reviews,
-        current_page=page,
-        total_pages=total_pages,
-        has_prev=page > 1,
-        has_next=page < total_pages
-    )
-
 @application.route('/detail_info/<name>/',methods=['GET'])
 def view_detail_info(name):
     print("##detailinfo#name:",name)
@@ -694,6 +667,48 @@ def sort_reviews():
     # JSON 응답으로 반환
     return jsonify(reviews=reviews)
 
+@application.route("/review_page/<name>/", methods=['GET'])
+def view_review_page(name):
+    reviews = DB.get_reviews(name)  # 리뷰 데이터 가져오기
+    
+    # 총 리뷰 수 계산
+    total_reviews = len(reviews)
+
+    # 평균 별점 계산
+    if total_reviews > 0:
+        try:
+            # 별점 데이터를 숫자로 변환해 합산
+            total_stars = sum([int(review.get('star', 0)) for review in reviews if 'star' in review and str(review['star']).isdigit()])
+            average_stars = round(total_stars / total_reviews, 1)
+        except Exception as e:
+            print(f"Error in calculating average stars: {e}")
+            average_stars = "데이터 없음"
+    else:
+        average_stars = "데이터 없음"  # 리뷰가 없을 경우 처리
+
+    print(f"Total reviews: {total_reviews}, Average stars: {average_stars}")  # 디버깅 출력
+
+    # 페이징 처리
+    page = request.args.get("page", 1, type=int)  # 현재 페이지 번호
+    per_page = 5  # 페이지당 표시할 리뷰 수
+    start_idx = (page - 1) * per_page
+    end_idx = start_idx + per_page
+    paginated_reviews = reviews[start_idx:end_idx]
+    
+    # 총 페이지 수 계산
+    total_pages = (total_reviews + per_page - 1) // per_page
+
+    return render_template(
+        "review_page.html",
+        name=name,
+        reviews=paginated_reviews,
+        current_page=page,
+        total_pages=total_pages,
+        total_reviews=total_reviews,
+        has_prev=page > 1,
+        has_next=page < total_pages,
+        average_stars=average_stars
+    )
 
 
 
