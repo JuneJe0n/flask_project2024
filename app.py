@@ -193,12 +193,15 @@ def view_myitems():
             locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:(i + 1) * per_row])
 
     finalprices = {}
+    review_counts = 0
     if data:
         for key, item in data.items():
             price = float(item.get('price', 0))
             discount = float(item.get('discount', 0))
             finalprice = int(price * (100 - discount) * 0.01)
             finalprices[key] = finalprice
+            reviews = DB.get_reviews(key)
+            review_count = len(reviews)
 
     return render_template(
         "myitems.html",
@@ -210,7 +213,8 @@ def view_myitems():
         page_count=int(math.ceil(item_counts / per_page)),
         total=item_counts,
         finalprices=finalprices,  # 템플릿으로 finalprices 전달
-        category=category
+        category=category,
+        review_count=review_count
     )
 
 
