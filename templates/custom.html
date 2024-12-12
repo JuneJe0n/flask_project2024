@@ -35,10 +35,15 @@
                         <img src="{{ data.images[0] }}" alt="상품 이미지">
                         {% endif %}
                         <div>
-                            <p class="category">{{ data.seller }}</p>
-                            <h3>{{ data.custom_name }}</h3>
-                            <p class="discount">{{ data.item_data.discount }}% <span class="price">{{ data.item_data.price }}원</span></p>
-                            <p class="rating">⭐ {{ data.item_data.rating }} ({{ data.item_data.review_count }})</p>
+                            <p class="category" style="margin: 10px 0;">
+                                <img src="/static/images/user_icon.png" alt="user_icon" style="width: 25px; height: 25px; border-radius: 50%; vertical-align: middle;">
+                                <span style="color:gray; font-size: 15px;">{{ data.seller }}</span>
+                            </p>
+                            <p style="font-size: 18px"><b>{{ data.custom_name }}</b></p>
+                            <p style="margin: 10px 0;">
+                                <span style="color:red"><b>{{data.item_data.discount}}% </b></span>
+                                <span class="price">{{ data.item_data.price  }}</span>
+                            </p>
                         </div>
                     </td>
                     <td>

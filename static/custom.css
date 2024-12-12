@@ -86,3 +86,9 @@ body {
     border-color: #bbb; /* hover 시 테두리 색상 변경 */
 }
 
+.user-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
