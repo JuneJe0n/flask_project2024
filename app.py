@@ -326,12 +326,15 @@ def submit_item_post():
             locals()['data_{}'.format(i)] = dict(list(data.items())[i*per_row:(i+1)*per_row])
 
     finalprices = {}
+    review_count = 0
     if data:
         for key, item in data.items():
             price = float(item.get('price', 0))
             discount = float(item.get('discount', 0))
             finalprice = int(price * (100 - discount) * 0.01)
             finalprices[key] = finalprice
+            reviews = DB.get_reviews(key)
+            review_count = len(reviews)
 
     return render_template( 
         "list.html",
@@ -341,7 +344,8 @@ def submit_item_post():
         limit=per_page,
         page=page, page_count=int((item_counts/per_page)+1),
         total=item_counts,
-        finalprices=finalprices)
+        finalprices=finalprices,
+        review_count=review_count)
 
 @application.route("/submit_custom_post", methods=['POST'])
 def submit_custom_post():
