@@ -27,7 +27,7 @@
                                         <p style="margin: 10px 0;">
                                           <span style="color:red"><b>{{value.discount}}% </b></span>
                                           <span class="price">{{ finalprices[key] }}</span></p>
-                                        <p><img class="rating-icon" src="/static/images/greenclover.png" alt="clover"> {{average_stars}} <span style="color:lightgray">({{review_count[key]}})</span></p>
+                                        <p><img class="rating-icon" src="/static/images/greenclover.png" alt="clover"> {{average_stars[key]}} <span style="color:lightgray">({{review_count[key]}})</span></p>
                                     </div>
                                 </td>
                             {% endfor %}
@@ -46,7 +46,7 @@
                                       <p style="margin: 10px 0;">
                                       <span style="color:red"><b>{{value.discount}}% </b></span>
                                       <span class="price">{{ finalprices[key] }}</span></p>
-                                      <p><img class="rating-icon" src="/static/images/greenclover.png" alt="clover"> {{average_stars}} <span style="color:lightgray">({{review_count[key]}})</span></p>
+                                      <p><img class="rating-icon" src="/static/images/greenclover.png" alt="clover"> {{average_stars[key]}} <span style="color:lightgray">({{review_count[key]}})</span></p>
                                   </div>
                               </td>
                             {% endfor %}

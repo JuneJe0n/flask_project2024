@@ -130,6 +130,8 @@ def view_list():
 
     finalprices = {}
     review_count = {}
+    average_stars = {} 
+
     if data:
         for key, item in data.items():
             price = float(item.get('price', 0))
@@ -138,6 +140,17 @@ def view_list():
             finalprices[key] = finalprice
             reviews = DB.get_reviews(key)
             review_count[key] = len(reviews)
+
+            if review_count[key] > 0:
+                try:
+                    total_stars = sum([int(review.get('star', 0)) for review in reviews if 'star' in review and str(review['star']).isdigit()])
+                    average_stars[key] = round(total_stars / review_count[key], 1)
+                except Exception as e:
+                    print(f"Error in calculating average stars: {e}")
+                    average_stars[key] = "데이터 없음"
+            else:
+                average_stars[key] = " "
+
 
     # 이후 finalprices를 템플릿에 넘길 수 있음.
     return render_template(
@@ -151,7 +164,8 @@ def view_list():
         total=item_counts,
         finalprices=finalprices, # 템플릿으로 finalprices 전달
         category=category,
-        review_count=review_count
+        review_count=review_count,
+        average_stars=average_stars
     )
 
 @application.route("/myitems")
@@ -192,7 +206,9 @@ def view_myitems():
             locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:(i + 1) * per_row])
 
     finalprices = {}
-    review_count = 0
+    review_count = {}
+    average_stars = {} 
+
     if data:
         for key, item in data.items():
             price = float(item.get('price', 0))
@@ -200,20 +216,33 @@ def view_myitems():
             finalprice = int(price * (100 - discount) * 0.01)
             finalprices[key] = finalprice
             reviews = DB.get_reviews(key)
-            review_count = len(reviews)
+            review_count[key] = len(reviews)
 
+            if review_count[key] > 0:
+                try:
+                    total_stars = sum([int(review.get('star', 0)) for review in reviews if 'star' in review and str(review['star']).isdigit()])
+                    average_stars[key] = round(total_stars / review_count[key], 1)
+                except Exception as e:
+                    print(f"Error in calculating average stars: {e}")
+                    average_stars[key] = "데이터 없음"
+            else:
+                average_stars[key] = " "
+
+
+    # 이후 finalprices를 템플릿에 넘길 수 있음.
     return render_template(
-        "myitems.html",
+        "list.html",
         datas=data.items(),
         row1=locals()['data_0'].items(),
         row2=locals()['data_1'].items(),
         limit=per_page,
         page=page,
-        page_count=int(math.ceil(item_counts / per_page)),
+        page_count=int(math.ceil(item_counts/per_page)),
         total=item_counts,
-        finalprices=finalprices,  # 템플릿으로 finalprices 전달
+        finalprices=finalprices, # 템플릿으로 finalprices 전달
         category=category,
-        review_count=review_count
+        review_count=review_count,
+        average_stars=average_stars
     )
 
 
