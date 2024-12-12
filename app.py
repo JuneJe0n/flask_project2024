@@ -231,7 +231,7 @@ def view_myitems():
 
     # 이후 finalprices를 템플릿에 넘길 수 있음.
     return render_template(
-        "list.html",
+        "myitems.html",
         datas=data.items(),
         row1=locals()['data_0'].items(),
         row2=locals()['data_1'].items(),
