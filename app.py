@@ -129,7 +129,7 @@ def view_list():
             locals()['data_{}'.format(i)] = dict(list(data.items())[i * per_row:(i + 1) * per_row])
 
     finalprices = {}
-    review_count = 0
+    review_count = {}
     if data:
         for key, item in data.items():
             price = float(item.get('price', 0))
@@ -137,8 +137,7 @@ def view_list():
             finalprice = int(price * (100 - discount) * 0.01)
             finalprices[key] = finalprice
             reviews = DB.get_reviews(key)
-            review_count = len(reviews)
-
+            review_count[key] = len(reviews)
 
     # 이후 finalprices를 템플릿에 넘길 수 있음.
     return render_template(
