@@ -705,7 +705,7 @@ def view_review_page(name):
             print(f"Error in calculating average stars: {e}")
             average_stars = "데이터 없음"
     else:
-        average_stars = "데이터 없음"  # 리뷰가 없을 경우 처리
+        average_stars = " "  # 리뷰가 없을 경우 처리
 
     print(f"Total reviews: {total_reviews}, Average stars: {average_stars}")  # 디버깅 출력
 
