@@ -58,11 +58,9 @@
 
 <footer>
     <div class="pagination" style="justify-self: center;">
-      <a href="#" class="prev" style="color: gray;">← Previous</a>
       {% for i in range(page_count) %}
         <a href="{{url_for('view_list', page=i, category=category)}}" class="page {% if page == i %}active{% endif %}">{{i+1}}</a>
       {% endfor %}
-      <a href="#" class="next" style="color: #006400;">Next →</a>
     </div>
 </footer> 
 
