@@ -32,9 +32,12 @@
                     </td>
                     <td class="quantity">
                         <div class="quantity-wrapper">
-                            {% for option, quantity in item.options.items() %}
-                                <p>{{ option }}: {{ quantity }}개</p>
-                            {% endfor %}
+                            <p>
+                                {% for option, quantity in item.options.items() %}
+                                    {{ option }}: {{ quantity }}개
+                                {% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
                         </div>
                     </td>
                     <td>
