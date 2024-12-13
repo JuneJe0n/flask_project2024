@@ -19,7 +19,7 @@
             {% if data %}
             {% for item_name, item in data.items() %}
                 <tr>
-                    <td class="product-info">
+                    <td class="product-info" onclick="location.href='/view_detail/{{ item_name }}/';">
                         <img src="{{ item.image }}" alt="상품 이미지" width="100">
                         <div>
                             <!-- item_name을 h3 태그 안에 출력 -->
